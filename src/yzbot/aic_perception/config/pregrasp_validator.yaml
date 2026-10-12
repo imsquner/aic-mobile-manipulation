@@ -1,0 +1,13 @@
+pregrasp_validator:
+  ros__parameters:
+    use_sim_time: true
+    input_topic: /competition/grasp_point
+    planning_frame: arm_base_link
+    planning_group: arm
+    ik_link: grasp_center_frame
+    cube_half_height_m: 0.015
+    hover_clearance_m: 0.10
+    contact_clearance_m: 0.0
+    max_point_age_sec: 1.0
+    tf_timeout_sec: 0.25
+    ik_timeout_sec: 0.60

@@ -1,0 +1,148 @@
+# Unified v1 layout: Gazebo entities come from entity_positions.yaml.
+#
+# HOW THE `parking:` POSES BELOW WERE DERIVED (verified 2026-09-23)
+# -----------------------------------------------------------------
+# They are NOT copied from `bot_navigation/config/waypoints.yaml`. They are
+# recomputed as the entity position offset by `approach.object_approach_distance_m`
+# (0.45 m) along a navigable direction. Measured entity->parking distances:
+#   8 of 10 cubes land exactly on 0.450 m
+#   blue_cube_1 = 0.386 m and red_cube_2 = 0.388 m are explicit per-cube overrides
+# (reproduce with `audit_evidence/check_parking_geometry.py`).
+#
+# `bot_navigation/config/waypoints.yaml` is referenced by no code in this tree.
+# Its cube entries sit only ~0.16-0.29 m from the entity positions (i.e. they
+# encode a *different*, tighter approach geometry) and therefore conflict with
+# the 0.45 m design used here. Keep it as historical navigation-graph data only;
+# do NOT use it to derive cube parking poses.
+#
+# Zones are the exception: place_A/B/C below DO match waypoints.yaml exactly
+# (0.000 m delta), so that file is still the reference for region parking.
+robot_initial_pose:
+  frame_id: map
+  x: 0.0
+  y: 0.0
+  yaw: 0.0
+
+approach:
+  end_effector_forward_m: 0.40
+  # 场景至少要有多少种颜色的物块（编排器 _load_points 的下限门）。
+  # 2026-09-23：现场收敛为 4 红 4 蓝（删掉了失败率最高的 red_cube_3
+  # 与会被 moving_box_1 扫掠推走的 blue_cube_2）。
+  minimum_cubes_per_color: 4
+  # 2026-09-24（老板指示）：删掉离起点最远的 red_cube_5（4.73 m）与 blue_cube_5（6.46 m）
+  # ——世界模型、本文件、entity_positions.yaml 同步删除；把原来'留在世界里但没配置'的
+  # red_cube_3 / blue_cube_2 补进配置：
+  #   red_cube_3  → (-1.7, 1.0)  离起点 1.97 m。它本来就在这（世界 <state> 段生效；模型定义里
+  #                 那套 -3.688 不生效，2026-09-24 用 /get_entity_state 实测确认）。
+  #   blue_cube_2 → (2.8, 0.0)   离起点 2.80 m。原 <state> 位置 (-1.6,-1) 与 blue_cube_3 只隔
+  #                 1.42 m，破坏'物块两两 ≥2 m'，故按 mapn3.pgm 静态地图搜了个净空 1.06 m 的位置。
+  # 每色仍是 4 块，minimum_cubes_per_color 不动；两两最小距离 2.143 m（red_cube_2↔blue_cube_1）。
+  # 历史提醒：这两块 2026-09-23 曾因'red_cube_3 失败率最高 / blue_cube_2 会被移动障碍推走'
+  # 被移出配置；本次按老板决定加回，加回后须用实跑复核抓取成功率与停车误差。
+  object_approach_distance_m: 0.40
+  object_approach_target_distance_m: 0.40
+  object_approach_min_distance_m: 0.30
+  object_approach_max_distance_m: 0.50
+  # The ideal band is reported above; RGB-D may take over anywhere inside this
+  # wider collision-safe band instead of forcing another full Nav2 recovery.
+  object_approach_safety_min_distance_m: 0.25
+  object_approach_safety_max_distance_m: 0.55
+  # tan(25 deg) gives +/-0.184 m lateral coverage at the 0.395 m grasp range,
+  # while retaining 5 deg of margin inside the RGB-D camera's 60 deg HFOV.
+  object_approach_yaw_tolerance_rad: 0.436332312999
+  object_circle_candidate_count: 12
+  # 2026-09-23：候选尝试数 2 -> 5。
+  # 依据：逐物块统计显示主要失败是 "navigation to visual grasp neighborhood failed"
+  # （车没被送到候选点）。原来每物块只试 2 个候选，第一个不可达时几乎没有第二次机会。
+  # frame2.0.md §13 明确"导航/路径失败**不计**为一次实际抓取尝试"，因此提高候选数
+  # 不违反"最多 2 次抓取"的定案。单候选超时 40 s 与总预算 60 s 保持不变，
+  # 最坏耗时不会线性放大（预算耗尽即停）。
+  object_circle_max_attempts: 5
+  object_candidate_shortlist_count: 6
+  object_path_prefilter_budget_sec: 2.0
+  object_navigation_total_budget_sec: 60.0
+  object_candidate_navigation_timeout_sec: 40.0
+  object_circle_map_clearance_m: 0.32
+  # 2026-09-23：非目标物块以中心点形式发到
+  # `/competition/non_target_obstacles`，由 Nav2 的 `virtual_cubes` 观测源
+  # 让规划器不直接穿过其它物块。但**离当前目标这么近**的邻居不发布——否则
+  # 目的停车位（0.40 m）本身会落进虚拟障碍的致命/高代价区，表现为
+  # "navigation to visual grasp neighborhood failed"。1.20 m 覆盖整个
+  # 0.40 m 候选圆加膨胀半径。
+  object_virtual_obstacle_exempt_radius_m: 1.20
+  object_path_cube_clearance_m: 0.25
+  # DORMANT: read only by task_orchestrator_node._gazebo_recover_object_approach,
+  # which is legacy non-active code with no remaining callers. Kept so the
+  # dormant method still parses; has no effect on the live grasp path.
+  object_recovery_distance_tolerance_m: 0.10
+  object_recovery_yaw_tolerance_rad: 0.261799387799
+  object_recovery_max_displacement_m: 1.20
+  object_staging_backoff_m: 0.0
+  grasp_desired_arm_x_m: 0.395
+  grasp_forward_tolerance_m: 0.03
+  grasp_yaw_tolerance_rad: 0.05235987756
+  grasp_base_correction_speed_mps: 0.15
+  grasp_base_correction_max_attempts: 1
+  cube_half_height_m: 0.015
+  # NOT READ BY ANY CODE. Verified: zero references to `pre_attach_tolerance_m`
+  # in any .py file. The tolerance actually enforced before attach is
+  # `attached_tolerance_m` on the next line. Kept only so that historical
+  # tooling and the test13 integration branch do not break on a missing key;
+  # do not rely on this value having any effect.
+  pre_attach_tolerance_m: 0.18
+  attached_tolerance_m: 0.18
+  placed_tolerance_m: 0.65
+  region_nearby_tolerance_m: 0.35
+  placement_stability_xy_m: 0.10
+  placement_stable_samples: 3
+  zone_base_nearby_tolerance_m: 0.60
+  # Clear the released cube's 0.30 m robot radius + 0.60 m inflation envelope
+  # before asking Nav2 to plan from the zone. The zone-specific distances
+  # account for each teammate parking pose's initial tool-to-region offset.
+  post_place_retreat_m: 0.50
+  post_place_retreat_by_zone_m: {A: 0.60, B: 0.75, C: 0.50}
+  post_place_retreat_min_timeout_sec: 10.0
+  post_place_retreat_speed_mps: 0.50
+
+navigation_fallback:
+  enabled: true
+  waypoint_timeout_sec: 40.0
+  waypoint_position_tolerance_m: 0.20
+  # One same-goal retry is followed by a live 0.45 m circle replan.
+  segment_retry_count: 1
+  force_routes: []
+  routes: {}
+
+red_cubes:
+  # 2026-09-23 停车位统一重算（audit_evidence/make_parking.py）：
+  # 准则 = 距离优先（≈ object_approach_distance_m 0.40~0.45）、停车点可通行、
+  # 净空 ≥0.50 m、开阔度 ≥0.90、朝向"正对物块"（视觉直接观察）。
+  # 同时把 yaw_tolerance_rad 统一为 0.4363（原 0.12 rad ≈ 6.9° 对 0.45 m
+  # 半径停车点过苛，是 red_cube_3/4 导航反复 ABORTED 的怀疑原因之一）。
+  # 可用 audit_evidence/verify_parking.py 复核：距离/朝向/可通行/净空。
+  - {id: red_cube_1, position: {x: 1.051, y: -1.398, z: 0.015}, parking: {x: 0.7980, y: -1.2368, yaw: -0.5672, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: red_cube_2, position: {x: 3.443, y: 2.097, z: 0.014}, parking: {x: 3.6042, y: 2.3500, yaw: -2.1380, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: red_cube_3, position: {x: -1.700, y: 1.000, z: 0.015}, parking: {x: -1.4000, y: 1.0000, yaw: 3.1416, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: red_cube_4, position: {x: 0.600, y: 3.400, z: 0.015}, parking: {x: 0.2015, y: 3.3651, yaw: 0.0873, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+
+blue_cubes:
+  # 同 red_cubes，全部按距离优先重算并统一 yaw_tolerance_rad。
+  - {id: blue_cube_1, position: {x: 3.314, y: 4.236, z: 0.015}, parking: {x: 3.2234, y: 3.8979, yaw: 1.3090, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: blue_cube_2, position: {x: 2.800, y: 0.000, z: 0.015}, parking: {x: 2.5000, y: 0.0000, yaw: 0.0000, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: blue_cube_3, position: {x: -0.975, y: -2.280, z: 0.015}, parking: {x: -0.6798, y: -2.0919, yaw: -2.5744, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+  - {id: blue_cube_4, position: {x: 0.226, y: -5.126, z: 0.015}, parking: {x: 0.1484, y: -4.8362, yaw: -1.3090, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.436332312999}}
+
+zones:
+  A: {position: {x: 4.388, y: -1.533, z: 0.010, zone_yaw: -0.7853981634, region_yaw: -0.7853981634, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.03}, parking: {x: 4.031, y: -1.324, yaw: -0.411, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.35}, description: "Zone A"}
+  B: {position: {x: -5.193, y: 3.483, z: 0.010, zone_yaw: -1.5707963268, region_yaw: -1.5707963268, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.21}, parking: {x: -5.399, y: 3.236, yaw: 1.571, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.35}, description: "Zone B"}
+  C: {position: {x: 7.000, y: 3.096, z: 0.010, zone_yaw: 0.0, region_yaw: 0.0, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.115}, parking: {x: 6.500, y: 3.045, yaw: 0.0, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.35}, description: "Zone C"}
+
+dynamic_obstacles:
+  - name: moving_box_1
+    z: 0.25
+    safety_radius_m: 0.65
+    motion: {type: sine_x, center_x: 0.353, center_y: -3.460, amplitude_m: 1.2, omega_rad_s: 0.125, phase_rad: 0.0}
+  - name: moving_box_2
+    z: 0.25
+    safety_radius_m: 0.65
+    motion: {type: sine_x, center_x: -0.595, center_y: 0.906, amplitude_m: 0.6, omega_rad_s: 0.25, phase_rad: 1.5707963268}

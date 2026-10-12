@@ -1,0 +1,1175 @@
+{
+  "configById": {
+    "3D!competitionMap": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 19.99999999996871,
+        "phi": 34.85631513637342,
+        "thetaOffset": -3.1108598032924393,
+        "targetOffset": [
+          -0.5173103108147157,
+          0.912466240267345,
+          4.415519718104532e-17
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "followTf": "map",
+      "scene": {
+        "transforms": {
+          "editable": false,
+          "showLabel": false
+        }
+      },
+      "transforms": {
+        "frame:odom": {
+          "visible": true
+        },
+        "frame:base_link": {
+          "visible": false
+        },
+        "frame:link1": {
+          "visible": false
+        },
+        "frame:link2": {
+          "visible": false
+        },
+        "frame:link3": {
+          "visible": false
+        },
+        "frame:link4": {
+          "visible": false
+        },
+        "frame:link5": {
+          "visible": false
+        },
+        "frame:link6": {
+          "visible": true
+        },
+        "frame:gripper_finger_link1": {
+          "visible": false
+        },
+        "frame:gripper_finger_link2": {
+          "visible": false
+        },
+        "frame:back_caster_link": {
+          "visible": false
+        },
+        "frame:camera_link": {
+          "visible": false
+        },
+        "frame:laser_link": {
+          "visible": false
+        },
+        "frame:left_wheel_link": {
+          "visible": false
+        },
+        "frame:right_wheel_link": {
+          "visible": false
+        },
+        "frame:arm_base_link": {
+          "visible": false
+        },
+        "frame:camera_rgbd_link": {
+          "visible": false
+        },
+        "frame:camera_rgbd_frame_optical": {
+          "visible": false
+        },
+        "frame:grasping_frame": {
+          "visible": false
+        }
+      },
+      "topics": {
+        "/map": {
+          "visible": true
+        },
+        "/scan": {
+          "visible": true,
+          "colorField": "range",
+          "colorMode": "gradient",
+          "colorMap": "turbo",
+          "pointSize": 4,
+          "decayTime": 0.5,
+          "pointShape": "square"
+        },
+        "/plan": {
+          "visible": true,
+          "lineWidth": 0.2,
+          "type": "line",
+          "color": "#22c55e"
+        },
+        "/local_plan": {
+          "visible": true,
+          "lineWidth": 0.16,
+          "type": "line",
+          "color": "#f59e0b"
+        },
+        "/amcl_pose": {
+          "visible": true
+        },
+        "/robot_description": {
+          "visible": true,
+          "displayMode": "auto",
+          "showOutlines": false,
+          "showAxis": false
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "624e37d7-3a83-446e-9453-588dddcda22d",
+          "layerId": "foxglove.Grid",
+          "size": 10,
+          "divisions": 10,
+          "lineWidth": 1,
+          "color": "#248eff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        "71656b70-8afa-48d6-93c2-6ad44c1442bb": {
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": true,
+          "opacity": 1,
+          "visible": true,
+          "frameLocked": true,
+          "instanceId": "71656b70-8afa-48d6-93c2-6ad44c1442bb",
+          "label": "URDF",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "url": "",
+          "filePath": "",
+          "parameter": "",
+          "topic": "/robot_description",
+          "framePrefix": "",
+          "order": 1
+        }
+      },
+      "publish": {
+        "type": "pose",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {},
+      "foxglovePanelTitle": "导航地图与实时路径"
+    },
+    "RawMessages!question": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/question",
+      "fontSize": 16,
+      "foxglovePanelTitle": "当前任务题目"
+    },
+    "RawMessages!mapping": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/mapping_rule",
+      "fontSize": 16,
+      "foxglovePanelTitle": "区域映射规则"
+    },
+    "RawMessages!plan": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/task_plan_text",
+      "fontSize": 15,
+      "foxglovePanelTitle": "抓取与放置顺序"
+    },
+    "RawMessages!events": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/event",
+      "fontSize": 13,
+      "foxglovePanelTitle": "任务事件"
+    },
+    "RawMessages!errors": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/last_error",
+      "fontSize": 13,
+      "foxglovePanelTitle": "最近错误"
+    },
+    "Indicator!redTotal": {
+      "path": "/competition/red_total.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#b42318",
+      "fallbackLabel": "--",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#b42318",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#b42318",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#b42318",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#b42318",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#b42318",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#b42318",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "红色总数"
+    },
+    "Indicator!blueTotal": {
+      "path": "/competition/blue_total.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#175cd3",
+      "fallbackLabel": "--",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#175cd3",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#175cd3",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#175cd3",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#175cd3",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#175cd3",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#175cd3",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "蓝色总数"
+    },
+    "Indicator!redDone": {
+      "path": "/competition/red_completed.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#d92d20",
+      "fallbackLabel": "0",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#d92d20",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#d92d20",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#d92d20",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#d92d20",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#d92d20",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#d92d20",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "红色已完成"
+    },
+    "Indicator!blueDone": {
+      "path": "/competition/blue_completed.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#2970ff",
+      "fallbackLabel": "0",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#2970ff",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#2970ff",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#2970ff",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#2970ff",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#2970ff",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#2970ff",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "蓝色已完成"
+    },
+    "Indicator!item": {
+      "path": "/competition/current_item_index.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#7f56d9",
+      "fallbackLabel": "--",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#7f56d9",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#7f56d9",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#7f56d9",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#7f56d9",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#7f56d9",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "当前方块"
+    },
+    "Indicator!done": {
+      "path": "/competition/completed_item_count.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#039855",
+      "fallbackLabel": "0",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#039855",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#039855",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#039855",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#039855",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#039855",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#039855",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "总完成数"
+    },
+    "Indicator!color": {
+      "path": "/competition/current_color.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#475467",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "red",
+          "color": "#d92d20",
+          "label": "红色"
+        },
+        {
+          "operator": "=",
+          "rawValue": "blue",
+          "color": "#2970ff",
+          "label": "蓝色"
+        }
+      ],
+      "foxglovePanelTitle": "目标颜色"
+    },
+    "Indicator!zone": {
+      "path": "/competition/current_zone.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#475467",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "A",
+          "color": "#475467",
+          "label": "A"
+        },
+        {
+          "operator": "=",
+          "rawValue": "B",
+          "color": "#475467",
+          "label": "B"
+        },
+        {
+          "operator": "=",
+          "rawValue": "C",
+          "color": "#475467",
+          "label": "C"
+        }
+      ],
+      "foxglovePanelTitle": "目标区域"
+    },
+    "Indicator!state": {
+      "path": "/competition/current_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#344054",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "BOOTING",
+          "color": "#344054",
+          "label": "启动中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RESETTING",
+          "color": "#344054",
+          "label": "复位中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READY",
+          "color": "#344054",
+          "label": "就绪"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READING_QUESTION",
+          "color": "#344054",
+          "label": "识别资源"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_OBJECT",
+          "color": "#344054",
+          "label": "前往资源点"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_GRASP",
+          "color": "#344054",
+          "label": "预抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "GRASPING",
+          "color": "#344054",
+          "label": "抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_ZONE",
+          "color": "#344054",
+          "label": "前往放置区"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PLACING",
+          "color": "#344054",
+          "label": "放置"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VERIFYING",
+          "color": "#344054",
+          "label": "校验中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ITEM_SUCCEEDED",
+          "color": "#344054",
+          "label": "单块完成"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ITEM_FAILED",
+          "color": "#344054",
+          "label": "单块失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_SUCCEEDED",
+          "color": "#039855",
+          "label": "任务完成"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_FAILED",
+          "color": "#d92d20",
+          "label": "任务失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "API_ERROR",
+          "color": "#d92d20",
+          "label": "解析失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TIME_LIMIT",
+          "color": "#d92d20",
+          "label": "时间到"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#344054",
+          "label": "已取消"
+        }
+      ],
+      "foxglovePanelTitle": "总状态"
+    },
+    "Indicator!nav": {
+      "path": "/competition/navigation_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#026aa2",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "IDLE",
+          "color": "#026aa2",
+          "label": "空闲"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_OBJECT",
+          "color": "#026aa2",
+          "label": "前往资源点"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_ZONE",
+          "color": "#026aa2",
+          "label": "前往放置区"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#026aa2",
+          "label": "已取消"
+        }
+      ],
+      "foxglovePanelTitle": "导航状态"
+    },
+    "Indicator!arm": {
+      "path": "/competition/manipulation_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#6941c6",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "IDLE",
+          "color": "#6941c6",
+          "label": "空闲"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_GRASP",
+          "color": "#6941c6",
+          "label": "预抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "MOVEIT_TO_OPENCV_TARGET",
+          "color": "#6941c6",
+          "label": "视觉微调"
+        },
+        {
+          "operator": "=",
+          "rawValue": "SUCTION_ON",
+          "color": "#6941c6",
+          "label": "吸附"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_RELEASE",
+          "color": "#6941c6",
+          "label": "预放置"
+        },
+        {
+          "operator": "=",
+          "rawValue": "SUCTION_OFF",
+          "color": "#6941c6",
+          "label": "释放"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#6941c6",
+          "label": "已取消"
+        }
+      ],
+      "foxglovePanelTitle": "机械臂状态"
+    },
+    "Indicator!api": {
+      "path": "/competition/api_status.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#b54708",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "BOOTING",
+          "color": "#b54708",
+          "label": "启动中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READY",
+          "color": "#b54708",
+          "label": "就绪"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READING_QUESTION",
+          "color": "#b54708",
+          "label": "读取题目"
+        },
+        {
+          "operator": "=",
+          "rawValue": "WAITING_MAPPING",
+          "color": "#b54708",
+          "label": "等待映射"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CALLING_LLM",
+          "color": "#b54708",
+          "label": "模型解析"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VALIDATING_TASK",
+          "color": "#b54708",
+          "label": "校验任务"
+        },
+        {
+          "operator": "=",
+          "rawValue": "API_ERROR",
+          "color": "#d92d20",
+          "label": "解析失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#b54708",
+          "label": "已取消"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VISUAL_FIXTURE",
+          "color": "#b54708",
+          "label": "验收夹具"
+        }
+      ],
+      "foxglovePanelTitle": "解析状态"
+    },
+    "Image!detection": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/competition/detection_image",
+        "synchronize": false,
+        "rotation": 0
+      },
+      "foxglovePanelTitle": "OpenCV目标检测"
+    },
+    "Image!rgb": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/camera_rgbd/camera_rgbd/image_raw",
+        "calibrationTopic": "/camera_rgbd/camera_rgbd/camera_info",
+        "synchronize": false,
+        "rotation": 0
+      },
+      "foxglovePanelTitle": "RGB画面"
+    },
+    "Image!depth": {
+      "cameraState": {
+        "distance": 20,
+        "perspective": true,
+        "phi": 60,
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOffset": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "thetaOffset": 45,
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "scene": {},
+      "transforms": {},
+      "topics": {},
+      "layers": {},
+      "publish": {
+        "type": "point",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {
+        "imageTopic": "/camera_rgbd/camera_rgbd/depth/image_raw",
+        "calibrationTopic": "/camera_rgbd/camera_rgbd/depth/camera_info",
+        "synchronize": false,
+        "rotation": 0
+      },
+      "foxglovePanelTitle": "Depth画面"
+    },
+    "Tab!vision": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "目标检测",
+          "layout": "Image!detection"
+        },
+        {
+          "title": "RGB",
+          "layout": "Image!rgb"
+        },
+        {
+          "title": "Depth",
+          "layout": "Image!depth"
+        }
+      ]
+    },
+    "Publish!mappingInput": {
+      "buttonText": "发布映射",
+      "buttonTooltip": "",
+      "advancedView": true,
+      "value": "{\"data\":\"\"}",
+      "foxglovePanelTitle": "映射输入",
+      "topicName": "/competition/mapping_rule_input",
+      "datatype": "std_msgs/String"
+    },
+    "Publish!manualQuestion": {
+      "buttonText": "发布题目",
+      "buttonTooltip": "",
+      "advancedView": true,
+      "value": "{\"data\":\"\"}",
+      "foxglovePanelTitle": "题目输入",
+      "topicName": "/competition/manual_question",
+      "datatype": "std_msgs/String"
+    },
+    "Publish!start": {
+      "buttonText": "开始",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "开始任务",
+      "topicName": "/competition/start",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!resubmit": {
+      "buttonText": "重新解析",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "重新解析",
+      "topicName": "/competition/resubmit",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!cancel": {
+      "buttonText": "取消",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "取消任务",
+      "topicName": "/competition/cancel",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!reset": {
+      "buttonText": "复位",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "复位任务",
+      "topicName": "/competition/reset",
+      "datatype": "std_msgs/Bool"
+    },
+    "RawMessages!planJson": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/task_plan_json",
+      "fontSize": 12,
+      "foxglovePanelTitle": "任务JSON"
+    },
+    "Tab!diagnostics": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "任务事件",
+          "layout": "RawMessages!events"
+        },
+        {
+          "title": "错误信息",
+          "layout": "RawMessages!errors"
+        },
+        {
+          "title": "任务JSON",
+          "layout": "RawMessages!planJson"
+        }
+      ]
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "first": {
+      "first": "3D!competitionMap",
+      "second": "Tab!vision",
+      "direction": "column",
+      "splitPercentage": 72
+    },
+    "second": {
+      "first": {
+        "first": {
+          "first": "RawMessages!question",
+          "second": {
+            "first": "RawMessages!mapping",
+            "second": "RawMessages!plan",
+            "direction": "column",
+            "splitPercentage": 45
+          },
+          "direction": "column",
+          "splitPercentage": 32
+        },
+        "second": {
+          "first": {
+            "first": {
+              "first": {
+                "first": "Indicator!redTotal",
+                "second": "Indicator!blueTotal",
+                "direction": "row",
+                "splitPercentage": 50
+              },
+              "second": "Indicator!redDone",
+              "direction": "row",
+              "splitPercentage": 66.66666666666666
+            },
+            "second": {
+              "first": {
+                "first": "Indicator!blueDone",
+                "second": "Indicator!item",
+                "direction": "row",
+                "splitPercentage": 50
+              },
+              "second": "Indicator!done",
+              "direction": "row",
+              "splitPercentage": 66.66666666666666
+            },
+            "direction": "column",
+            "splitPercentage": 50
+          },
+          "second": {
+            "first": {
+              "first": {
+                "first": "Indicator!color",
+                "second": "Indicator!zone",
+                "direction": "row",
+                "splitPercentage": 50
+              },
+              "second": "Indicator!state",
+              "direction": "row",
+              "splitPercentage": 66.66666666666666
+            },
+            "second": {
+              "first": {
+                "first": "Indicator!nav",
+                "second": "Indicator!arm",
+                "direction": "row",
+                "splitPercentage": 50
+              },
+              "second": "Indicator!api",
+              "direction": "row",
+              "splitPercentage": 66.66666666666666
+            },
+            "direction": "column",
+            "splitPercentage": 50
+          },
+          "direction": "column",
+          "splitPercentage": 50
+        },
+        "direction": "column",
+        "splitPercentage": 43
+      },
+      "second": {
+        "first": "Tab!diagnostics",
+        "second": {
+          "first": {
+            "first": {
+              "first": "Publish!mappingInput",
+              "second": "Publish!manualQuestion",
+              "direction": "row",
+              "splitPercentage": 50
+            },
+            "second": "Publish!start",
+            "direction": "row",
+            "splitPercentage": 66.66666666666666
+          },
+          "second": {
+            "first": {
+              "first": "Publish!resubmit",
+              "second": "Publish!cancel",
+              "direction": "row",
+              "splitPercentage": 50
+            },
+            "second": "Publish!reset",
+            "direction": "row",
+            "splitPercentage": 66.66666666666666
+          },
+          "direction": "column",
+          "splitPercentage": 50
+        },
+        "direction": "column",
+        "splitPercentage": 58
+      },
+      "direction": "column",
+      "splitPercentage": 75
+    },
+    "direction": "row",
+    "splitPercentage": 58
+  }
+}

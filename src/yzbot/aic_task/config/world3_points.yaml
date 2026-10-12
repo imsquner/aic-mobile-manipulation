@@ -1,0 +1,168 @@
+# World3 uses the verified World2 task layout plus moving obstacles.
+
+robot_initial_pose:
+  frame_id: map
+  x: 0.0
+  y: 0.0
+  yaw: 0.0
+
+approach:
+  end_effector_forward_m: 0.40
+  # Keep the base clear of the cube while staying inside the verified IK range.
+  object_approach_distance_m: 0.45
+  # Nav2 handles the long segment; odometry closes the final clear approach.
+  object_staging_backoff_m: 0.25
+  object_yaw: 3.141592653589793
+  zone_yaw: 0.0
+  # The suction plugin attaches from a collision-safe hover above the OpenCV point.
+  cube_half_height_m: 0.015
+  pre_attach_tolerance_m: 0.18
+  attached_tolerance_m: 0.18
+  placed_tolerance_m: 0.65
+  # The rules explicitly allow placement near the marked region.
+  region_nearby_tolerance_m: 0.35
+  # Gazebo can settle a released cube by several centimetres on the marked
+  # plate; the final region-nearby check remains the authoritative gate.
+  placement_stability_xy_m: 0.10
+  placement_stable_samples: 3
+  zone_base_nearby_tolerance_m: 0.50
+  # Leave the released cube in front of the robot before Nav2 is allowed to
+  # rotate toward the next target. This prevents the footprint from sweeping
+  # previously placed cargo out of the region.
+  post_place_retreat_m: 0.60
+  # Zone B's west wall stops the base near x=2.5. A 0.4 m retreat reaches the
+  # validated x=2.6 staging corridor without loading the wall contact.
+  post_place_retreat_by_zone_m: {B: 0.40}
+  post_place_retreat_min_timeout_sec: 10.0
+  post_place_retreat_speed_mps: 0.80
+
+# Nav2 remains the primary planner. These routes are attempted only after a
+# direct goal fails, splitting long wall-corner paths into bounded segments.
+navigation_fallback:
+  enabled: true
+  # A stuck DWB segment is cleared and retried once instead of consuming the
+  # whole allowance without changing controller state.
+  waypoint_timeout_sec: 35.0
+  # Intermediate corridor points do not require final-object heading accuracy.
+  # Accept a stationary base already inside this radius after Nav2 cancellation.
+  waypoint_position_tolerance_m: 0.35
+  segment_retry_count: 2
+  # Direct Nav2 remains primary. These corridor points are used only after
+  # direct planning and costmap recovery fail.
+  force_routes: [blue_cube_2, red_cube_3, red_cube_2_zone_B, red_cube_4_zone_B, red_cube_5_zone_B, zone_A_blue_cube_2, zone_A_blue_cube_5, zone_B_red_cube_2]
+  # Dynamic obstacles can leave lethal-cost history behind after the robot has
+  # already waited. Clear only the run39-proven high-risk segments before
+  # dispatch; laser updates and the collision monitor remain authoritative.
+  preclear_segments:
+    red_cube_2_zone_B: [1, 3]
+    zone_B_red_cube_2: [3]
+    red_cube_4_zone_B: [1]
+    red_cube_5_zone_B: [1]
+  # Red-5 returns from the north-east. Reuse its verified outbound west-edge
+  # waypoint in reverse so the fifth carry approaches B west of placed cargo.
+  carry_route_aliases:
+    zone_B_red_cube_5: red_cube_5_zone_B
+  routes:
+    blue_cube_1: [{x: -2.0, y: 1.0, yaw: -1.5707963267948966}, {x: -1.2, y: -0.5, yaw: -1.5707963267948966}]
+    blue_cube_2: [{x: -2.0, y: 1.0, yaw: 3.141592653589793}, {x: -4.0, y: 0.0, yaw: -1.5707963267948966}]
+    blue_cube_3: [{x: -0.5, y: -1.0, yaw: 0.0}]
+    blue_cube_4: [{x: 1.5, y: -0.5, yaw: 0.0}]
+    blue_cube_5: [{x: 0.6, y: -3.5, yaw: -1.5707963267948966}]
+    red_cube_1: [{x: -2.0, y: 1.0, yaw: 0.0}]
+    # Use the open center corridor instead of approaching behind red_cube_1.
+    red_cube_2: [{x: -4.0, y: 0.0, yaw: 1.5707963267948966}]
+    red_cube_3: [{x: 0.74, y: 0.55, yaw: 1.63}]
+    # Reverse the verified west-wall corridor when leaving Zone B for red-2.
+    # This prevents a single direct goal from consuming the full 55 s budget.
+    red_cube_2_zone_B:
+      - {x: -1.70, y: 1.10, yaw: 2.64}
+      - {x: -2.35, y: 1.50, yaw: 3.141592653589793}
+    # Red 4 is now in the open south-east room. Direct Nav2 is primary; this
+    # lower-room point is only used after a direct-goal recovery fails.
+    red_cube_4: [{x: 4.2, y: -2.0, yaw: -0.5}]
+    # First move north at the west edge of Zone B, then finish facing east for
+    # the next segment. The turn happens in the clear corridor, above all
+    # released cargo; a single diagonal goal displaced the third cube in run50.
+    red_cube_4_zone_B:
+      - {x: 2.60, y: 0.05, yaw: 0.0}
+      - {x: 5.25, y: 0.05, yaw: -1.5707963267948966}
+    red_cube_5_zone_B:
+      - {x: 2.60, y: 0.05, yaw: 0.0}
+    # These central approach points keep recovery goals clear of the narrow
+    # final parking areas; every segment still uses Nav2 obstacle avoidance.
+    zone_A: [{x: -2.0, y: 1.0, yaw: 1.5707963267948966}]
+    # The blue-2 carry route repeatedly exhausted two direct 35 s attempts.
+    # Force the same verified central corridor immediately for this edge.
+    zone_A_blue_cube_2: [{x: -2.0, y: 1.0, yaw: 0.70}]
+    # Blue-5 to Zone A once consumed a full 35 s direct attempt before the
+    # same open-corridor recovery succeeded. Start through it immediately.
+    zone_A_blue_cube_5: [{x: -2.0, y: 1.0, yaw: 0.70}]
+    # Keep the carried cube above the west wall until the base has cleared its
+    # east endpoint. A direct DWB path cuts this corner and traps the footprint
+    # in the inflated wall cells near (-3.1, 1.1).
+    zone_B_red_cube_2:
+      - {x: -2.35, y: 1.50, yaw: 0.0}
+      - {x: -1.70, y: 1.10, yaw: -0.50}
+    zone_B: [{x: 2.6, y: -1.5, yaw: 0.0}]
+    zone_C: [{x: 1.0, y: 0.0, yaw: 0.0}, {x: 1.4, y: 0.0, yaw: 0.0}]
+    zone_C_blue_cube_1: [{x: 0.5, y: -1.0, yaw: 0.0}]
+    zone_C_blue_cube_5: [{x: 0.0, y: -2.5, yaw: 1.5707963267948966}]
+
+red_cubes:
+  # A 0.23 m target leaves base clearance while bringing the RGB-D point into IK reach.
+  - {id: red_cube_1, position: {x: -1.5, y: 1.5, z: 0.015}, parking: {x: -1.27, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # Approach from the west so the loaded base already faces the eastbound
+  # Zone-B corridor instead of spending a full recovery turn beside the wall.
+  - {id: red_cube_2, position: {x: -3.6, y: 1.5, z: 0.015}, parking: {x: -3.90, y: 1.5, yaw: 0.0, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_3, position: {x: 0.6, y: 3.5, z: 0.015}, parking: {x: 0.6, y: 3.27, yaw: 1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # The open south-east position removes the repeated Zone-B wall detour.
+  # Its nearest cargo remains 3.18 m away, above the official 2 m minimum.
+  # The last two full runs only acquired this cube after the proven -25 deg
+  # camera scan. Preserve the fixed parking direction and scan immediately.
+  - {id: red_cube_4, vision_match_tolerance_m: 0.35, visual_scan_first: true, object_staging_backoff_m: 0.15, position: {x: 5.0, y: -2.7, z: 0.015}, parking: {x: 5.0, y: -2.47, yaw: -1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # The former far north-east location made the five-red worst case exceed
+  # 300 s. This open point keeps 2.46 m cargo spacing and a 0.79 m clear
+  # north-side parking pose while shortening the Zone-B transfer.
+  # OpenCV remains authoritative once the base is within the verified 0.10 m
+  # parking gate; a stricter 0.05 m chase caused run60 to circle past the cube.
+  - {id: red_cube_5, direct_precision_xy_tolerance_m: 0.10, object_staging_backoff_m: 0.15, position: {x: 5.25, y: -0.25, z: 0.015}, parking: {x: 5.25, y: 0.05, yaw: -1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+blue_cubes:
+  - {id: blue_cube_1, position: {x: -1.5, y: -1.5, z: 0.015}, parking: {x: -1.27, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # Wall_57 occupies the old forward parking point, so approach this cube
+  # from the left with a separate fixed direction.
+  - {id: blue_cube_2, route_risk_penalty_sec: 7.0, position: {x: -3.6, y: -1.5, z: 0.015}, parking: {x: -3.83, y: -1.5, yaw: 0.0, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # Open central locations shorten the route while retaining at least 2.10 m
+  # between every cargo pair. Each final approach remains perpendicular.
+  - {id: blue_cube_3, direct_visual_reorientation_on_failure: true, position: {x: 0.6, y: -0.5, z: 0.015}, parking: {x: 0.6, y: -0.73, yaw: 1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  # The east, west, and south candidates clip Wall_59's SDF footprint. The
+  # north side preserves the 0.23 m camera geometry with 0.41 m wall clearance.
+  - {id: blue_cube_4, route_risk_penalty_sec: 8.0, direct_visual_reorientation_on_failure: true, position: {x: 2.7, y: -0.5, z: 0.015}, parking: {x: 2.7, y: -0.27, yaw: -1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_5, position: {x: 0.6, y: -4.5, z: 0.015}, parking: {x: 0.6, y: -4.27, yaw: -1.5707963267948966, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+zones:
+  # The three region centers are pairwise separated by existing SDF walls.
+  # This remains behind Wall_40/Wall_59 from B and C while removing repeated
+  # west-room travel from the five-blue worst case.
+  A: {position: {x: -1.5, y: 2.75, z: 0.01, zone_yaw: 3.141592653589793, region_yaw: 0.0, size_x_m: 1.0, size_y_m: 0.5}, parking: {x: -1.1, y: 2.75, yaw: 3.141592653589793, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.3490658503988659}, description: "Zone A"}
+  # Fill B from east to west. Each later base parking pose remains west of all
+  # released cargo, avoiding the lateral lane change that displaced run44.
+  B: {position: {x: 3.4, y: -1.5, z: 0.01, zone_yaw: 0.0, region_yaw: 0.0, size_x_m: 1.0, size_y_m: 0.5, placement_axis: longitudinal_descending, placement_longitudinal_extent_scale: 0.80}, parking: {x: 3.0, y: -1.5, yaw: 0.0, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.3490658503988659}, description: "Zone B"}
+  # C is a central transit area. Compact slots keep released cubes inside the
+  # marked footprint so later Nav2 paths cannot push the edge slots away.
+  C: {position: {x: 1.8, y: 0.3, z: 0.01, zone_yaw: 1.5707963267948966, region_yaw: 0.0, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_extent_scale: 0.20}, parking: {x: 1.8, y: 0.0, yaw: 1.5707963267948966, xy_tolerance_m: 0.25, yaw_tolerance_rad: 0.3490658503988659}, description: "Zone C"}
+
+dynamic_obstacles:
+  - name: dynamic_obstacle_1
+    z: 0.5
+    safety_radius_m: 0.75
+    # Crosses the transfer route before Zone A's narrow final entrance.
+    path: [[-4.4, 0.6], [-4.4, 1.4], [-4.4, 0.6]]
+    speed: 0.35
+  - name: dynamic_obstacle_2
+    z: 0.25
+    safety_radius_m: 0.75
+    # Keep both retreat endpoints far enough apart that one remains clear when
+    # the robot crosses the center; this avoids pausing the obstacle in-lane.
+    path: [[-3.6, 0.0], [0.2, 0.0], [-3.6, 0.0]]
+    speed: 0.40

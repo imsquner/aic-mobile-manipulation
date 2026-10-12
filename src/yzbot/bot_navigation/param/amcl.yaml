@@ -1,0 +1,45 @@
+amcl:
+  ros__parameters:
+    alpha1: 0.2
+    alpha2: 0.2
+    alpha3: 0.2
+    alpha4: 0.2
+    alpha5: 0.2
+    base_frame_id: "base_footprint"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    global_frame_id: "map"
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 2.0
+    laser_max_range: 100.0
+    laser_min_range: -1.0
+    laser_model_type: "likelihood_field"
+    max_beams: 60
+    max_particles: 2000
+    min_particles: 500
+    odom_frame_id: "odom"
+    pf_err: 0.05
+    pf_z: 0.99
+    # 2026-09-23：与 test13（最近跑通的版本）逐字节对齐。
+    # 曾试改为 0.1/0.01（开启恢复）与 laser range 30.0/0.10，
+    # 但 test13 与队友基线都用 0.0/0.0 与 100.0/-1.0 跑通过，
+    # 说明 AMCL 不是瓶颈。已完全回退，不再偏离已知可用配置。
+    recovery_alpha_fast: 0.0
+    recovery_alpha_slow: 0.0
+    resample_interval: 1
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    save_pose_rate: 0.5
+    sigma_hit: 0.2
+    tf_broadcast: true
+    transform_tolerance: 1.0
+    update_min_a: 0.2
+    update_min_d: 0.25
+    # 2026-09-23：曾试改为 z_hit 0.95 / z_rand 0.05（常规配比），
+    # 实测未显示改善（见 NAV_LOCALIZATION_ROOT_CAUSE.md §五），已回退为原值。
+    z_hit: 0.5
+    z_max: 0.05
+    z_rand: 0.5
+    z_short: 0.05
+    scan_topic: scan

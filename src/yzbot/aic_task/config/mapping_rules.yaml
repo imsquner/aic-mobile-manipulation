@@ -1,0 +1,20 @@
+# Official example mapping from the competition rules. It maps result
+# variables to cargo colors, then maps each computed count to a zone.
+# Foxglove input can override this text for the current competition round.
+default: "x represents red and y represents blue; a result count >= 3 goes to zone A; a result count < 3 goes to zone C."
+
+# Zone descriptions
+zones:
+  A:
+    description: "Green zone - Area A"
+    color: "green"
+  B:
+    description: "Yellow zone - Area B"
+    color: "yellow"
+  C:
+    description: "Blue zone - Area C"
+    color: "blue"
+
+# Valid mappings (all possible combinations)
+valid_colors: ["red", "blue"]
+valid_zones: ["A", "B", "C"]

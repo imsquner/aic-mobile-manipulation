@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<robot name="six_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:include filename="$(find mybot_description)/urdf/large_base.xacro" />
+
+    <!-- Transmission is important to link the joints and the controller -->
+    <xacro:macro name="wheel_transmission" params="prefix">
+        <transmission name="${prefix}_wheel_joint_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${prefix}_wheel_joint">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${prefix}_wheel_joint_motor">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <gazebo reference="${prefix}_wheel_link">
+            <material>Gazebo/Gray</material>
+            <mu1>100000.0</mu1>
+            <mu2>100000.0</mu2>
+        </gazebo>
+    </xacro:macro>
+
+    <!-- /////////////////////////////////   Gazebo   ////////////////////////////////////// -->
+    <gazebo reference="base_footprint">
+        <turnGravityOff>false</turnGravityOff>
+    </gazebo>
+    <gazebo reference="base_link">
+        <material>Gazebo/Blue</material>
+    </gazebo>
+
+    <gazebo reference="back_caster_link">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <xacro:wheel_transmission prefix="left" />
+    <xacro:wheel_transmission prefix="right" />
+
+
+    <!-- controller -->
+    <!--
+      SAFETY CHAIN FIX (2026-09-23)
+
+      `<command_topic>` is NOT read by gazebo_ros 3.9.0 (Humble). Verified by
+      inspecting the shipped binary: `strings libgazebo_ros_diff_drive.so`
+      contains `cmd_vel` but zero occurrences of `command_topic` or
+      `cmd_vel_safe`. The plugin therefore always subscribed to `/cmd_vel`,
+      which made `collision_monitor` a no-op: it subscribed to `/cmd_vel` and
+      published `/cmd_vel_safe`, but nothing ever listened to `/cmd_vel_safe`,
+      while the differential drive drove straight off the raw `/cmd_vel`.
+
+      The remapping below is the mechanism this plugin actually supports and is
+      what historical test13 runs used successfully (their Gazebo logs show
+      `Subscribed to [/cmd_vel_muxed]`).
+
+      Keep the `<command_topic>` element for documentation, but do NOT rely on
+      it. Any future topic change must be made here, and verified in the Gazebo
+      log line `[differential_drive_controller]: Subscribed to [...]`.
+    -->
+    <gazebo>
+        <plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+            <update_rate>30</update_rate>
+            <left_joint>left_wheel_joint</left_joint>
+            <right_joint>right_wheel_joint</right_joint>
+            <wheel_separation>${base_width+wheel_length}</wheel_separation>
+            <wheel_diameter>${2*wheel_radius}</wheel_diameter>
+            <max_wheel_torque>10</max_wheel_torque>
+            <max_wheel_acceleration>1.0</max_wheel_acceleration>
+            <command_topic>cmd_vel_safe</command_topic>
+            <publish_odom>true</publish_odom>
+            <publish_odom_tf>true</publish_odom_tf>
+            <publish_wheel_tf>true</publish_wheel_tf>
+            <odometry_topic>odom</odometry_topic>
+            <odometry_frame>odom</odometry_frame>
+            <robot_base_frame>base_footprint</robot_base_frame>
+            <odometry_source>1</odometry_source>
+	    <!-- 强制 2D 位姿，Z 轴恒为 0 -->
+	    <odometry_2d_only>true</odometry_2d_only>
+	  
+	    <!-- 或者使用下面这个参数（不同版本可能不同） -->
+	    <publish_odom_2d_only>true</publish_odom_2d_only>
+            <!-- This is the element that actually takes effect: the plugin's
+                 only subscription must receive collision_monitor's output. -->
+            <ros>
+                <remapping>cmd_vel:=cmd_vel_safe</remapping>
+            </ros>
+        </plugin>
+    </gazebo>
+</robot>

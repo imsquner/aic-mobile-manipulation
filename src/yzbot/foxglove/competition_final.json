@@ -1,0 +1,324 @@
+{
+  "configById": {},
+  "layout": {
+    "version": 1,
+    "sidebar": { "width": 0 },
+    "panels": {
+      "topRow": {
+        "type": "tab",
+        "tabs": [
+          {
+            "title": "Competition Dashboard",
+            "layout": {
+              "version": 1,
+              "panels": {
+                "statusBar1": {
+                  "type": "tab",
+                  "tabs": [
+                    {
+                      "title": "Task Status",
+                      "layout": {
+                        "version": 1,
+                        "panels": {
+                          "currentTarget": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/current_color",
+                              "label": "Current Target Color"
+                            }
+                          },
+                          "currentZone": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/current_zone",
+                              "label": "Current Target Zone"
+                            }
+                          },
+                          "currentItem": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/current_item_index",
+                              "label": "Current Item #"
+                            }
+                          },
+                          "currentGroupCount": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/current_group_count",
+                              "label": "Current Group Items"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "statusBar2": {
+                  "type": "tab",
+                  "tabs": [
+                    {
+                      "title": "Progress",
+                      "layout": {
+                        "version": 1,
+                        "panels": {
+                          "redTotal": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/red_total",
+                              "label": "Red Total"
+                            }
+                          },
+                          "redCompleted": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/red_completed",
+                              "label": "Red Done"
+                            }
+                          },
+                          "blueTotal": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/blue_total",
+                              "label": "Blue Total"
+                            }
+                          },
+                          "blueCompleted": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/blue_completed",
+                              "label": "Blue Done"
+                            }
+                          },
+                          "totalProgress": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/completed_item_count",
+                              "label": "Total Completed"
+                            }
+                          },
+                          "remainingTime": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/remaining_seconds",
+                              "label": "Remaining (s)"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "statusBar3": {
+                  "type": "tab",
+                  "tabs": [
+                    {
+                      "title": "System Status",
+                      "layout": {
+                        "version": 1,
+                        "panels": {
+                          "currentState": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/current_state",
+                              "label": "State"
+                            }
+                          },
+                          "navState": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/navigation_state",
+                              "label": "Navigation"
+                            }
+                          },
+                          "manipState": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/manipulation_state",
+                              "label": "Arm/Gripper"
+                            }
+                          },
+                          "apiStatus": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/api_status",
+                              "label": "API Status"
+                            }
+                          },
+                          "lastError": {
+                            "type": "Indicator",
+                            "config": {
+                              "topic": "/competition/last_error",
+                              "label": "Last Error"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "mainContent": {
+                  "type": "tab",
+                  "tabs": [
+                    {
+                      "title": "Main View",
+                      "layout": {
+                        "version": 1,
+                        "panels": {
+                          "questionDisplay": {
+                            "type": "Text",
+                            "config": {
+                              "topic": "/competition/question",
+                              "label": "Question"
+                            }
+                          },
+                          "mappingDisplay": {
+                            "type": "Text",
+                            "config": {
+                              "topic": "/competition/mapping_rule",
+                              "label": "Mapping Rules"
+                            }
+                          },
+                          "taskPlanDisplay": {
+                            "type": "Text",
+                            "config": {
+                              "topic": "/competition/task_plan_text",
+                              "label": "Task Plan"
+                            }
+                          },
+                          "taskPlanJson": {
+                            "type": "RawMessage",
+                            "config": {
+                              "topic": "/competition/task_plan_json",
+                              "label": "Structured Task (JSON)"
+                            }
+                          },
+                          "detectionImage": {
+                            "type": "Image",
+                            "config": {
+                              "topic": "/competition/detection_image",
+                              "label": "Detection View"
+                            }
+                          },
+                          "rgbImage": {
+                            "type": "Image",
+                            "config": {
+                              "topic": "/camera_rgbd/camera_rgbd/image_raw",
+                              "label": "RGB Camera"
+                            }
+                          },
+                          "depthImage": {
+                            "type": "Image",
+                            "config": {
+                              "topic": "/camera_rgbd/camera_rgbd/depth/image_raw",
+                              "label": "Depth"
+                            }
+                          },
+                          "map3D": {
+                            "type": "Map3D",
+                            "config": {
+                              "topic": "/map",
+                              "label": "3D Map"
+                            }
+                          },
+                          "laserScan": {
+                            "type": "LaserScan",
+                            "config": {
+                              "topic": "/scan",
+                              "label": "LiDAR Scan"
+                            }
+                          },
+                          "globalPath": {
+                            "type": "Path",
+                            "config": {
+                              "topic": "/plan",
+                              "label": "Global Path"
+                            }
+                          },
+                          "localPath": {
+                            "type": "Path",
+                            "config": {
+                              "topic": "/local_plan",
+                              "label": "Local Path"
+                            }
+                          },
+                          "eventLog": {
+                            "type": "Log",
+                            "config": {
+                              "topic": "/competition/event",
+                              "label": "Event Log"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "controlBar": {
+                  "type": "tab",
+                  "tabs": [
+                    {
+                      "title": "Controls",
+                      "layout": {
+                        "version": 1,
+                        "panels": {
+                          "mappingInput": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/mapping_rule_input",
+                              "label": "Mapping Rule Input"
+                            }
+                          },
+                          "manualQuestion": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/manual_question",
+                              "label": "Manual Question"
+                            }
+                          },
+                          "startButton": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/start",
+                              "label": "Start Task",
+                              "buttonText": "START",
+                              "message": "true"
+                            }
+                          },
+                          "resubmitButton": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/resubmit",
+                              "label": "Retry Current Question",
+                              "buttonText": "RESUBMIT",
+                              "message": "true"
+                            }
+                          },
+                          "cancelButton": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/cancel",
+                              "label": "Cancel Task",
+                              "buttonText": "CANCEL"
+                            }
+                          },
+                          "resetButton": {
+                            "type": "Publish",
+                            "config": {
+                              "topic": "/competition/reset",
+                              "label": "Reset",
+                              "buttonText": "RESET"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

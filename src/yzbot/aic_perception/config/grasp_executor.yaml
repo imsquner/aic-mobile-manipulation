@@ -1,0 +1,44 @@
+grasp_executor:
+  ros__parameters:
+    use_sim_time: true
+    allow_motion: false
+    allow_attach: false
+    allow_detach: false
+    cube_model: ""
+    detach_timeout_sec: 5.0
+    release_settle_sec: 0.25
+    planning_group: arm
+    planning_frame: arm_base_link
+    ik_link: grasp_center_frame
+    max_status_age_sec: 20.0
+    max_plan_age_sec: 120.0
+    cartesian_step_m: 0.005
+    cartesian_revolute_jump_rad: 0.15
+    cartesian_fraction_min: 0.98
+    # 2026-09-24（老板指示）：把 2.0rl 里测出来的"稳定高速档"搬回来。现役这组是
+    # test13 stable_v2_0 才出现的慢档（speed 0.060 / min_dur 0.35 / scaling 0.80-0.75 /
+    # return 1.30），比队友实测的 V1-V4 任何一档都慢，抓取明显拖时间。
+    # 依据：2.0rl/partner/arm/grasp_time_tests.md + 2.0rl/params/arm.md
+    #   V1（2026-08-28 稳定高速仿真档）= speed 0.40 / min_dur 0.10 / pregrasp scaling 1.00/1.00
+    #                                    / return 0.60 → 实测每点抓取 2.23–2.57 s
+    #   V2 = V1 但 return 0.45 → 2.11–2.49 s（略快，未发版；想要更快可换这一档）
+    #   V3 = speed 0.45 / min_dur 0.08 / return 0.30 → 1.72–1.87 s，但个别点 2.94/4.19 s
+    #        （仿真控制器跟不上，队友判定"太激进"，**不要用**）
+    #   V4 = speed 0.25 / min_dur 0.15 / return 0.65 → 抓取 3.08–4.26 s（回调过慢）
+    cartesian_speed_mps: 0.40
+    cartesian_min_duration_sec: 0.10
+    pregrasp_velocity_scaling_factor: 1.00
+    pregrasp_acceleration_scaling_factor: 1.00
+    return_velocity_scaling_factor: 1.00
+    return_acceleration_scaling_factor: 1.00
+    observation_clearance_m: 0.020
+    pregrasp_joint_tolerance_rad: 0.08
+    arm_trajectory_action: /arm_controller/follow_joint_trajectory
+    # 2026-09-24：跟快档一起从 2.0rl 搬过来。原来 2.0/2.0 时，快档下只规划 0.20 s 的
+    # `execute_observation` MoveL 下降会被判 `controller execution timed out (2.40s)`
+    # —— 5 轮里出现 2 次，旧的慢档 0 次。这两个参数只是「等控制器多久」的上限，
+    # 放宽不会让动作变慢，只避免把跟得慢一点的动作误判成失败。
+    controller_timeout_scale: 3.0
+    controller_timeout_margin_sec: 3.0
+    return_joint_positions: [0.0, 0.4, 0.9, 0.0, -1.2, 0.0]
+    return_duration_sec: 0.60

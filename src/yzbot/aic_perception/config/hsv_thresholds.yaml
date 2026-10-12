@@ -1,0 +1,98 @@
+# HSV Thresholds for Red and Blue Cube Detection
+# Values in OpenCV HSV range: H[0-180], S[0-255], V[0-255]
+
+red:
+  # Red wraps around hue=0, requiring two ranges
+  lower1: [0, 230, 80]
+  upper1: [5, 255, 255]
+  lower2: [175, 230, 80]
+  upper2: [179, 255, 255]
+
+blue:
+  lower: [100, 180, 70]
+  upper: [130, 255, 255]
+
+# Minimum contour area for valid detection (pixels)
+min_area: 200
+
+# Maximum aspect ratio deviation (width/height)
+max_aspect_ratio: 3.0
+
+# 贴住图像下沿的轮廓放宽到该长宽比。
+#
+# 与上面的 detection_roi y_max=1.00 **必须配套**：放宽 ROI 后，
+# 被切在图像下沿的物块会以"宽条"形状进入检测，若仍按 max_aspect_ratio=3.0
+# 判断就会被拒。实测（run_20260923_154147）：只放宽 ROI 后，
+# aspect 拒绝从 3 次升到 42 次、roi 拒绝从 42 次降到 3 次 —— 主因转移了。
+#
+# 只有真正触碰下沿的轮廓才用这个宽限值，其余仍按 3.0 判定。
+# VM 现役版本使用同一组合（1.00 + 6.0）。
+bottom_clipped_max_aspect_ratio: 6.0
+
+# Allow angular parking error to move a cube near either image edge. The lower
+# boundary still rejects the large blue robot surface, while area, aspect,
+# depth, color, and map-position gates reject unrelated edge pixels.
+# Detection ROI (normalized image coordinates).
+#
+# 2026-09-23 修改：y_max 由 0.85 放宽到 1.00。
+#
+# 依据：加了拒绝原因诊断后实测（run_20260923_104001）127 次拒绝里
+# **114 次来自 ROI**（`[area=0 roi=N aspect=0 depth=0]`），
+# 而 depth 判据 0 次、aspect 仅 1 次 —— 轮廓确实被检出、面积/形状/深度都合格，
+# 只是中心点落在 ROI 之外被判出界。
+#
+# 典型现场：red_cube_4 导航成功、停车距离 0.493 m（在 [0.30,0.50] 带内）、
+# ideal_approach_reached=true，却报 "no valid expected-color map detection"
+# 而抓取失败（run_20260923_151424）。
+#
+# 腕部相机在近距离对正时，物块会出现在图像下沿，0.85 把这一带整块排除了。
+# VM 现役版本同样是 1.00（其注释："A cube clipped by the near/bottom image edge
+# appears as a wide strip"）。
+detection_roi: {x_min: 0.02, y_min: 0.02, x_max: 0.98, y_max: 1.00}
+
+# RGB and aligned depth are generated together. Reject larger temporal offsets
+# instead of mixing a moving wrist-camera image with stale depth.
+max_rgb_depth_delta_sec: 0.05
+
+# Detection-rate cap.
+#
+# The camera publishes RGB and depth at 15 Hz, so without a cap the detector
+# runs 15 times a second doing two HSV segmentations, morphology, contour
+# analysis and up to two TF lookups per pass. On the test VM that contended
+# with Gazebo and Nav2 enough that TF lookups trailed the sensor stamps: run
+# logs showed hundreds of "laser_link->base_footprint ... extrapolation into
+# the future" plus "Transform data too old when converting from odom to map",
+# after which the controller could not place the robot and the planner aborted
+# every goal. Bounding this rate was measured to be necessary on the VM.
+#
+# 0.05 s 是 `frame2.0.md` §0.1 确认过的目标设计值（20 Hz 上限；15 Hz 相机仍是瓶颈）。
+#
+# 2026-09-23：改用**按阶段分频**，本项只在需要「固定档位」时做覆盖，默认 0.0
+# 表示交给下面的 processing_rate。依据 test13 PERFORMANCE_TUNING.md §6：
+# 长途导航用不着视觉，却一直在满速跑 OpenCV + TF。VM 实测 color_detector 在
+# 完全空闲时占 48.7% CPU。
+processing_period_sec: 0.0
+
+# 按编排器状态分频（见 aic_perception/perception_rate.py）。
+# 未收到状态消息时用 active 档：宁可多花 CPU，也不能在不知道阶段时把抓取卡在慢档。
+processing_rate:
+  idle_processing_period_sec: 0.50     # 长途/携物导航等非抓取阶段
+  active_processing_period_sec: 0.05   # PRE_GRASP / GRASPING（沿用 frame2.0 §0.1）
+  active_state_topic: /competition/current_state
+  active_states: [PRE_GRASP, GRASPING]
+
+# Coordinates used by the later MoveL target builder. The published
+# /competition/grasp_point is a stable, position-only PointStamped; the MoveL
+# node must still provide the validated suction orientation and approach pose.
+coordinate_output:
+  target_frame: base_link
+  # Local arm grasping does not require a global map transform.
+  world_frame: "map"
+  tf_timeout_sec: 0.20
+  min_depth_samples: 20
+  min_depth_m: 0.15
+  max_depth_m: 1.50
+  stability_window_size: 5
+  stability_min_samples: 3
+  stability_max_spread_m: 0.015
+  grasp_offset_m: {x: 0.0, y: 0.0, z: 0.0}

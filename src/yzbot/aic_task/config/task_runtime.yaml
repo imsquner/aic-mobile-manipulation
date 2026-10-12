@@ -1,0 +1,36 @@
+# Task runtime configuration
+timeouts:
+  api: 30.0           # DeepSeek API timeout (seconds)
+  vision: 10.0        # Vision/object detection timeout
+  navigation: 120.0   # Single navigation goal timeout
+  moveit_plan: 10.0   # MoveIt planning timeout
+  trajectory_exec: 15.0  # Trajectory execution timeout
+  attach: 5.0         # ATTACHLINK service timeout
+  detach: 5.0         # DETACHLINK service timeout
+  question_gen: 30.0  # TMSCQtest binary timeout
+
+retries:
+  vision: 2
+  navigation: 2
+  grasp: 2
+  attach: 2
+  api: 3
+
+# Competition time management
+competition:
+  total_duration: 300.0  # 5 minutes total
+  early_stop_threshold: 20.0  # Stop new items when < 20s remain
+  auto_start_timer: true
+  enforce_time_limit: false  # Record elapsed time, but finish all tasks first
+
+# Route-planner operation costs. The teammate grasp pipeline's measured
+# 23-24 s already includes attach, lift, and return-to-observation, so those
+# stages must not be counted again here.
+planner:
+  deadline: 285.0             # Reporting target only when enforcement is off
+  vision_stable: 0.4
+  grasp_complete: 24.0
+  attach_confirm: 0.0
+  release: 0.5
+  lift_retract: 0.0
+  dynamic_margin: 3.0

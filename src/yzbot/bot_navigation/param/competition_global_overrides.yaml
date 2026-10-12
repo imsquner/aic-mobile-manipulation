@@ -1,0 +1,38 @@
+# 全局参数覆盖：由 nav_bringup_gazebo2.launch.py 用 launch_ros 的
+# SetParametersFromFile 注入到本次 launch 作用域内的所有节点
+# （等价于给每个节点加 `--params-file`，ROS 2 原生支持 `/**` 通配）。
+#
+# 为什么需要它
+# ------------
+# Nav2 lifecycle_manager 的 bond 心跳窗口 `bond_timeout` 默认 4 s。本 VM 满载
+# （实测 load average 10~13）时心跳会被漏检，manager 随即判 CRITICAL FAILURE，
+# 并把它管理的**全部**节点一起 deactivate（日志：Shutting down related nodes）。
+# 其中 velocity_smoother 是 /cmd_vel_nav 的唯一订阅者 —— 它一掉，速度链就断，
+# 机器人在 Nav2 与编排器控制下完全不能动，而其它话题看起来都正常。
+#
+# 为什么不能运行时改
+# ------------------
+# Nav2 Humble 的 lifecycle_manager 在**构造函数**里
+#     declare_parameter("bond_timeout", 4.0);
+#     get_parameter("bond_timeout", bond_timeout_s);
+#     bond_timeout_ = duration_cast<milliseconds>(duration<double>(bond_timeout_s));
+# 之后只读成员 bond_timeout_（CRITICAL FAILURE 报文里的毫秒数就是它）。
+# 实测：`ros2 param set ... bond_timeout 30` 后参数读回 30.0，报文仍打印 4000 ms
+# → **运行时修改无效**，必须在创建时设定。
+# 而 nav2_bringup 的 launch 只给这两个 manager 传 inline 参数（autostart /
+# node_names / use_sim_time），没有 params_file 钩子，所以改用这里的全局覆盖。
+#
+# 影响面
+# ------
+# `/**` 会把 bond_timeout 交给本次 launch 里的每个节点；只有 nav2_lifecycle_manager
+# 声明并使用它，其余节点会忽略未声明的参数。本次 launch 内的三个 manager
+# （lifecycle_manager_localization / _navigation / _collision_monitor）都会得到 30 s。
+#
+# 取舍
+# ----
+# 放宽到 30 s：真正死掉的进程仍会在 30 s 内被发现，而负载抖动造成的漏检不再触发
+# 连锁停机。运行期另有 aic_task/lifecycle_watchdog.py 兜底（1 s 轮询、自动接回并上报）。
+
+/**:
+  ros__parameters:
+    bond_timeout: 30.0

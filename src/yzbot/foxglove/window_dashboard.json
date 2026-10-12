@@ -1,0 +1,710 @@
+{
+  "configById": {
+    "RawMessages!question": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/question",
+      "fontSize": 16,
+      "foxglovePanelTitle": "1 题目生成结果"
+    },
+    "RawMessages!planJson": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/task_plan_json",
+      "fontSize": 12,
+      "foxglovePanelTitle": "3 DS解析有序任务表"
+    },
+    "Publish!mappingInput": {
+      "buttonText": "确认映射",
+      "buttonTooltip": "",
+      "advancedView": true,
+      "value": "{\"data\":\"x 代表红色,y 代表蓝色,数量大于等于 3 的去 A 区,其他颜色去 C 区\"}",
+      "foxglovePanelTitle": "2 映射输入",
+      "topicName": "/competition/mapping_rule_input",
+      "datatype": "std_msgs/String"
+    },
+    "Publish!start": {
+      "buttonText": "开始",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "开始任务",
+      "topicName": "/competition/start",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!resubmit": {
+      "buttonText": "重新解析",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "重新解析",
+      "topicName": "/competition/resubmit",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!cancel": {
+      "buttonText": "取消",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "取消任务",
+      "topicName": "/competition/cancel",
+      "datatype": "std_msgs/Bool"
+    },
+    "Publish!reset": {
+      "buttonText": "复位",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "复位任务",
+      "topicName": "/competition/reset",
+      "datatype": "std_msgs/Bool"
+    },
+    "Indicator!redTotal": {
+      "path": "/competition/red_total.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#b42318",
+      "fallbackLabel": "--",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#b42318",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#b42318",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#b42318",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#b42318",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#b42318",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#b42318",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "红色目标总数"
+    },
+    "Indicator!blueTotal": {
+      "path": "/competition/blue_total.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#175cd3",
+      "fallbackLabel": "--",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#175cd3",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#175cd3",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#175cd3",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#175cd3",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#175cd3",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#175cd3",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "蓝色目标总数"
+    },
+    "Indicator!redDone": {
+      "path": "/competition/red_completed.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#d92d20",
+      "fallbackLabel": "0",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#d92d20",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#d92d20",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#d92d20",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#d92d20",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#d92d20",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#d92d20",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "红色已完成"
+    },
+    "Indicator!blueDone": {
+      "path": "/competition/blue_completed.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#2970ff",
+      "fallbackLabel": "0",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "0",
+          "color": "#2970ff",
+          "label": "0"
+        },
+        {
+          "operator": "=",
+          "rawValue": "1",
+          "color": "#2970ff",
+          "label": "1"
+        },
+        {
+          "operator": "=",
+          "rawValue": "2",
+          "color": "#2970ff",
+          "label": "2"
+        },
+        {
+          "operator": "=",
+          "rawValue": "3",
+          "color": "#2970ff",
+          "label": "3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "4",
+          "color": "#2970ff",
+          "label": "4"
+        },
+        {
+          "operator": "=",
+          "rawValue": "5",
+          "color": "#2970ff",
+          "label": "5"
+        }
+      ],
+      "foxglovePanelTitle": "蓝色已完成"
+    },
+    "Indicator!color": {
+      "path": "/competition/current_color.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#475467",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "red",
+          "color": "#d92d20",
+          "label": "红色"
+        },
+        {
+          "operator": "=",
+          "rawValue": "blue",
+          "color": "#2970ff",
+          "label": "蓝色"
+        }
+      ],
+      "foxglovePanelTitle": "目标颜色"
+    },
+    "Indicator!zone": {
+      "path": "/competition/current_zone.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#475467",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "A",
+          "color": "#475467",
+          "label": "A"
+        },
+        {
+          "operator": "=",
+          "rawValue": "B",
+          "color": "#475467",
+          "label": "B"
+        },
+        {
+          "operator": "=",
+          "rawValue": "C",
+          "color": "#475467",
+          "label": "C"
+        }
+      ],
+      "foxglovePanelTitle": "目标区域"
+    },
+    "Indicator!nav": {
+      "path": "/competition/navigation_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#026aa2",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "IDLE",
+          "color": "#026aa2",
+          "label": "空闲"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_OBJECT",
+          "color": "#026aa2",
+          "label": "前往资源点"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_ZONE",
+          "color": "#026aa2",
+          "label": "前往放置区"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#026aa2",
+          "label": "已取消"
+        }
+      ],
+      "foxglovePanelTitle": "导航状态"
+    },
+    "Indicator!arm": {
+      "path": "/competition/manipulation_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#6941c6",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "IDLE",
+          "color": "#6941c6",
+          "label": "空闲"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_GRASP",
+          "color": "#6941c6",
+          "label": "预抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "MOVEIT_TO_OPENCV_TARGET",
+          "color": "#6941c6",
+          "label": "视觉微调"
+        },
+        {
+          "operator": "=",
+          "rawValue": "SUCTION_ON",
+          "color": "#6941c6",
+          "label": "吸附"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_RELEASE",
+          "color": "#6941c6",
+          "label": "预放置"
+        },
+        {
+          "operator": "=",
+          "rawValue": "SUCTION_OFF",
+          "color": "#6941c6",
+          "label": "释放"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#6941c6",
+          "label": "已取消"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTING_PICK_SEQUENCE",
+          "color": "#6941c6",
+          "label": "抓取流水线"
+        }
+      ],
+      "foxglovePanelTitle": "机械臂状态"
+    },
+    "Indicator!api": {
+      "path": "/competition/api_status.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#b54708",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "BOOTING",
+          "color": "#b54708",
+          "label": "启动中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READY",
+          "color": "#b54708",
+          "label": "就绪"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READING_QUESTION",
+          "color": "#b54708",
+          "label": "读取题目"
+        },
+        {
+          "operator": "=",
+          "rawValue": "WAITING_MAPPING",
+          "color": "#b54708",
+          "label": "等待映射"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CALLING_LLM",
+          "color": "#b54708",
+          "label": "模型解析"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VALIDATING_TASK",
+          "color": "#b54708",
+          "label": "校验任务"
+        },
+        {
+          "operator": "=",
+          "rawValue": "API_ERROR",
+          "color": "#d92d20",
+          "label": "解析失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#b54708",
+          "label": "已取消"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VISUAL_FIXTURE",
+          "color": "#b54708",
+          "label": "验收夹具"
+        }
+      ],
+      "foxglovePanelTitle": "解析状态"
+    },
+    "Indicator!state": {
+      "path": "/competition/current_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#344054",
+      "fallbackLabel": "空闲",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "BOOTING",
+          "color": "#344054",
+          "label": "启动中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RESETTING",
+          "color": "#344054",
+          "label": "复位中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READY",
+          "color": "#344054",
+          "label": "就绪"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READING_QUESTION",
+          "color": "#344054",
+          "label": "识别资源"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_OBJECT",
+          "color": "#344054",
+          "label": "前往资源点"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PRE_GRASP",
+          "color": "#344054",
+          "label": "预抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "GRASPING",
+          "color": "#344054",
+          "label": "抓取"
+        },
+        {
+          "operator": "=",
+          "rawValue": "NAVIGATING_TO_ZONE",
+          "color": "#344054",
+          "label": "前往放置区"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PLACING",
+          "color": "#344054",
+          "label": "放置"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VERIFYING",
+          "color": "#344054",
+          "label": "校验中"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ITEM_SUCCEEDED",
+          "color": "#344054",
+          "label": "单块完成"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ITEM_FAILED",
+          "color": "#344054",
+          "label": "单块失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_SUCCEEDED",
+          "color": "#039855",
+          "label": "任务完成"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_FAILED",
+          "color": "#d92d20",
+          "label": "任务失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "API_ERROR",
+          "color": "#d92d20",
+          "label": "解析失败"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TIME_LIMIT",
+          "color": "#d92d20",
+          "label": "时间到"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCELLED",
+          "color": "#344054",
+          "label": "已取消"
+        }
+      ],
+      "foxglovePanelTitle": "总状态"
+    },
+    "Publish!generate": {
+      "buttonText": "生成题目",
+      "buttonTooltip": "",
+      "advancedView": false,
+      "value": "{\"data\":true}",
+      "foxglovePanelTitle": "1 题目生成",
+      "topicName": "/competition/generate_question",
+      "datatype": "std_msgs/Bool"
+    },
+    "Indicator!network": {
+      "path": "/competition/network_status.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#667085",
+      "fallbackLabel": "等待",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "ONLINE",
+          "color": "#039855",
+          "label": "在线"
+        },
+        {
+          "operator": "=",
+          "rawValue": "OFFLINE",
+          "color": "#d92d20",
+          "label": "离线"
+        }
+      ],
+      "foxglovePanelTitle": "网络状态"
+    },
+    "RawMessages!elapsed": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/elapsed_seconds",
+      "fontSize": 20,
+      "foxglovePanelTitle": "已运行总耗时(s)"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "first": {
+      "first": {
+        "first": "Publish!generate",
+        "second": "RawMessages!question",
+        "direction": "row",
+        "splitPercentage": 50
+      },
+      "second": {
+        "first": "Publish!mappingInput",
+        "second": {
+          "first": "RawMessages!planJson",
+          "second": {
+            "first": {
+              "first": "Publish!start",
+              "second": "Publish!resubmit",
+              "direction": "row",
+              "splitPercentage": 50
+            },
+            "second": {
+              "first": "Publish!cancel",
+              "second": "Publish!reset",
+              "direction": "row",
+              "splitPercentage": 50
+            },
+            "direction": "column",
+            "splitPercentage": 50
+          },
+          "direction": "column",
+          "splitPercentage": 33.333333333333336
+        },
+        "direction": "column",
+        "splitPercentage": 25
+      },
+      "direction": "column",
+      "splitPercentage": 20
+    },
+    "second": {
+      "first": {
+        "first": "Indicator!redTotal",
+        "second": "Indicator!blueTotal",
+        "direction": "row",
+        "splitPercentage": 50
+      },
+      "second": {
+        "first": {
+          "first": "Indicator!redDone",
+          "second": "Indicator!blueDone",
+          "direction": "row",
+          "splitPercentage": 50
+        },
+        "second": {
+          "first": {
+            "first": "Indicator!color",
+            "second": "Indicator!zone",
+            "direction": "row",
+            "splitPercentage": 50
+          },
+          "second": {
+            "first": {
+              "first": "Indicator!nav",
+              "second": "Indicator!arm",
+              "direction": "row",
+              "splitPercentage": 50
+            },
+            "second": {
+              "first": {
+                "first": "Indicator!network",
+                "second": "Indicator!api",
+                "direction": "row",
+                "splitPercentage": 50
+              },
+              "second": {
+                "first": "RawMessages!elapsed",
+                "second": "Indicator!state",
+                "direction": "column",
+                "splitPercentage": 50
+              },
+              "direction": "column",
+              "splitPercentage": 33.333333333333336
+            },
+            "direction": "column",
+            "splitPercentage": 25
+          },
+          "direction": "column",
+          "splitPercentage": 20
+        },
+        "direction": "column",
+        "splitPercentage": 16.666666666666668
+      },
+      "direction": "column",
+      "splitPercentage": 14.285714285714286
+    },
+    "direction": "row",
+    "splitPercentage": 54
+  }
+}

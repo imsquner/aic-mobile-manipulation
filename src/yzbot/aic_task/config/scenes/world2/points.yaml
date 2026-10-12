@@ -1,0 +1,216 @@
+# ============================================================================
+# world2 场景（test12 重构版 · 房间下半部）—— 2026-09-25 引入
+# ----------------------------------------------------------------------------
+# 来源：D:\桌面\2.0rl\test\test12\v2.0_mppi_fused\aic_task\config\world2_points.yaml
+#
+# 与 v1 场景的区别：物块位置、区域位置、小车初始位置**全部不同**（都在房间下半部）：
+#   初始  (-0.884483, -11.938343, yaw -0.007388)
+#   区域  A(-0.933257, -9.430909)  B(2.032836, -12.909407)  C(-1.410625, -10.243129)
+#   物块  8 个，Y 约 -7.8 ~ -14.2
+#   （v1 是：初始(0,0,0)、区域 A(4.388,-1.533)/B(-5.193,3.483)/C(7.000,3.096)、物块 Y 约 -5.1~4.2）
+#   地图两者相同（mapn3），所以本文件只切"场景布局"。
+#
+# 转换说明（test12 原格式 → test14 需要的格式）：
+#   1) 保留 world2 自己的 robot_initial_pose / 物块停车点（= 物块位置 + 0.30 m 东侧、yaw = π）
+#      / 区域停车点 —— 这三样 test12 已经算好，直接沿用；
+#   2) approach 段继承 test14 v1 的同一批参数，仅把"接近距离/staging"保持 world2 的 0.30 m；
+#   3) zones 补 test14 需要的几何字段（region_yaw / size_x_m / size_y_m / placement_lateral_bias_m）；
+#   4) dynamic_obstacles 沿用 test14 v1（两个 moving_box 在房间上半部 Y≈-3.5 / +0.9，
+#      与本场景 Y≈-8~-14 相距 5 m 以上，不冲突；保留以维持题目难度一致）。
+# ============================================================================
+
+robot_initial_pose:
+  frame_id: map
+  x: -0.884483
+  y: -11.938343
+  yaw: -0.007388
+
+approach:
+  end_effector_forward_m: 0.40
+  minimum_cubes_per_color: 4
+  # 2026-09-27 老板拍板：接近距离 target=0.35（折中 0.30~0.40）。
+  # 真因复盘：车被导航到 staging 点 = 候选点 + object_staging_backoff_m，
+  # 旧 backoff=0.30 使 staging 距物块 0.60，超出 safety_max=0.55，判定必失败
+  # （run_20260927_050425：object_circle_candidate 距物块 0.5996 吻合）。
+  # 修复：staging_backoff 归零 + target/min 对齐 0.35（见下方 staging_backoff）。
+  object_approach_distance_m: 0.35
+  object_approach_target_distance_m: 0.35
+  object_approach_min_distance_m: 0.35
+  object_approach_max_distance_m: 0.50
+  object_approach_safety_min_distance_m: 0.25
+  object_approach_safety_max_distance_m: 0.55
+  object_approach_yaw_tolerance_rad: 0.261799387799
+  object_circle_candidate_count: 12
+  object_circle_max_attempts: 5
+  object_candidate_shortlist_count: 6
+  object_path_prefilter_budget_sec: 2.0
+  object_navigation_total_budget_sec: 60.0
+  object_candidate_navigation_timeout_sec: 40.0
+  object_circle_map_clearance_m: 0.32
+  object_virtual_obstacle_exempt_radius_m: 1.20
+  object_path_cube_clearance_m: 0.25
+  object_recovery_distance_tolerance_m: 0.10
+  object_recovery_yaw_tolerance_rad: 0.261799387799
+  object_recovery_max_displacement_m: 1.20
+  object_staging_backoff_m: 0.0
+  object_yaw: 3.141592653589793
+  zone_yaw: 0.0
+  grasp_desired_arm_x_m: 0.395
+  grasp_forward_tolerance_m: 0.03
+  grasp_yaw_tolerance_rad: 0.05235987756
+  grasp_base_correction_speed_mps: 0.15
+  grasp_base_correction_max_attempts: 1
+  cube_half_height_m: 0.015
+  pre_attach_tolerance_m: 0.18
+  attached_tolerance_m: 0.18
+  placed_tolerance_m: 0.65
+  region_nearby_tolerance_m: 0.35
+  placement_stability_xy_m: 0.10
+  placement_stable_samples: 3
+  zone_base_nearby_tolerance_m: 0.60
+  post_place_retreat_m: 0.50
+  post_place_retreat_by_zone_m: {A: 0.60, B: 0.75, C: 0.50}
+  post_place_retreat_min_timeout_sec: 10.0
+  post_place_retreat_speed_mps: 0.50
+
+navigation_fallback:
+  enabled: true
+  waypoint_timeout_sec: 40.0
+  waypoint_position_tolerance_m: 0.20
+  segment_retry_count: 1
+  force_routes: []
+  routes: {}
+
+red_cubes:
+  - {id: red_cube_1, position: {x: 0.973894, y: -12.149809, z: 0.014473}, parking: {x: 1.273894, y: -12.149809, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_2, position: {x: 4.951756, y: -12.296011, z: 0.014990}, parking: {x: 5.251756, y: -12.296011, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_3, position: {x: -1.3095, y: -7.7777, z: 0.0140}, parking: {x: -1.0095, y: -7.7777, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_4, position: {x: 1.984190, y: -10.204877, z: 0.014173}, parking: {x: 2.284190, y: -10.204877, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+blue_cubes:
+  - {id: blue_cube_1, position: {x: 0.9172, y: -8.4411, z: 0.0150}, parking: {x: 1.2172, y: -8.4411, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_2, position: {x: 4.015122, y: -10.519125, z: 0.014852}, parking: {x: 4.315122, y: -10.519125, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_3, position: {x: -0.061626, y: -10.333476, z: 0.014993}, parking: {x: 0.238374, y: -10.333476, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_4, position: {x: 3.638807, y: -13.886786, z: 0.014991}, parking: {x: 3.938807, y: -13.886786, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+zones:
+  # region_yaw / size_x_m / size_y_m / placement_lateral_bias_m 为 test14 需要、
+  # test12 原文件缺失的几何字段，此处按比赛区域标准尺寸 1.0 × 0.5 m 补齐。
+  # 逐槽坐标按已审方案原值录入；旧 parking 保留给既有矩阵与旧编排器。
+  # endpoint 是沿机器人后向、按 nominal_distance_m 计算的名义几何终点，
+  # 并不代表已验证静态地图、现场障碍或实际释放结果。
+  A:
+    position: {x: -0.933257, y: -9.430909, z: 0.010000, zone_yaw: -0.539043, region_yaw: -0.539043, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    parking: {x: -1.330447, y: -9.315281, yaw: -0.539043, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}
+    description: "Zone A"
+    placement_slots:
+      - id: A1
+        drop: {x: -0.6576, y: -9.8092, z: 0.0140}
+        staging: {x: -0.1760, y: -9.0489}
+        release: {x: -0.4412, y: -9.4728}
+        yaw: -2.129825286209
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 0.0892, y: -8.6250}}
+      - id: A2
+        drop: {x: -0.7992, y: -9.6017, z: 0.0140}
+        staging: {x: -0.3176, y: -8.8414}
+        release: {x: -0.5828, y: -9.2653}
+        yaw: -2.129825286209
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.0524, y: -8.4175}}
+      - id: A3
+        drop: {x: -1.0330, y: -9.3352, z: 0.0140}
+        staging: {x: -0.5514, y: -8.5749}
+        release: {x: -0.8166, y: -8.9988}
+        yaw: -2.129825286209
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.2862, y: -8.1510}}
+      - id: A4
+        drop: {x: -1.1822, y: -9.0668, z: 0.0140}
+        staging: {x: -0.7006, y: -8.3065}
+        release: {x: -0.9658, y: -8.7304}
+        yaw: -2.129825286209
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.4354, y: -7.8826}}
+      - id: A5
+        drop: {x: -0.8221, y: -9.3045, z: 0.0141}
+        staging: {x: -0.3405, y: -8.5442}
+        release: {x: -0.6057, y: -8.9681}
+        yaw: -2.129825286209
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.0753, y: -8.1203}}
+  B:
+    position: {x: 2.032836, y: -12.909407, z: 0.010000, zone_yaw: -1.824446, region_yaw: -1.824446, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    parking: {x: 2.220010, y: -12.581897, yaw: -1.824446, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}
+    description: "Zone B"
+    placement_slots:
+      - id: B1
+        drop: {x: 1.7506, y: -13.2860, z: 0.0140}
+        staging: {x: 2.6222, y: -13.5103}
+        release: {x: 2.1383, y: -13.3844}
+        yaw: 2.887123648649
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.1061, y: -13.6361}}
+      - id: B2
+        drop: {x: 1.9297, y: -13.0780, z: 0.0140}
+        staging: {x: 2.8013, y: -13.3023}
+        release: {x: 2.3174, y: -13.1764}
+        yaw: 2.887123648649
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.2852, y: -13.4281}}
+      - id: B3
+        drop: {x: 2.1245, y: -12.7996, z: 0.0140}
+        staging: {x: 2.9961, y: -13.0239}
+        release: {x: 2.5122, y: -12.8980}
+        yaw: 2.887123648649
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.4800, y: -13.1497}}
+      - id: B4
+        drop: {x: 2.2802, y: -12.5906, z: 0.0140}
+        staging: {x: 3.1518, y: -12.8149}
+        release: {x: 2.6679, y: -12.6890}
+        yaw: 2.887123648649
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.6357, y: -12.9407}}
+      - id: B5
+        drop: {x: 2.1923, y: -12.9764, z: 0.0144}
+        staging: {x: 3.0639, y: -13.2007}
+        release: {x: 2.5800, y: -13.0748}
+        yaw: 2.887123648649
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.5478, y: -13.3265}}
+  C:
+    position: {x: -1.410625, y: -10.243129, z: 0.010000, zone_yaw: -0.564777, region_yaw: -0.564777, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    parking: {x: -1.860276, y: -10.018595, yaw: -0.564777, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.2617993877991494}
+    description: "Zone C"
+    placement_slots:
+      - id: C1
+        drop: {x: -1.6880, y: -9.8643, z: 0.0140}
+        staging: {x: -2.1449, y: -10.6397}
+        release: {x: -1.8908, y: -10.2091}
+        yaw: 1.037598240311
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.3991, y: -11.0703}}
+      - id: C2
+        drop: {x: -1.5186, y: -10.0531, z: 0.0140}
+        staging: {x: -1.9755, y: -10.8285}
+        release: {x: -1.7214, y: -10.3979}
+        yaw: 1.037598240311
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.2297, y: -11.2591}}
+      - id: C3
+        drop: {x: -1.3252, y: -10.3319, z: 0.0140}
+        staging: {x: -1.7821, y: -11.1073}
+        release: {x: -1.5280, y: -10.6767}
+        yaw: 1.037598240311
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.0363, y: -11.5379}}
+      - id: C4
+        drop: {x: -1.1768, y: -10.5685, z: 0.0140}
+        staging: {x: -1.6337, y: -11.3439}
+        release: {x: -1.3796, y: -10.9133}
+        yaw: 1.037598240311
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -1.8879, y: -11.7745}}
+      - id: C5
+        drop: {x: -1.5374, y: -10.3681, z: 0.0145}
+        staging: {x: -1.9943, y: -11.1435}
+        release: {x: -1.7402, y: -10.7129}
+        yaw: 1.037598240311
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.2485, y: -11.5741}}
+
+dynamic_obstacles:
+  - name: moving_box_1
+    z: 0.25
+    safety_radius_m: 0.65
+    motion: {type: sine_x, center_x: 0.353, center_y: -3.460, amplitude_m: 1.2, omega_rad_s: 0.125, phase_rad: 0.0}
+  - name: moving_box_2
+    z: 0.25
+    safety_radius_m: 0.65
+    motion: {type: sine_x, center_x: -0.595, center_y: 0.906, amplitude_m: 0.6, omega_rad_s: 0.25, phase_rad: 1.5707963268}

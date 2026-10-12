@@ -1,0 +1,13 @@
+id: v1
+status: baseline
+points: points.yaml
+entities_source: external_yaml
+entities: entities.yaml
+launch: gazebo_world2.launch.py
+world: install/mybot_description/share/mybot_description/worlds/offic_room.world
+map: install/bot_navigation/share/bot_navigation/maps/mapn3.yaml
+service_prefix: ''
+dynamic_obstacles: [moving_box_1, moving_box_2]
+matrix: verification/path_matrix_v1/static_path_matrix.json
+matrix_source_hash: bcb5e0e5579c1f9f4b347786dd1117ce9f4579a0a8fa87291250f20c0d39118f
+points_sha256: eee24ec8f05997ee22ff6f4de2f341435accc8ca36f9c0054a2eef9494660887

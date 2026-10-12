@@ -1,0 +1,32 @@
+# Competition coordinates in the Gazebo world/map frame.
+robot_initial_pose: {frame_id: map, x: 0.0, y: 0.0, yaw: 0.0}
+
+approach:
+  end_effector_forward_m: 0.40
+  object_approach_distance_m: 0.30
+  object_staging_backoff_m: 0.30
+  object_yaw: 3.141592653589793
+  zone_yaw: 0.0
+  cube_half_height_m: 0.015
+  pre_attach_tolerance_m: 0.18
+  attached_tolerance_m: 0.18
+  placed_tolerance_m: 0.65
+
+red_cubes:
+  - {id: red_cube_1, position: {x: -1.5, y: 1.5, z: 0.015}, parking: {x: -1.2, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_2, position: {x: -3.6, y: 1.5, z: 0.015}, parking: {x: -3.3, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_3, position: {x: -5.7, y: 1.5, z: 0.015}, parking: {x: -5.4, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_4, position: {x: -7.8, y: 1.5, z: 0.015}, parking: {x: -7.5, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: red_cube_5, position: {x: -9.9, y: 1.5, z: 0.015}, parking: {x: -9.6, y: 1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+blue_cubes:
+  - {id: blue_cube_1, position: {x: -1.5, y: -1.5, z: 0.015}, parking: {x: -1.2, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_2, position: {x: -3.6, y: -1.5, z: 0.015}, parking: {x: -3.3, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_3, position: {x: -5.7, y: -1.5, z: 0.015}, parking: {x: -5.4, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_4, position: {x: -7.8, y: -1.5, z: 0.015}, parking: {x: -7.5, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+  - {id: blue_cube_5, position: {x: -9.9, y: -1.5, z: 0.015}, parking: {x: -9.6, y: -1.5, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.08726646259971647}}
+
+zones:
+  A: {position: {x: -5.0, y: 2.5, z: 0.01, zone_yaw: 0.0}, parking: {x: -5.4, y: 2.5, yaw: 0.0, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}, description: "Zone A"}
+  B: {position: {x: 1.0, y: 2.0, z: 0.01, zone_yaw: 3.141592653589793}, parking: {x: 1.4, y: 2.0, yaw: 3.141592653589793, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}, description: "Zone B"}
+  C: {position: {x: -3.5, y: -4.5, z: 0.01, zone_yaw: -2.7}, parking: {x: -2.8, y: -4.4, yaw: -2.7, xy_tolerance_m: 0.15, yaw_tolerance_rad: 0.2617993877991494}, description: "Zone C"}

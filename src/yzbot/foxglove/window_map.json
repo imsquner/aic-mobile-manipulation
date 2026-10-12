@@ -1,0 +1,193 @@
+{
+  "configById": {
+    "3D!competitionMap": {
+      "cameraState": {
+        "perspective": true,
+        "distance": 19.99999999996871,
+        "phi": 34.85631513637342,
+        "thetaOffset": -3.1108598032924393,
+        "targetOffset": [
+          -0.5173103108147157,
+          0.912466240267345,
+          4.415519718104532e-17
+        ],
+        "target": [
+          0,
+          0,
+          0
+        ],
+        "targetOrientation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "fovy": 45,
+        "near": 0.5,
+        "far": 5000
+      },
+      "followMode": "follow-pose",
+      "followTf": "map",
+      "scene": {
+        "transforms": {
+          "editable": false,
+          "showLabel": false
+        }
+      },
+      "transforms": {
+        "frame:odom": {
+          "visible": true
+        },
+        "frame:base_link": {
+          "visible": false
+        },
+        "frame:link1": {
+          "visible": false
+        },
+        "frame:link2": {
+          "visible": false
+        },
+        "frame:link3": {
+          "visible": false
+        },
+        "frame:link4": {
+          "visible": false
+        },
+        "frame:link5": {
+          "visible": false
+        },
+        "frame:link6": {
+          "visible": true
+        },
+        "frame:gripper_finger_link1": {
+          "visible": false
+        },
+        "frame:gripper_finger_link2": {
+          "visible": false
+        },
+        "frame:back_caster_link": {
+          "visible": false
+        },
+        "frame:camera_link": {
+          "visible": false
+        },
+        "frame:laser_link": {
+          "visible": false
+        },
+        "frame:left_wheel_link": {
+          "visible": false
+        },
+        "frame:right_wheel_link": {
+          "visible": false
+        },
+        "frame:arm_base_link": {
+          "visible": false
+        },
+        "frame:camera_rgbd_link": {
+          "visible": false
+        },
+        "frame:camera_rgbd_frame_optical": {
+          "visible": false
+        },
+        "frame:grasping_frame": {
+          "visible": false
+        }
+      },
+      "topics": {
+        "/map": {
+          "visible": true
+        },
+        "/scan": {
+          "visible": true,
+          "colorField": "range",
+          "colorMode": "gradient",
+          "colorMap": "turbo",
+          "pointSize": 4,
+          "decayTime": 0.5,
+          "pointShape": "square"
+        },
+        "/plan": {
+          "visible": true,
+          "lineWidth": 0.2,
+          "type": "line",
+          "color": "#22c55e"
+        },
+        "/local_plan": {
+          "visible": true,
+          "lineWidth": 0.16,
+          "type": "line",
+          "color": "#f59e0b"
+        },
+        "/amcl_pose": {
+          "visible": true
+        },
+        "/robot_description": {
+          "visible": true,
+          "displayMode": "auto",
+          "showOutlines": false,
+          "showAxis": false
+        }
+      },
+      "layers": {
+        "grid": {
+          "visible": true,
+          "frameLocked": true,
+          "label": "Grid",
+          "instanceId": "624e37d7-3a83-446e-9453-588dddcda22d",
+          "layerId": "foxglove.Grid",
+          "size": 10,
+          "divisions": 10,
+          "lineWidth": 1,
+          "color": "#248eff",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        "71656b70-8afa-48d6-93c2-6ad44c1442bb": {
+          "displayMode": "auto",
+          "fallbackColor": "#ffffff",
+          "showAxis": false,
+          "axisScale": 1,
+          "showOutlines": true,
+          "opacity": 1,
+          "visible": true,
+          "frameLocked": true,
+          "instanceId": "71656b70-8afa-48d6-93c2-6ad44c1442bb",
+          "label": "URDF",
+          "layerId": "foxglove.Urdf",
+          "sourceType": "topic",
+          "url": "",
+          "filePath": "",
+          "parameter": "",
+          "topic": "/robot_description",
+          "framePrefix": "",
+          "order": 1
+        }
+      },
+      "publish": {
+        "type": "pose",
+        "poseTopic": "/move_base_simple/goal",
+        "pointTopic": "/clicked_point",
+        "poseEstimateTopic": "/initialpose",
+        "poseEstimateXDeviation": 0.5,
+        "poseEstimateYDeviation": 0.5,
+        "poseEstimateThetaDeviation": 0.26179939
+      },
+      "imageMode": {},
+      "foxglovePanelTitle": "导航地图与实时路径"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": "3D!competitionMap"
+}

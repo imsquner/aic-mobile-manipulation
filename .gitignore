@@ -1,0 +1,13 @@
+# Local API credentials must never be committed
+**/api_secrets.yaml
+.env
+.env.*
+# Generated artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+build/
+install/
+log/
+logs/
