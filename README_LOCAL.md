@@ -9,3 +9,11 @@
 桌面父目录仍含“桌面”二字，因此英文文件夹名不等于英文绝对路径。编译/运行产物使用独立ASCII目录；后续源码修改只在此处完成，再同步生成运行副本，禁止直接修改运行副本或原交接包。
 
 详细构建路径和启动诊断将递增记录在桌面省赛本机工作_20261012/05_修改记录与04_运行日志。
+
+## Git与运行目录
+
+初始源码基线commit：`b2122d4`，tag：`baseline-20261012`。`verification/path_matrix_world2_slots15_release_v2_20260927`是原样旧矩阵输入资产，不是构建输出或测试日志；已保持原SHA。
+
+修改后先在本目录review和commit；用`git archive HEAD`生成独立ASCII运行快照（`/home/ros/.cache/aic_competition_20261012/runtimes/<commit>/dev_ws`），仅另外复制ignored的本地API配置，权限600。在快照中编译并运行，不在快照中修改源码；保存commit、源文件SHA和环境版本到运行证据。
+
+查看历史：`git log --oneline`；比较基线：`git diff baseline-20261012 -- src`。未提交文件的局部回退使用`git restore --source <commit> -- <具体文件>`，操作前先保存需要的改动；已提交修复的回退优先`git revert <commit>`，保留历史。不要自动执行整库reset --hard/clean。私密API文件被Git忽略，回退不会重建或覆盖它。
