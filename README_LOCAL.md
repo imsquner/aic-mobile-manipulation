@@ -17,3 +17,7 @@
 修改后先在本目录review和commit；用`git archive HEAD`生成独立ASCII运行快照（`/home/ros/.cache/aic_competition_20261012/runtimes/<commit>/dev_ws`），仅另外复制ignored的本地API配置，权限600。在快照中编译并运行，不在快照中修改源码；保存commit、源文件SHA和环境版本到运行证据。
 
 查看历史：`git log --oneline`；比较基线：`git diff baseline-20261012 -- src`。未提交文件的局部回退使用`git restore --source <commit> -- <具体文件>`，操作前先保存需要的改动；已提交修复的回退优先`git revert <commit>`，保留历史。不要自动执行整库reset --hard/clean。私密API文件被Git忽略，回退不会重建或覆盖它。
+
+## 必需的工作区根资源（2026-10-13补齐）
+
+TMSCQtest_x86_x64.bin是交接包原样出题程序，不在src内；生成运行快照必须包含它与verification旧矩阵资产。2026-10-13发现仅复制src会遗漏该文件，使QuestionSource不可用；现补入Git，保留原SHA及执行权限。前检必须验证实际QuestionSource.is_available，不能仅凭SYSTEM READY判出题链可用。程序保持在工作区根目录，不迁移目录或改任务逻辑。
