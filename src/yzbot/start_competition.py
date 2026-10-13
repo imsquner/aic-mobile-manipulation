@@ -34,6 +34,22 @@ LOG_BASE = Path.home() / "aic_competition_delivery/logs"
 SCENES_ROOT = WORKSPACE_SRC / "aic_task/config/scenes"
 INITIAL_POSE = (0.0, 0.0, 0.0)
 
+
+def log_base_dir():
+    """解析本次运行的日志根目录。
+
+    默认仍是历史路径 `~/aic_competition_delivery/logs`，保证未设环境变量时行为不变。
+    该目录可能已被清理而不存在；正式启动前必须把日志落盘到本次 Work 记录目录，
+    否则 `_create_run_dir` 会因父目录缺失直接抛异常。用 `AIC_LOG_BASE` 指定绝对路径。
+    """
+    override = os.environ.get("AIC_LOG_BASE", "").strip()
+    if not override:
+        return LOG_BASE
+    candidate = Path(override).expanduser()
+    if not candidate.is_absolute():
+        raise ValueError(f"AIC_LOG_BASE must be an absolute path, got {override!r}")
+    return candidate
+
 # --- 运行期 lifecycle 保护（见 aic_task/lifecycle_watchdog.py 与 CR-3）---
 # Nav2 lifecycle_manager 的 bond 心跳默认 4 s。本 VM 满载（load average > 10）时心跳可能被漏掉，
 # 于是 `bond_map_[node]->isBroken()` 为真 → 判为 CRITICAL FAILURE，把**它管理的全部节点**
@@ -426,7 +442,13 @@ class CompetitionLauncher:
 
     def _create_run_dir(self):
         stamp = self.start_time.strftime("%Y%m%d_%H%M%S")
-        self.run_dir = LOG_BASE / f"run_{stamp}"
+        base = log_base_dir()
+        if not base.is_dir():
+            raise RuntimeError(
+                f"log base directory does not exist: {base}; "
+                "create it first or point AIC_LOG_BASE at a writable directory"
+            )
+        self.run_dir = base / f"run_{stamp}"
         self.run_dir.mkdir(parents=True, exist_ok=False)
         self.log(f"run_dir={self.run_dir}")
 
