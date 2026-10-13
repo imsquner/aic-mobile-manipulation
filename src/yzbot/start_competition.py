@@ -151,6 +151,18 @@ NAV2_LIFECYCLE_NODES = (
 )
 
 
+def ros_file_parameter(path, workspace=None):
+    """Keep serialized ROS file values ASCII and scoped to the runtime workspace."""
+    root = Path(workspace if workspace is not None else WORKSPACE).resolve()
+    try:
+        relative = Path(path).resolve().relative_to(root).as_posix()
+    except ValueError as exc:
+        raise ValueError(f"ROS file parameter must remain inside workspace: {path}") from exc
+    if not relative.isascii():
+        raise ValueError(f"ROS file parameter must have an ASCII relative path: {relative}")
+    return relative
+
+
 class CompetitionLauncher:
     def __init__(self, args):
         self.args = args
@@ -373,6 +385,13 @@ class CompetitionLauncher:
         os.environ.setdefault("RMW_IMPLEMENTATION", "rmw_fastrtps_cpp")
 
     def _verify_prerequisites(self):
+        # Validate before launching any node. Absolute Unicode values can be
+        # corrupted when ROS launch serializes them into parameter YAML.
+        for path in (self.scene.map_file, self.scene.entities_file,
+                     self.points_file, self.path_matrix):
+            if path is not None:
+                ros_file_parameter(path)
+
         checks = {
             "ROS setup": ROS_SETUP.exists(),
             "workspace setup": WORKSPACE_SETUP.exists(),
@@ -543,6 +562,7 @@ class CompetitionLauncher:
             stdout=handle,
             stderr=subprocess.STDOUT,
             env=os.environ,
+            cwd=WORKSPACE,
             start_new_session=True,
             text=True,
         )
@@ -555,7 +575,7 @@ class CompetitionLauncher:
         command = ["ros2", "launch", "mybot", self.scene.launch_file]
         command.append(f"gui:={'False' if self.args.headless else 'True'}")
         if self.scene.entities_file is not None:
-            command.append(f"entities_file:={self.scene.entities_file}")
+            command.append(f"entities_file:={ros_file_parameter(self.scene.entities_file)}")
         self._start_process(
             "gazebo",
             command,
@@ -567,7 +587,7 @@ class CompetitionLauncher:
             "launch",
             "bot_navigation",
             "nav_bringup_gazebo2.launch.py",
-            f"map:={self.scene.map_file}",
+            f"map:={ros_file_parameter(self.scene.map_file)}",
             "slam:=False",
             f"rviz:={'False' if self.args.no_rviz else 'True'}",
         ]
@@ -591,7 +611,7 @@ class CompetitionLauncher:
                 "-p",
                 "use_sim_time:=true",
                 "-p",
-                f"points_file:={self.points_file}",
+                f"points_file:={ros_file_parameter(self.points_file)}",
                 "-p",
                 "enabled_obstacles:=" + ",".join(self.dynamic_obstacle_names),
             ],
@@ -603,7 +623,7 @@ class CompetitionLauncher:
             [
                 "ros2", "launch", "aic_perception", "grasp_pipeline.launch.py",
                 "allow_motion:=true", "allow_attach:=true", "allow_detach:=true",
-                f"candidates_config:={self.points_file}",
+                f"candidates_config:={ros_file_parameter(self.points_file)}",
             ],
         )
 
@@ -630,7 +650,7 @@ class CompetitionLauncher:
             "-p",
             f"mode:={self.mode}",
             "-p",
-            f"points_file:={self.points_file}",
+            f"points_file:={ros_file_parameter(self.points_file)}",
             "-p",
             f"get_entity_service:={self.get_entity_service}",
             "-p",
@@ -647,7 +667,7 @@ class CompetitionLauncher:
             orchestrator_command.extend(
                 [
                     "-p",
-                    f"path_matrix_file:={self.path_matrix}",
+                    f"path_matrix_file:={ros_file_parameter(self.path_matrix)}",
                     "-p",
                     "route_planning_required:=true",
                 ]
