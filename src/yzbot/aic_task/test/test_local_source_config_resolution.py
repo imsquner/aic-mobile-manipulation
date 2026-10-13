@@ -1,5 +1,6 @@
 """隔离桌面候选不得偷偷读取旧工作区，且symlink-install能找到源配置。"""
 import ast
+import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -20,7 +21,7 @@ def test_api_loads_config_beside_resolved_source_file(tmp_path):
     installed.symlink_to(module)
     original = ROOT / 'task_input/deepseek_client.py'
     method = next(n for n in ast.walk(ast.parse(original.read_text())) if isinstance(n, ast.FunctionDef) and n.name == '_load_config')
-    ns = {'Path': Path, 'yaml': yaml, '__file__': str(installed)}
+    ns = {'Path': Path, 'yaml': yaml, 'os': os, '__file__': str(installed)}
     exec(compile(ast.Module(body=[method], type_ignores=[]), str(original), 'exec'), ns)
     assert ns['_load_config'](SimpleNamespace())['deepseek']['model'] == 'local-source-fixture'
 

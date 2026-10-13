@@ -42,7 +42,7 @@ class TaskParserNode(Node):
 
         # Initialize clients
         self.ds_client = DeepSeekClient()
-        self.q_source = QuestionSource()
+        self.q_source = QuestionSource(competition_mode=self.mode == "competition")
 
         # Current task state
         self.current_task: StructuredTask = None
@@ -241,6 +241,8 @@ class TaskParserNode(Node):
             self._set_status("READING_QUESTION")
             if self.q_source.is_available:
                 question_text, order, error = self.q_source.run_and_parse()
+                self.get_logger().info("Question generator evidence: " + json.dumps(
+                    self.q_source.last_run_evidence, ensure_ascii=False))
                 if error:
                     self.get_logger().warn(f"Question generator error: {error}")
                     self._set_error(f"Binary error: {error}")

@@ -5,6 +5,7 @@ Uses OpenAI-compatible API to call deepseek-v4-flash for structured JSON output.
 """
 
 import json
+import os
 import time
 import yaml
 import requests
@@ -45,6 +46,8 @@ class DeepSeekClient:
         self.max_retries = self.config["deepseek"]["max_retries"]
 
     def _load_config(self, config_path=None):
+        if config_path is None:
+            config_path = os.environ.get("AIC_API_CONFIG_PATH") or None
         if config_path is None:
             # Search multiple locations for config (symlink-install safe, security-conscious)
             search_paths = [

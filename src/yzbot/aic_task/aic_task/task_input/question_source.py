@@ -5,6 +5,9 @@ Also supports manual question input mode.
 """
 
 import subprocess
+import time
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 import stat
 import hashlib
@@ -131,10 +134,13 @@ class QuestionSource:
         "/home/ros/dev_ws/TMSCQtest_x86_x64.bin",
     ]
 
-    def __init__(self, binary_path: Optional[str] = None):
+    def __init__(self, binary_path: Optional[str] = None, *, competition_mode: bool = False):
+        self.competition_mode = bool(competition_mode)
+        self.last_run_evidence = None
         self.binary_path = None
         self.binary_info = {}
 
+        binary_path = binary_path or os.environ.get("AIC_QUESTION_BINARY_PATH")
         if binary_path:
             self._setup_binary(binary_path)
         else:
@@ -160,6 +166,8 @@ class QuestionSource:
             "path": str(p.absolute()),
             "size": p.stat().st_size,
             "sha256": sha,
+            "mode": "competition" if self.competition_mode else "development",
+            "args": ["11470507"] if self.competition_mode else [],
         }
         self.binary_path = str(p.absolute())
 
@@ -181,13 +189,23 @@ class QuestionSource:
             return None, None, "Binary not found or not executable"
 
         try:
+            started = datetime.now(ZoneInfo("Asia/Shanghai")).isoformat()
+            timer = time.monotonic()
+            command = [self.binary_path, *self.binary_info["args"]]
             result = subprocess.run(
-                [self.binary_path],
+                command,
                 capture_output=True,
                 text=True,
                 timeout=timeout,
                 cwd=os.path.dirname(self.binary_path),
             )
+
+            self.last_run_evidence = {
+                **self.binary_info, "command": command, "started_at": started,
+                "finished_at": datetime.now(ZoneInfo("Asia/Shanghai")).isoformat(),
+                "elapsed_sec": time.monotonic() - timer, "returncode": result.returncode,
+                "stdout": result.stdout, "stderr": result.stderr,
+            }
 
             if result.returncode != 0:
                 return (
