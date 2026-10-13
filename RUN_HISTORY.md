@@ -19,3 +19,7 @@
 ## 003 - 2026-10-13 - Restart READY verified
 
 [13:20:35] SYSTEM READY: publish true on /competition/start to begin.。全部管理进程存活，无降级，三页面HTTP200；新parser日志READY，无binary not available或Start ignored。保持运行交给老板再点击生成。尚未实际运行出题程序，不能把可发现性写成真实出题成功。
+
+## 004 - 2026-10-13 - Closed for user cleanup
+
+老板要求先全关，再自行清理。本次launcher PID30104核对归属后SIGINT优雅停止，已输出All managed subsystems stopped。仿真/导航/MoveIt/任务/RViz/rosbridge/三Foxglove窗口退出，9091及8088-8090监听为空；Domain42 CLI daemon停止。未删除源码、Git、日志或其他文件，用户普通浏览器等无关程序保留。清理核验：/home/ros/aic_competition_delivery/notes/20261013_question_resource/closed_for_cleanup.json。
