@@ -26,6 +26,8 @@ def generate_launch_description():
     pkg_share = FindPackageShare(package='mybot').find('mybot')
     urdf_model_path = os.path.join(model_pkg_share, f'urdf/{urdf_name}')
     world_file_path = os.path.join(model_pkg_share, f'worlds/{world_name}')
+    # Keep the plugin parameter ASCII even when the package share path is Unicode.
+    controller_config_dir = os.path.join(pkg_share, 'config')
     # Existing callers may use entities:=filename; the scene manager passes
     # entities_file:=absolute_path so the matching scene asset is read directly.
     entities = LaunchConfiguration('entities')
@@ -39,6 +41,7 @@ def generate_launch_description():
              '-s', 'libgazebo_ros_factory.so',
              world_file_path],
         output='screen',
+        cwd=controller_config_dir,
         condition=IfCondition(gui)
     )
     start_gazebo_server = ExecuteProcess(
@@ -47,6 +50,7 @@ def generate_launch_description():
              '-s', 'libgazebo_ros_factory.so',
              world_file_path],
         output='screen',
+        cwd=controller_config_dir,
         condition=UnlessCondition(gui)
     )
 
@@ -60,8 +64,9 @@ def generate_launch_description():
     )
 
     # 解析 xacro 并去除注释
-    doc = xacro.parse(open(urdf_model_path))
-    xacro.process_doc(doc)
+    with open(urdf_model_path) as urdf_file:
+        doc = xacro.parse(urdf_file)
+    xacro.process_doc(doc, mappings={"controllers_file": "ros2_controllers.yaml"})
     params = {'robot_description': remove_comments(doc.toxml())}
 
     # robot_state_publisher 节点
