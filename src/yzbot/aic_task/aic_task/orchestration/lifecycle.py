@@ -28,6 +28,10 @@ def competition_time_budget_action(
 
 class LifecycleMixin:
     def _on_start(self, msg):
+        with self._control_lock:
+            self._start_task(msg)
+
+    def _start_task(self, msg):
         if not msg.data:
             return
         if self.state != TaskState.READY:
@@ -36,6 +40,14 @@ class LifecycleMixin:
         if self._exec_thread is not None and self._exec_thread.is_alive():
             self._event("start_rejected", reason="execution already active")
             return
+        with self._data_lock:
+            if not self._plan_ready or self.current_task is None or not self.expanded_items:
+                self._event("start_rejected", reason="current task is not ready")
+                self.pub_last_error.publish(String(data="请先出题、确认映射并完成解析"))
+                return
+            self._task_plan_frozen = True
+            self._execution_round_id = self._expected_round_id
+            self._execution_revision = self._plan_revision
         self._reset_run_counters()
         # 计时：点「开始」从 0 重新计
         self._frozen_elapsed = None
@@ -51,51 +63,24 @@ class LifecycleMixin:
 
     def _on_cancel(self, msg):
         if msg.data:
-            # 计时：点「取消」停在当时的数值（冻结），不再增长
-            if self.start_time is not None:
-                self._frozen_elapsed = max(0.0, time.monotonic() - self.start_time)
-                self.start_time = None
-            self._stop_exec = True
-            self._cancel_navigation()
-            self._cancel_trajectories()
-            self.pub_navigation.publish(String(data="CANCELLED"))
-            self.pub_manipulation.publish(String(data="CANCELLED"))
-            self._transition(TaskState.CANCELLED)
+            self._request_control("cancel")
 
     def _on_reset(self, msg):
-        if not msg.data:
-            return
-        if self._scene_reset_active:
-            self._event("reset_ignored", reason="a scene reset is already running")
-            return
-        # 冷却：一次复位已经把小车和物块都搬回去了，紧接着的重复点击只会让识别位姿
-        # 的 MoveIt goal 互相顶掉（实测会把状态抖进 TASK_FAILED）。3 秒内的重复请求忽略。
-        if (
-            self._last_reset_finished_at
-            and (time.monotonic() - self._last_reset_finished_at)
-            < SCENE_RESET_COOLDOWN_SEC
-        ):
-            self._event("reset_ignored", reason="cooldown after the previous reset")
-            return
-        self._stop_exec = True
-        self._cancel_navigation()
-        self._cancel_trajectories()
-        if self._exec_thread is not None and self._exec_thread.is_alive():
-            self._reset_pending = True
-            self._event("reset_deferred", reason="execution is stopping")
-            return
-        self._complete_reset()
+        if msg.data:
+            self._complete_reset()
 
     def _scene_reset_worker(self):
         try:
             scene_ok, detail = self._reset_scene()
             if not scene_ok:
-                self.pub_last_error.publish(
-                    String(data=f"scene reset incomplete: {detail}")
-                )
+                self.pub_last_error.publish(String(data=f"scene reset incomplete: {detail}"))
+                self._transition(TaskState.RESET_FAILED)
+                return
         except Exception as exc:  # 线程里的异常会静默丢失，这里兜住并上报
             self._event("scene_reset_failed", error=str(exc))
             self.pub_last_error.publish(String(data=f"scene reset failed: {exc}"))
+            self._transition(TaskState.RESET_FAILED)
+            return
         finally:
             with self._reset_lock:
                 self._scene_reset_active = False
@@ -159,6 +144,7 @@ class LifecycleMixin:
 
     def _tick(self):
         self._publish_state_heartbeat()
+        self._publish_operator_view()
         self._publish_placed_cargo_obstacles()
         if (
             self._reset_pending

@@ -113,6 +113,9 @@ class Publisher:
 
 
 class SlotReleaseHarness(ZoneSlotReleaseMixin, PlacementLegacyFlowMixin):
+    def _set_step(self, text):
+        self.steps = getattr(self, "steps", []) + [text]
+
     TaskState = SimpleNamespace(
         NAVIGATING_TO_ZONE="NAVIGATING_TO_ZONE",
         PLACING="PLACING",

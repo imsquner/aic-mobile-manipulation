@@ -19,7 +19,7 @@
       "foxglovePanelTitle": "3 DS解析有序任务表"
     },
     "Publish!mappingInput": {
-      "buttonText": "确认映射",
+      "buttonText": "映射",
       "buttonTooltip": "",
       "advancedView": true,
       "value": "{\"data\":\"x 代表红色,y 代表蓝色,数量大于等于 3 的去 A 区,其他颜色去 C 区\"}",
@@ -37,7 +37,7 @@
       "datatype": "std_msgs/Bool"
     },
     "Publish!resubmit": {
-      "buttonText": "重新解析",
+      "buttonText": "重解析",
       "buttonTooltip": "",
       "advancedView": false,
       "value": "{\"data\":true}",
@@ -267,7 +267,7 @@
           "label": "蓝色"
         }
       ],
-      "foxglovePanelTitle": "目标颜色"
+      "foxglovePanelTitle": "本轮颜色"
     },
     "Indicator!zone": {
       "path": "/competition/current_zone.data",
@@ -295,14 +295,14 @@
           "label": "C"
         }
       ],
-      "foxglovePanelTitle": "目标区域"
+      "foxglovePanelTitle": "本轮区域"
     },
     "Indicator!nav": {
       "path": "/competition/navigation_state.data",
       "style": "background",
       "fontSize": 20,
       "fallbackColor": "#026aa2",
-      "fallbackLabel": "空闲",
+      "fallbackLabel": "未知",
       "rules": [
         {
           "operator": "=",
@@ -327,6 +327,18 @@
           "rawValue": "CANCELLED",
           "color": "#026aa2",
           "label": "已取消"
+        },
+        {
+          "operator": "=",
+          "rawValue": "STOPPING",
+          "label": "停止中",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "STOPPED",
+          "label": "已停止",
+          "color": "#b54708"
         }
       ],
       "foxglovePanelTitle": "导航状态"
@@ -336,7 +348,7 @@
       "style": "background",
       "fontSize": 20,
       "fallbackColor": "#6941c6",
-      "fallbackLabel": "空闲",
+      "fallbackLabel": "未知",
       "rules": [
         {
           "operator": "=",
@@ -385,6 +397,84 @@
           "rawValue": "EXECUTING_PICK_SEQUENCE",
           "color": "#6941c6",
           "label": "抓取流水线"
+        },
+        {
+          "operator": "=",
+          "rawValue": "STOPPING",
+          "label": "停止中",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "STOPPED",
+          "label": "已停止",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RECOGNITION_POSE",
+          "label": "识别位",
+          "color": "#039855"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RETURNING_RECOGNITION_POSE",
+          "label": "回识别位",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "LATCH_PREGRASP",
+          "label": "IK校验",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PLAN_PICK",
+          "label": "规划",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTE_PREGRASP",
+          "label": "预抓取",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTE_OBSERVATION",
+          "label": "观察位",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTE_DESCEND",
+          "label": "下降",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ATTACH_TARGET",
+          "label": "吸附",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTE_LIFT",
+          "label": "抬升",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RETURN_ARM",
+          "label": "回识别位",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "EXECUTING_PICK_SEQUENCE_RETRY",
+          "label": "重试",
+          "color": "#175cd3"
         }
       ],
       "foxglovePanelTitle": "机械臂状态"
@@ -394,61 +484,61 @@
       "style": "background",
       "fontSize": 20,
       "fallbackColor": "#b54708",
-      "fallbackLabel": "等待",
+      "fallbackLabel": "未知",
       "rules": [
         {
           "operator": "=",
-          "rawValue": "BOOTING",
-          "color": "#b54708",
-          "label": "启动中"
-        },
-        {
-          "operator": "=",
-          "rawValue": "READY",
-          "color": "#b54708",
-          "label": "就绪"
-        },
-        {
-          "operator": "=",
-          "rawValue": "READING_QUESTION",
-          "color": "#b54708",
-          "label": "读取题目"
-        },
-        {
-          "operator": "=",
-          "rawValue": "WAITING_MAPPING",
-          "color": "#b54708",
-          "label": "等待映射"
-        },
-        {
-          "operator": "=",
-          "rawValue": "CALLING_LLM",
-          "color": "#b54708",
-          "label": "模型解析"
-        },
-        {
-          "operator": "=",
-          "rawValue": "VALIDATING_TASK",
-          "color": "#b54708",
-          "label": "校验任务"
-        },
-        {
-          "operator": "=",
-          "rawValue": "API_ERROR",
-          "color": "#d92d20",
-          "label": "解析失败"
+          "rawValue": "EMPTY",
+          "label": "未准备",
+          "color": "#667085"
         },
         {
           "operator": "=",
           "rawValue": "CANCELLED",
-          "color": "#b54708",
-          "label": "已取消"
+          "label": "未准备",
+          "color": "#667085"
         },
         {
           "operator": "=",
-          "rawValue": "VISUAL_FIXTURE",
-          "color": "#b54708",
-          "label": "验收夹具"
+          "rawValue": "PLAN_INVALIDATED",
+          "label": "未准备",
+          "color": "#667085"
+        },
+        {
+          "operator": "=",
+          "rawValue": "READING_QUESTION",
+          "label": "出题中",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "WAITING_MAPPING",
+          "label": "等映射",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CALLING_LLM",
+          "label": "解析中",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "VALIDATING_TASK",
+          "label": "解析中",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PLAN_READY",
+          "label": "可开始",
+          "color": "#039855"
+        },
+        {
+          "operator": "=",
+          "rawValue": "PARSE_FAILED",
+          "label": "失败",
+          "color": "#d92d20"
         }
       ],
       "foxglovePanelTitle": "解析状态"
@@ -457,116 +547,140 @@
       "path": "/competition/current_state.data",
       "style": "background",
       "fontSize": 20,
-      "fallbackColor": "#344054",
-      "fallbackLabel": "空闲",
+      "fallbackColor": "#667085",
+      "fallbackLabel": "未知",
       "rules": [
         {
           "operator": "=",
           "rawValue": "BOOTING",
-          "color": "#344054",
-          "label": "启动中"
-        },
-        {
-          "operator": "=",
-          "rawValue": "RESETTING",
-          "color": "#344054",
-          "label": "复位中"
+          "label": "初始化",
+          "color": "#667085"
         },
         {
           "operator": "=",
           "rawValue": "READY",
-          "color": "#344054",
-          "label": "就绪"
+          "label": "就绪",
+          "color": "#039855"
         },
         {
           "operator": "=",
           "rawValue": "READING_QUESTION",
-          "color": "#344054",
-          "label": "识别资源"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "NAVIGATING_TO_OBJECT",
-          "color": "#344054",
-          "label": "前往资源点"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "PRE_GRASP",
-          "color": "#344054",
-          "label": "预抓取"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "GRASPING",
-          "color": "#344054",
-          "label": "抓取"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "NAVIGATING_TO_ZONE",
-          "color": "#344054",
-          "label": "前往放置区"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "PLACING",
-          "color": "#344054",
-          "label": "放置"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "VERIFYING",
-          "color": "#344054",
-          "label": "校验中"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "ITEM_SUCCEEDED",
-          "color": "#344054",
-          "label": "单块完成"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
           "rawValue": "ITEM_FAILED",
-          "color": "#344054",
-          "label": "单块失败"
+          "label": "运行中",
+          "color": "#175cd3"
         },
         {
           "operator": "=",
-          "rawValue": "TASK_SUCCEEDED",
-          "color": "#039855",
-          "label": "任务完成"
-        },
-        {
-          "operator": "=",
-          "rawValue": "TASK_FAILED",
-          "color": "#d92d20",
-          "label": "任务失败"
-        },
-        {
-          "operator": "=",
-          "rawValue": "API_ERROR",
-          "color": "#d92d20",
-          "label": "解析失败"
-        },
-        {
-          "operator": "=",
-          "rawValue": "TIME_LIMIT",
-          "color": "#d92d20",
-          "label": "时间到"
+          "rawValue": "CANCELLING",
+          "label": "取消中",
+          "color": "#b54708"
         },
         {
           "operator": "=",
           "rawValue": "CANCELLED",
-          "color": "#344054",
-          "label": "已取消"
+          "label": "已取消",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RESETTING",
+          "label": "复位中",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_SUCCEEDED",
+          "label": "已结束",
+          "color": "#039855"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TASK_FAILED",
+          "label": "已结束",
+          "color": "#d92d20"
+        },
+        {
+          "operator": "=",
+          "rawValue": "TIME_LIMIT",
+          "label": "已结束",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "API_ERROR",
+          "label": "异常",
+          "color": "#d92d20"
+        },
+        {
+          "operator": "=",
+          "rawValue": "INITIALIZATION_FAILED",
+          "label": "异常",
+          "color": "#d92d20"
+        },
+        {
+          "operator": "=",
+          "rawValue": "CANCEL_FAILED",
+          "label": "异常",
+          "color": "#d92d20"
+        },
+        {
+          "operator": "=",
+          "rawValue": "RESET_FAILED",
+          "label": "异常",
+          "color": "#d92d20"
         }
       ],
       "foxglovePanelTitle": "总状态"
     },
     "Publish!generate": {
-      "buttonText": "生成题目",
+      "buttonText": "出题",
       "buttonTooltip": "",
       "advancedView": false,
       "value": "{\"data\":true}",
@@ -604,6 +718,104 @@
       "topicPath": "/competition/elapsed_seconds",
       "fontSize": 20,
       "foxglovePanelTitle": "已运行总耗时(s)"
+    },
+    "RawMessages!step": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/current_step",
+      "fontSize": 16,
+      "foxglovePanelTitle": "当前步骤"
+    },
+    "RawMessages!mapping": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/mapping_rule",
+      "fontSize": 16,
+      "foxglovePanelTitle": "有效映射"
+    },
+    "RawMessages!error": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/last_error",
+      "fontSize": 16,
+      "foxglovePanelTitle": "错误"
+    },
+    "RawMessages!updated": {
+      "diffEnabled": false,
+      "diffMethod": "custom",
+      "diffTopicPath": "",
+      "showFullMessageForDiff": false,
+      "topicPath": "/competition/state_updated",
+      "fontSize": 16,
+      "foxglovePanelTitle": "更新时间"
+    },
+    "Indicator!attachment": {
+      "path": "/competition/attachment_state.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#667085",
+      "fallbackLabel": "未知",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "UNKNOWN",
+          "label": "未知",
+          "color": "#b54708"
+        },
+        {
+          "operator": "=",
+          "rawValue": "ATTACHED",
+          "label": "已吸附",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "DETACHED",
+          "label": "未吸附",
+          "color": "#039855"
+        },
+        {
+          "operator": "=",
+          "rawValue": "DETACHING",
+          "label": "释放中",
+          "color": "#b54708"
+        }
+      ],
+      "foxglovePanelTitle": "吸附"
+    },
+    "Indicator!connection": {
+      "path": "/competition/api_connection_status.data",
+      "style": "background",
+      "fontSize": 20,
+      "fallbackColor": "#667085",
+      "fallbackLabel": "未知",
+      "rules": [
+        {
+          "operator": "=",
+          "rawValue": "CHECKING",
+          "label": "检测中",
+          "color": "#175cd3"
+        },
+        {
+          "operator": "=",
+          "rawValue": "AVAILABLE",
+          "label": "可用",
+          "color": "#039855"
+        },
+        {
+          "operator": "=",
+          "rawValue": "UNAVAILABLE",
+          "label": "不可用",
+          "color": "#d92d20"
+        }
+      ],
+      "foxglovePanelTitle": "API连接"
     }
   },
   "globalVariables": {},
@@ -620,7 +832,12 @@
         "splitPercentage": 50
       },
       "second": {
-        "first": "Publish!mappingInput",
+        "first": {
+          "first": "Publish!mappingInput",
+          "second": "RawMessages!mapping",
+          "direction": "row",
+          "splitPercentage": 50
+        },
         "second": {
           "first": "RawMessages!planJson",
           "second": {
@@ -679,30 +896,55 @@
             "second": {
               "first": {
                 "first": "Indicator!network",
-                "second": "Indicator!api",
+                "second": "Indicator!connection",
                 "direction": "row",
                 "splitPercentage": 50
               },
               "second": {
-                "first": "RawMessages!elapsed",
-                "second": "Indicator!state",
+                "first": {
+                  "first": "Indicator!api",
+                  "second": "Indicator!attachment",
+                  "direction": "row",
+                  "splitPercentage": 50
+                },
+                "second": {
+                  "first": "RawMessages!step",
+                  "second": {
+                    "first": "RawMessages!error",
+                    "second": {
+                      "first": "RawMessages!updated",
+                      "second": {
+                        "first": "RawMessages!elapsed",
+                        "second": "Indicator!state",
+                        "direction": "column",
+                        "splitPercentage": 50
+                      },
+                      "direction": "column",
+                      "splitPercentage": 33.333333333333336
+                    },
+                    "direction": "column",
+                    "splitPercentage": 25
+                  },
+                  "direction": "column",
+                  "splitPercentage": 20
+                },
                 "direction": "column",
-                "splitPercentage": 50
+                "splitPercentage": 16.666666666666668
               },
               "direction": "column",
-              "splitPercentage": 33.333333333333336
+              "splitPercentage": 14.285714285714286
             },
             "direction": "column",
-            "splitPercentage": 25
+            "splitPercentage": 12.5
           },
           "direction": "column",
-          "splitPercentage": 20
+          "splitPercentage": 11.11111111111111
         },
         "direction": "column",
-        "splitPercentage": 16.666666666666668
+        "splitPercentage": 10
       },
       "direction": "column",
-      "splitPercentage": 14.285714285714286
+      "splitPercentage": 9.090909090909092
     },
     "direction": "row",
     "splitPercentage": 54

@@ -170,6 +170,7 @@ class ZoneSlotReleaseMixin:
             scan_points, scan_error = self._slot_scan_points_map()
             if scan_points is None:
                 return False, f"slot maneuver blocked: {scan_error}"
+            self._set_step("搬运至槽位")
             self._transition(self.TaskState.NAVIGATING_TO_ZONE)
             self.pub_navigation.publish(String(data="NAVIGATING_TO_ZONE"))
             source_node = str(getattr(self, "_planner_location", ""))
@@ -417,6 +418,7 @@ class ZoneSlotReleaseMixin:
                 safety_clear=True,
                 rotation_attempted=rotation_attempted,
             )
+            self._set_step("释放物块")
             self._transition(self.TaskState.PLACING)
             self.pub_manipulation.publish(String(data="PRE_RELEASE"))
             release_attempted = True
@@ -443,6 +445,7 @@ class ZoneSlotReleaseMixin:
             self._zone_placement_counts[item.zone] = (
                 self._zone_placement_counts.get(item.zone, 0) + 1
             )
+            self._set_step("核验落点")
             self._transition(self.TaskState.VERIFYING)
             stable_position = self._wait_for_cube_stable(str(cube["id"]))
             released_positions, released_reason = self._slot_current_model_positions_map()
@@ -532,6 +535,7 @@ class ZoneSlotReleaseMixin:
                     next_location=self._planner_location,
                 )
             elif has_more_items or not strict_inside:
+                self._set_step("放置后退离")
                 retreated, distance, retreat_reason = self._retreat_from_slot(
                     slot, cube["id"]
                 )

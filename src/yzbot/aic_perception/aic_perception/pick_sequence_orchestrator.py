@@ -59,18 +59,19 @@ class ValidationGate:
     def wait(self, timeout):
         deadline = time.monotonic() + timeout
         with self._condition:
-            while self._result is None:
+            while self._armed and self._result is None:
                 remaining = deadline - time.monotonic()
                 if remaining <= 0.0:
                     return None
                 self._condition.wait(remaining)
-            return dict(self._result)
+            return dict(self._result) if self._result is not None else None
 
     def cancel(self):
         with self._condition:
             self._armed = False
             self._saw_latched = False
             self._result = None
+            self._condition.notify_all()
 
 
 class PickSequenceOrchestrator(Node):
@@ -105,6 +106,13 @@ class PickSequenceOrchestrator(Node):
             callback_group=self._validation_cbg,
         )
         self._sequence_lock = threading.Lock()
+        self._stop_event = threading.Event()
+        self._command_lock = threading.RLock()
+        self._pending_stages = []
+        self.create_service(Trigger, "/competition/stop_pick_sequence", self._on_stop,
+                            callback_group=self._cbg)
+        self.create_service(Trigger, "/competition/reset_pick_sequence", self._on_reset_sequence,
+                            callback_group=self._cbg)
         self.create_service(
             Trigger,
             "/competition/execute_pick_sequence",
@@ -130,16 +138,34 @@ class PickSequenceOrchestrator(Node):
         self._status_pub.publish(String(data=encoded))
         self.get_logger().info(encoded)
 
-    @staticmethod
-    def _wait_future(future, timeout):
-        completed = threading.Event()
-        future.add_done_callback(lambda _: completed.set())
-        if not completed.wait(timeout):
-            return None
+    def _wait_future(self, future, timeout):
+        self._pending_stages.append(future)
+        deadline = time.monotonic() + timeout
+        while not future.done():
+            if self._stop_event.is_set() or time.monotonic() >= deadline:
+                return None
+            time.sleep(.02)
         try:
             return future.result()
         except Exception:
             return None
+
+    def _on_stop(self, request, response):
+        with self._command_lock:
+            self._stop_event.set()
+            self._validation_gate.cancel()
+            self._pending_stages[:] = [f for f in self._pending_stages if not f.done()]
+            stopped = not self._sequence_lock.locked() and not self._pending_stages
+            self._publish("stopped" if stopped else "stopping")
+            return self._finish(response, stopped, "stopped" if stopped else "waiting for stage termination")
+
+    def _on_reset_sequence(self, request, response):
+        with self._command_lock:
+            if self._sequence_lock.locked() or any(not f.done() for f in self._pending_stages):
+                return self._finish(response, False, "previous sequence is not settled")
+            self._pending_stages.clear()
+            self._stop_event.clear()
+            return self._finish(response, True, "sequence ready")
 
     @staticmethod
     def _finish(response, success, message):
@@ -149,6 +175,8 @@ class PickSequenceOrchestrator(Node):
 
     def _on_execute(self, request, response):
         del request
+        if self._stop_event.is_set():
+            return self._finish(response, False, "pick sequence stopped; reset required")
         if not self._sequence_lock.acquire(blocking=False):
             return self._finish(response, False, "pick sequence is already active")
 
@@ -157,6 +185,8 @@ class PickSequenceOrchestrator(Node):
             total = len(PICK_STAGES)
             self._publish("sequence_started", total_stages=total)
             for index, (stage, service) in enumerate(PICK_STAGES, start=1):
+                if self._stop_event.is_set():
+                    return self._finish(response, False, "pick sequence cancelled")
                 if stage == "latch_pregrasp":
                     self._validation_gate.start()
                 client = self._stage_clients[stage]
@@ -173,9 +203,12 @@ class PickSequenceOrchestrator(Node):
                 self._publish(
                     "stage_started", stage=stage, stage_index=index, total_stages=total
                 )
-                result = self._wait_future(
-                    client.call_async(Trigger.Request()), self.stage_timeout
-                )
+                with self._command_lock:
+                    if self._stop_event.is_set():
+                        return self._finish(response, False, "pick sequence cancelled")
+                    pending = client.call_async(Trigger.Request())
+                    self._pending_stages.append(pending)
+                result = self._wait_future(pending, self.stage_timeout)
                 if result is None:
                     message = f"stage {stage} timed out"
                     self._publish(
@@ -249,7 +282,7 @@ class PickSequenceOrchestrator(Node):
 def main():
     rclpy.init()
     node = PickSequenceOrchestrator()
-    executor = MultiThreadedExecutor(num_threads=2)
+    executor = MultiThreadedExecutor(num_threads=4)
     executor.add_node(node)
     try:
         executor.spin()

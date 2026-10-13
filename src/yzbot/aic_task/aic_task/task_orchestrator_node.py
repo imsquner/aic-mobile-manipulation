@@ -26,7 +26,7 @@ from moveit_msgs.srv import GetPositionIK
 from lifecycle_msgs.srv import GetState
 from nav2_msgs.action import ComputePathToPose, NavigateToPose
 from nav2_msgs.srv import ClearEntireCostmap
-from nav_msgs.msg import OccupancyGrid
+from nav_msgs.msg import OccupancyGrid, Odometry
 from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import GetParameters, SetParameters
 from rclpy.action import ActionClient
@@ -35,7 +35,7 @@ from rclpy.duration import Duration
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
-from sensor_msgs.msg import LaserScan, PointCloud2, PointField
+from sensor_msgs.msg import JointState, LaserScan, PointCloud2, PointField
 from std_msgs.msg import Bool, Float32, Int32, String
 from std_srvs.srv import Trigger
 from tf2_geometry_msgs import do_transform_point
@@ -140,6 +140,7 @@ from aic_task.orchestration.lifecycle import (
     competition_time_budget_action,
 )
 from aic_task.orchestration.round_flow import RoundFlowMixin
+from aic_task.orchestration.control_flow import ControlFlowMixin
 from aic_task.orchestration.states import (
     StatePublishingMixin,
     TaskState as _RuntimeTaskState,
@@ -265,6 +266,7 @@ def _world2_slot_reset_block_reason(
 
 
 class TaskOrchestratorNode(
+    ControlFlowMixin,
     ReportingMixin,
     AllocationMixin,
     StatePublishingMixin,
@@ -300,6 +302,13 @@ class TaskOrchestratorNode(
         )
         competition_runtime = runtime_config.get("competition", {})
         planner_runtime = runtime_config.get("planner", {})
+        control_config = runtime_config.get("control", {})
+        self._init_control_flow(control_config)
+        self._reset_verify_timeout = max(1.0, float(control_config.get("reset_verify_timeout_sec", 8.0)))
+        self._reset_position_tolerance = max(.001, float(control_config.get("reset_position_tolerance_m", .03)))
+        self._reset_yaw_tolerance = max(.001, float(control_config.get("reset_yaw_tolerance_rad", .05)))
+        self.declare_parameter("parser_enabled", True)
+        self._parser_enabled = bool(self.get_parameter("parser_enabled").value)
         self.declare_parameter("mode", "competition")
         self.declare_parameter("development_cube_start_index", 0)
         self.declare_parameter("points_file", default_points)
@@ -918,20 +927,44 @@ class TaskOrchestratorNode(
         self._tf_buffer = Buffer()
         self._tf_listener = TransformListener(self._tf_buffer, self)
 
+        for attribute, service in (
+            ("_pick_stop_client", "/competition/stop_pick_sequence"),
+            ("_pick_reset_client", "/competition/reset_pick_sequence"),
+            ("_grasp_stop_client", "/competition/stop_grasp"),
+            ("_parser_clear_client", "/competition/clear_task"),
+            ("_parser_cancel_client", "/competition/cancel_task"),
+            ("_parser_freeze_client", "/competition/freeze_task"),
+        ):
+            setattr(self, attribute, self.create_client(Trigger, service, callback_group=self._cbg))
+        view_qos = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
+        self.pub_plan_acceptance = self.create_publisher(String, "/competition/plan_acceptance", view_qos)
+        self.pub_step = self.create_publisher(String, "/competition/current_step", view_qos)
+        self.pub_attachment = self.create_publisher(String, "/competition/attachment_state", view_qos)
+        self.pub_updated = self.create_publisher(String, "/competition/state_updated", view_qos)
+        self.create_subscription(String, "/competition/grasp_execution_status", self._on_grasp_execution, view_qos,
+                                 callback_group=self._cbg)
+        self.create_subscription(String, "/competition/pick_sequence_status", self._on_pick_status, 10,
+                                 callback_group=self._cbg)
+        telemetry_qos = QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT)
+        self.create_subscription(Odometry, "/odom", self._on_control_odom, telemetry_qos, callback_group=self._cbg)
+        self.create_subscription(JointState, "/joint_states", self._on_control_joint_state, telemetry_qos,
+                                 callback_group=self._cbg)
+        self.create_subscription(String, "/competition/api_status", self._on_parser_state, 10,
+                                 callback_group=self._cbg)
         self.pub_state = self.create_publisher(
-            String, "/competition/current_state", 10
+            String, "/competition/current_state", view_qos
         )
         self.pub_current_color = self.create_publisher(
-            String, "/competition/current_color", 10
+            String, "/competition/current_color", view_qos
         )
         self.pub_current_zone = self.create_publisher(
-            String, "/competition/current_zone", 10
+            String, "/competition/current_zone", view_qos
         )
         self.pub_current_item = self.create_publisher(
-            Int32, "/competition/current_item_index", 10
+            Int32, "/competition/current_item_index", view_qos
         )
         self.pub_current_group_count = self.create_publisher(
-            Int32, "/competition/current_group_count", 10
+            Int32, "/competition/current_group_count", view_qos
         )
         self.pub_total = self.create_publisher(
             Int32, "/competition/total_item_count", 10
@@ -955,10 +988,10 @@ class TaskOrchestratorNode(
             String, "/competition/gripper_state", 10
         )
         self.pub_manipulation = self.create_publisher(
-            String, "/competition/manipulation_state", 10
+            String, "/competition/manipulation_state", view_qos
         )
         self.pub_navigation = self.create_publisher(
-            String, "/competition/navigation_state", 10
+            String, "/competition/navigation_state", view_qos
         )
         self.pub_event = self.create_publisher(String, "/competition/event", 10)
         self.pub_placed_cargo_obstacles = self.create_publisher(
@@ -1005,7 +1038,7 @@ class TaskOrchestratorNode(
             String, "/competition/grasp_target_arm", 10
         )
         self.pub_last_error = self.create_publisher(
-            String, "/competition/last_error", 10
+            String, "/competition/last_error", view_qos
         )
         # Nav2 owns long-distance motion. This publisher is used only for the
         # short, obstacle-free final approach after the fixed staging pose.
@@ -1160,7 +1193,7 @@ class TaskOrchestratorNode(
                 success=False,
                 reason="arm controller unavailable",
             )
-            self._transition(TaskState.TASK_FAILED)
+            self._transition(TaskState.INITIALIZATION_FAILED)
             return
         success = self._arm(POSE_PRE_GRASP, 1.2)
         self._event(
@@ -1172,7 +1205,9 @@ class TaskOrchestratorNode(
             self.pub_last_error.publish(
                 String(data="recognition pose initialization failed")
             )
-            self._transition(TaskState.TASK_FAILED)
+            self._transition(TaskState.INITIALIZATION_FAILED)
+            return
+        if self._stop_exec:
             return
         self.pub_manipulation.publish(String(data="RECOGNITION_POSE"))
         self._transition(TaskState.READY)
@@ -1474,8 +1509,9 @@ class TaskOrchestratorNode(
         )
         return matrix
 
-    def _transition(self, new_state):
-        return super()._transition(new_state)
+    def _transition(self, new_state, control=False):
+        with self._control_lock:
+            return super()._transition(new_state, control=control)
 
     def _publish_state_heartbeat(self):
         return super()._publish_state_heartbeat()
@@ -1512,51 +1548,85 @@ class TaskOrchestratorNode(
         self.get_logger().info(f"Event: {serialized}")
 
     def _on_task_plan(self, msg):
-        try:
-            task = StructuredTask.from_deepseek_result(json.loads(msg.data))
-            errors = task.validate()
-            if task.red_count > len(self.points["red_cubes"]):
-                errors.append("Requested red count exceeds available cubes")
-            if task.blue_count > len(self.points["blue_cubes"]):
-                errors.append("Requested blue count exceeds available cubes")
-            if task.total_items <= 0:
-                errors.append("Task contains no items")
-            if errors:
-                raise ValueError("; ".join(errors))
+        with self._control_lock:
+            if self.state != TaskState.READY or self._task_plan_frozen or self._control_mode:
+                return
+            payload = {}
+            try:
+                payload = json.loads(msg.data)
+                if not isinstance(payload, dict):
+                    payload = {}
+                    raise ValueError("task plan must be a JSON object")
+                if self.state != TaskState.READY or self._task_plan_frozen or self._control_mode:
+                    self._event("task_plan_ignored", reason="system is not accepting plans")
+                    return
+                round_id = payload.get("round_id")
+                if self._parser_enabled and (not round_id or (
+                        self._expected_round_id is not None and round_id != self._expected_round_id)):
+                    self._event("task_plan_ignored", reason="stale or untagged parser plan")
+                    return
+                revision = int(payload.get("generation", -1))
+                if self._parser_enabled and revision < self._plan_revision:
+                    return
+                self._plan_revision = revision
+                if payload.get("valid") is False:
+                    with self._data_lock:
+                        self.current_task = None
+                        self.expanded_items = []
+                        self._plan_ready = False
+                    return
+                task = StructuredTask.from_deepseek_result(payload)
+                errors = task.validate()
+                if task.red_count > len(self.points["red_cubes"]):
+                    errors.append("Requested red count exceeds available cubes")
+                if task.blue_count > len(self.points["blue_cubes"]):
+                    errors.append("Requested blue count exceeds available cubes")
+                if task.total_items <= 0:
+                    errors.append("Task contains no items")
+                if errors:
+                    raise ValueError("; ".join(errors))
 
-            expanded = []
-            for group in sorted(task.ordered_tasks, key=lambda item: item.sequence):
-                expanded.extend([group] * group.count)
-            with self._data_lock:
-                if self._task_plan_frozen:
-                    plan_frozen = True
-                else:
-                    plan_frozen = False
-                    self.current_task = task
-                    self.expanded_items = expanded
-            if plan_frozen:
-                self.get_logger().warning(
-                    "Task plan ignored: execution plan is frozen until reset"
-                )
+                expanded = []
+                for group in sorted(task.ordered_tasks, key=lambda item: item.sequence):
+                    expanded.extend([group] * group.count)
+                with self._data_lock:
+                    if self._task_plan_frozen:
+                        plan_frozen = True
+                    else:
+                        plan_frozen = False
+                        self.current_task = task
+                        self.expanded_items = expanded
+                        self._plan_ready = self._parser_state == "PLAN_READY" or not self._parser_enabled
+                if plan_frozen:
+                    self.get_logger().warning(
+                        "Task plan ignored: execution plan is frozen until reset"
+                    )
+                    self._event(
+                        "task_plan_ignored",
+                        reason="execution plan frozen",
+                        total=task.total_items,
+                        red=task.red_count,
+                        blue=task.blue_count,
+                    )
+                    return
+                self._expected_round_id = round_id
+                self.pub_plan_acceptance.publish(String(data=json.dumps({
+                    "round_id": round_id, "generation": revision, "accepted": True})))
+                self.pub_total.publish(Int32(data=task.total_items))
                 self._event(
-                    "task_plan_ignored",
-                    reason="execution plan frozen",
+                    "task_plan_received",
                     total=task.total_items,
                     red=task.red_count,
                     blue=task.blue_count,
                 )
-                return
-            self.pub_total.publish(Int32(data=task.total_items))
-            self._event(
-                "task_plan_received",
-                total=task.total_items,
-                red=task.red_count,
-                blue=task.blue_count,
-            )
-        except Exception as exc:
-            self.get_logger().error(f"Task plan rejected: {exc}")
-            self._event("task_plan_rejected", error=str(exc))
-            self._transition(TaskState.API_ERROR)
+            except Exception as exc:
+                self.get_logger().error(f"Task plan rejected: {exc}")
+                self._event("task_plan_rejected", error=str(exc))
+                self._plan_ready = False
+                self.pub_plan_acceptance.publish(String(data=json.dumps({
+                    "round_id": payload.get("round_id"), "generation": payload.get("generation"),
+                    "accepted": False, "reason": str(exc)})))
+                self.pub_last_error.publish(String(data=str(exc)))
 
     def _on_detections(self, msg):
         try:
@@ -1606,57 +1676,17 @@ class TaskOrchestratorNode(
         return super()._finish_reset()
 
     def _complete_reset(self):
-        # _tick 挂在 ReentrantCallbackGroup 上，可能被多个执行器线程同时调到这里；
-        # 只有第一个进去的真的做，其余直接放弃（否则会重复搬物块、抢着切 READY）。
-        if not self._reset_lock.acquire(blocking=False):
-            self._event("reset_ignored", reason="a reset is already being processed")
-            return
-        try:
-            reset_block_reason = _world2_slot_reset_block_reason(
-                self._slot_mode_enabled(),
-                self.reset_scene_on_reset,
-                self._placement_slot_states,
-                self._attached_cube,
-                bool(self._placed_cube_regions),
-                bool(self._placed_cube_obstacle_positions),
-            )
-            if reset_block_reason:
-                self._reset_pending = False
-                self.pub_last_error.publish(String(data=reset_block_reason))
-                self._event("reset_blocked", reason=reset_block_reason)
-                self._transition(TaskState.TASK_FAILED)
-                return
-            with self._data_lock:
-                self.current_task = None
-                self.expanded_items = []
-                self._task_plan_frozen = False
-            self._reset_run_counters()
-            self.start_time = None
-            # 复位把计时归 0（与「取消」的冻结不同）
-            self._frozen_elapsed = None
-            self._stop_exec = False
+        reason = _world2_slot_reset_block_reason(
+            self._slot_mode_enabled(), self.reset_scene_on_reset,
+            self._placement_slot_states, self._attached_cube,
+            bool(self._placed_cube_regions), bool(self._placed_cube_obstacle_positions))
+        if reason:
             self._reset_pending = False
-            self.pub_navigation.publish(String(data="IDLE"))
-            self.pub_last_error.publish(String(data=""))
-            # 复位场景：断开吸附 + 小车与物块归位 + 清残留障碍（可用参数关闭）。
-            # 重活放独立线程，执行器线程必须保持可用来发 elapsed / 心跳；复位期间
-            # 状态是 RESETTING（面板显示"复位中"），此时 start 会被拒绝。
-            if self.reset_scene_on_reset:
-                if self._scene_reset_active:
-                    self._event(
-                        "scene_reset_skipped", reason="a reset is already running"
-                    )
-                    return
-                self._scene_reset_active = True
-                self._transition(TaskState.RESETTING)
-                self._scene_reset_thread = threading.Thread(
-                    target=self._scene_reset_worker, name="scene-reset", daemon=True
-                )
-                self._scene_reset_thread.start()
-                return
-        finally:
-            self._reset_lock.release()
-        self._finish_reset()
+            self.pub_last_error.publish(String(data=reason))
+            self._event("reset_blocked", reason=reason)
+            self._transition(TaskState.RESET_FAILED, control=True)
+            return
+        self._request_control("reset")
 
     def _reset_run_counters(self):
         return super()._reset_run_counters()
@@ -1700,6 +1730,9 @@ class TaskOrchestratorNode(
             (self._grasp_execute_client, "competition/execute_pick_sequence"),
             (self._grasp_release_client, "competition/release_target"),
             (self._grasp_abort_client, "competition/abort_pick"),
+            (self._pick_stop_client, "competition/stop_pick_sequence"),
+            (self._pick_reset_client, "competition/reset_pick_sequence"),
+            (self._grasp_stop_client, "competition/stop_grasp"),
         )
         deadline = time.monotonic() + timeout
         for client, name in actions:
@@ -1964,7 +1997,7 @@ class TaskOrchestratorNode(
                 kd=0.3,
                 max_angular=self.direct_precision_max_angular,
             )
-            self.pub_precision_cmd.publish(command)
+            self._publish_motion_command(command)
             time.sleep(0.05)
         self._publish_precision_stop()
         self._event(
@@ -2114,7 +2147,10 @@ class TaskOrchestratorNode(
         command = Twist()
         command.linear.x = float(linear_x)
         command.angular.z = float(angular_z)
-        self.pub_precision_cmd.publish(command)
+        with self._motion_command_lock:
+            if (command.linear.x or command.angular.z) and self._stop_exec:
+                return
+            self.pub_precision_cmd.publish(command)
 
     def _world2_dock_candidate(
         self, cube, object_staging, remaining_budget_sec=None, deadline=None
@@ -2464,14 +2500,30 @@ class TaskOrchestratorNode(
         return super()._verify_near(first, second, tolerance, xy_only)
 
     def _wait_future(self, future, timeout):
-        deadline = time.monotonic() + timeout
+        deadline = time.monotonic() + max(0.0, timeout)
         while not future.done():
-            if self._should_stop() or time.monotonic() >= deadline:
+            try:
+                stopped = self._should_stop()
+            except Exception:
+                with self._motion_command_lock:
+                    self._pending_waits.append(future)
+                    if future in self._pending_action_sends:
+                        self._abandoned_sends.add(id(future))
+                raise
+            if stopped or time.monotonic() >= deadline:
+                with self._motion_command_lock:
+                    if future in self._pending_action_sends:
+                        self._abandoned_sends.add(id(future))
+                    if future not in self._pending_waits:
+                        self._pending_waits.append(future)
                 return False
             time.sleep(0.02)
         return True
 
     def _should_stop(self):
+        if self._is_control_worker():
+            self._control_checkpoint()
+            return False
         if self._stop_exec:
             return True
         remaining = self._remaining_time()

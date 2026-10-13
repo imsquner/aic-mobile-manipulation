@@ -158,6 +158,7 @@ class ItemFlowMixin:
             )
             zone_parking = self._parking_pose(zone, placement_position, "zone_yaw")
 
+        self._set_step("前往目标物块")
         self._transition(TaskState.NAVIGATING_TO_OBJECT)
         self.pub_navigation.publish(String(data="NAVIGATING_TO_OBJECT"))
         if not self._set_navigation_profile("transit"):
@@ -422,6 +423,7 @@ class ItemFlowMixin:
         if next_candidate_index < len(circle_candidates):
             visual_recovery_pose = dict(circle_candidates[next_candidate_index])
 
+        self._set_step("视觉抓取准备")
         self._transition(TaskState.PRE_GRASP)
         if not self._grasp(
             cube["id"],
@@ -477,6 +479,7 @@ class ItemFlowMixin:
                 has_more_items=has_more_items,
                 route_via_staging=route_via_staging,
             )
+        self._set_step("搬运至放置区")
         self._transition(TaskState.NAVIGATING_TO_ZONE)
         self.pub_navigation.publish(String(data="NAVIGATING_TO_ZONE"))
         zone_nav_source = self._planner_location
@@ -541,6 +544,7 @@ class ItemFlowMixin:
             return False, "navigation or parking at zone failed"
         self._planner_location = f"zone_{item.zone}"
 
+        self._set_step("释放前检查")
         self._transition(TaskState.PLACING)
         placed = self._place(cube["id"], placement_position, zone["position"])
         if placed:

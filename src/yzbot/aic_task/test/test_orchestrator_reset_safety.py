@@ -40,7 +40,7 @@ def _load_orchestrator_function(name):
     module = ast.Module(body=[copy.deepcopy(function)], type_ignores=[])
     ast.fix_missing_locations(module)
     namespace = {
-        "TaskState": SimpleNamespace(TASK_FAILED="TASK_FAILED"),
+        "TaskState": SimpleNamespace(TASK_FAILED="TASK_FAILED", RESET_FAILED="RESET_FAILED"),
         "threading": threading,
         "String": FakeString,
         "_world2_slot_reset_block_reason": _load_orchestrator_function(
@@ -76,7 +76,9 @@ class ResetHarness:
         self.pub_last_error = FakePublisher()
         self._slot_mode_enabled = lambda: slot_mode
         self._event = lambda event, **fields: self.events.append((event, fields))
-        self._transition = lambda state: setattr(self, "state", state)
+        self._transition = lambda state, **kwargs: setattr(self, "state", state)
+        self.control_requested = None
+        self._request_control = lambda mode: setattr(self, "control_requested", mode)
         self._reset_run_counters = lambda: setattr(self, "reset_run_called", True)
         self._finish_reset = lambda: setattr(self, "finish_reset_called", True)
 
@@ -135,7 +137,7 @@ class OrchestratorResetSafetyTest(unittest.TestCase):
 
         self.complete_reset(node)
 
-        self.assertEqual(node.state, "TASK_FAILED")
+        self.assertEqual(node.state, "RESET_FAILED")
         self.assertEqual(node._placement_slot_states, slots_before)
         self.assertEqual(node._placed_cube_regions, regions_before)
         self.assertEqual(node._placed_cube_obstacle_positions, obstacles_before)
@@ -150,9 +152,9 @@ class OrchestratorResetSafetyTest(unittest.TestCase):
     def test_non_slot_scene_still_uses_legacy_counter_reset(self):
         node = ResetHarness(slot_states={}, attached_cube=None, slot_mode=False)
         self.complete_reset(node)
-        self.assertTrue(node.reset_run_called)
-        self.assertTrue(node.finish_reset_called)
-        self.assertNotEqual(node.state, "TASK_FAILED")
+        self.assertEqual(node.control_requested, "reset")
+        self.assertFalse(node.reset_run_called)
+        self.assertFalse(node.finish_reset_called)
 
 
 if __name__ == "__main__":

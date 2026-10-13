@@ -12,11 +12,17 @@ class RoundFlowMixin:
     def _execution_loop(self):
         with self._exec_lock:
             try:
+                if getattr(self, '_parser_enabled', False) and not self._freeze_parser_task():
+                    if not self._stop_exec:
+                        self._transition(TaskState.TASK_FAILED)
+                    return
                 if not self._wait_for_task_plan(self.task_plan_timeout):
-                    self._transition(TaskState.API_ERROR)
+                    if not self._stop_exec:
+                        self._transition(TaskState.API_ERROR)
                     return
                 if not self._wait_for_servers(30.0):
-                    self._transition(TaskState.TASK_FAILED)
+                    if not self._stop_exec:
+                        self._transition(TaskState.TASK_FAILED)
                     return
 
                 with self._data_lock:
@@ -77,6 +83,7 @@ class RoundFlowMixin:
                         cube=cube["id"],
                     )
 
+                    self._set_step(f"第{ordinal}块 | {item.color} | {item.zone}区")
                     attempt_started = time.monotonic()
                     # The active target must be exempt from the virtual obstacle
                     # cloud, otherwise Nav2 would refuse to approach it.
@@ -88,6 +95,8 @@ class RoundFlowMixin:
                         has_more_items=ordinal < len(items),
                     )
                     self._active_cube_id = None
+                    if getattr(self, "_control_mode", None):
+                        return
                     if success and not self._verify_placed_cargo_integrity():
                         success = False
                         detail = "previously placed cargo moved outside its target region"
@@ -176,6 +185,8 @@ class RoundFlowMixin:
                         item_index += 1
                         break
 
+                if getattr(self, "_control_mode", None):
+                    return
                 if self.state in (TaskState.TIME_LIMIT, TaskState.CANCELLED):
                     self._publish_final_result()
                     return
@@ -183,6 +194,7 @@ class RoundFlowMixin:
                     self._transition(TaskState.TASK_SUCCEEDED)
                 else:
                     self._transition(TaskState.TASK_FAILED)
+                self._set_step("本轮完成" if self.state == TaskState.TASK_SUCCEEDED else "本轮失败，请查看错误")
                 self._publish_final_result()
             except Exception as exc:
                 self.get_logger().error(f"Execution failed: {exc}")

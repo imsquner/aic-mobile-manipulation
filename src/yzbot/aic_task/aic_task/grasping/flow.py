@@ -79,6 +79,7 @@ def grasp_alignment_rotation_required(yaw_error, yaw_tolerance):
 
 class GraspingFlowMixin:
     def _cancel_trajectories(self):
+        self._cancel_tracked_goals()
         if self._active_move_group_goal is not None:
             try:
                 self._active_move_group_goal.cancel_goal_async()
@@ -98,7 +99,7 @@ class GraspingFlowMixin:
         trajectory.points.append(point)
         goal = FollowJointTrajectory.Goal(trajectory=trajectory)
 
-        send_future = client.send_goal_async(goal)
+        send_future = self._send_motion_goal(client, goal)
         if not self._wait_future(send_future, 5.0):
             return False
         goal_handle = send_future.result()
@@ -151,7 +152,7 @@ class GraspingFlowMixin:
         goal.planning_options.replan_attempts = 2
         goal.planning_options.replan_delay = 0.2
 
-        send_future = self._move_group_client.send_goal_async(goal)
+        send_future = self._send_motion_goal(self._move_group_client, goal)
         if not self._wait_future(send_future, 10.0):
             self._event("moveit_grasp_result", success=False, reason="send timeout")
             return False
@@ -916,6 +917,25 @@ class GraspingFlowMixin:
         )
         return success
 
+    def _quiesce_failed_pick(self):
+        deadline = time.monotonic() + self._control_timeouts['stop']
+        stopped = False
+        while time.monotonic() < deadline and not self._should_stop():
+            sequence = self._call_grasp_trigger(self._pick_stop_client,
+                                                "/competition/stop_pick_sequence", .5)
+            grasp = self._call_grasp_trigger(self._grasp_stop_client,
+                                             "/competition/stop_grasp", .5)
+            if sequence and grasp:
+                stopped = True
+                break
+        if stopped and self._call_grasp_trigger(self._grasp_abort_client,
+                                                "/competition/abort_pick", 10.0):
+            self._attached_cube = None
+            return True
+        if not self._control_mode:
+            self._request_control('cancel')
+        return False
+
     def _set_grasp_target_model(self, cube_id):
         request = SetParameters.Request()
         request.parameters = [
@@ -1166,6 +1186,10 @@ class GraspingFlowMixin:
             )
             return False
         if not self._call_grasp_trigger(
+            self._pick_reset_client, "/competition/reset_pick_sequence", 5.0
+        ):
+            return False
+        if not self._call_grasp_trigger(
             self._grasp_reset_client, "/competition/reset_pick", 5.0
         ):
             return False
@@ -1179,9 +1203,8 @@ class GraspingFlowMixin:
         )
         if not pick_succeeded:
             first_failure_reason = self._last_grasp_service_reason
-            self._call_grasp_trigger(
-                self._grasp_abort_client, "/competition/abort_pick", 10.0
-            )
+            if not self._quiesce_failed_pick():
+                return False
             ik_failed = any(
                 marker in first_failure_reason.lower()
                 for marker in ("ik validation failed", "no_ik_solution", "no ik solution")
@@ -1206,6 +1229,8 @@ class GraspingFlowMixin:
             if detection is None:
                 return False
             if not self._call_grasp_trigger(
+                self._pick_reset_client, "/competition/reset_pick_sequence", 5.0
+            ) or not self._call_grasp_trigger(
                 self._grasp_reset_client, "/competition/reset_pick", 5.0
             ) or not self._set_grasp_target_model(cube_id):
                 return False
@@ -1216,9 +1241,7 @@ class GraspingFlowMixin:
                 90.0,
             )
             if not pick_succeeded:
-                self._call_grasp_trigger(
-                    self._grasp_abort_client, "/competition/abort_pick", 10.0
-                )
+                self._quiesce_failed_pick()
                 return False
         self._attached_cube = cube_id
         if not self._verify_near(
@@ -1227,10 +1250,7 @@ class GraspingFlowMixin:
             float(self.points["approach"]["attached_tolerance_m"]),
             xy_only=False,
         ):
-            self._call_grasp_trigger(
-                self._grasp_abort_client, "/competition/abort_pick", 10.0
-            )
-            self._attached_cube = None
+            self._quiesce_failed_pick()
             return False
         self._event("carry_constraint", cube=cube_id, link="link6")
         return True

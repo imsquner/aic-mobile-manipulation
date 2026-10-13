@@ -182,7 +182,7 @@ class NavigationOperationsMixin:
         goal.pose.pose.orientation.w = math.cos(float(yaw) / 2.0)
         self._event("navigation_goal", x=x, y=y, yaw=yaw)
 
-        send_future = self._nav_client.send_goal_async(goal)
+        send_future = self._send_motion_goal(self._nav_client, goal)
         if not self._wait_future(send_future, 10.0):
             navigation_evidence(evidence, "goal_send_failed")
             return False
@@ -506,7 +506,8 @@ class NavigationOperationsMixin:
     def _rehydrate_placed_cargo_costmaps(self):
         """Restore released-cube obstacles before planning after a full clear."""
         positions = getattr(self, "_placed_cube_obstacle_positions", {})
-        if not positions:
+        if not positions or (getattr(self, '_control_mode', None) == 'reset'
+                             and getattr(self, '_reset_scene_verified', False)):
             return True
         settle_sec = max(
             0.0,
@@ -894,7 +895,7 @@ class NavigationOperationsMixin:
             command = Twist()
             command.linear.x = math.copysign(speed, remaining)
             command.angular.z = max(-0.15, min(0.15, 1.2 * yaw_error))
-            self.pub_precision_cmd.publish(command)
+            self._publish_motion_command(command)
             time.sleep(0.05)
         self._publish_precision_stop()
         self._event(
@@ -1047,7 +1048,7 @@ class NavigationOperationsMixin:
                     yaw_error_deg=math.degrees(abs(yaw_error)),
                 )
                 return success
-            self.pub_precision_cmd.publish(command)
+            self._publish_motion_command(command)
             time.sleep(0.05)
 
         self._publish_precision_stop()

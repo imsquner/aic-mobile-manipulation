@@ -251,6 +251,9 @@ class PlacementLegacyFlowMixin:
         positions = list(
             getattr(self, "_placed_cube_obstacle_positions", {}).values()
         )
+        if (getattr(self, '_control_mode', None) == 'reset'
+                and getattr(self, '_reset_scene_verified', False)):
+            positions = []
         message = placed_cargo_point_cloud(positions)
         # Released cargo is a static map obstacle. A zero timestamp tells TF2
         # to use its latest map->odom transform instead of rejecting the cloud

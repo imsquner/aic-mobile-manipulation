@@ -329,7 +329,7 @@ class CompetitionLauncher:
                 self._mark_stage("foxglove_bridge", self._wait_foxglove_ready())
 
             self._write_manifest()
-            self.log("SYSTEM READY: publish true on /competition/start to begin.")
+            self.log("SYSTEM READY: generate question, confirm mapping and parsed plan, then start.")
             self._wait_shutdown()
             self._shutdown()
         except Exception:
@@ -649,6 +649,8 @@ class CompetitionLauncher:
             "--ros-args",
             "-p",
             f"mode:={self.mode}",
+            "-p",
+            f"parser_enabled:={str(not self.args.no_task_parser).lower()}",
             "-p",
             f"points_file:={ros_file_parameter(self.points_file)}",
             "-p",
@@ -1130,6 +1132,9 @@ class CompetitionLauncher:
                 "/competition/execute_pick_sequence",
                 "/competition/release_target",
                 "/competition/abort_pick",
+                "/competition/stop_pick_sequence",
+                "/competition/reset_pick_sequence",
+                "/competition/stop_grasp",
             ),
             30.0,
         )
@@ -1147,6 +1152,8 @@ class CompetitionLauncher:
         ]
         if not self.args.no_task_parser:
             expected_topics.append("/competition/resubmit")
+            self._wait_for_list_entries("service", (
+                "/competition/cancel_task", "/competition/clear_task", "/competition/freeze_task"), 20.0)
         self._wait_for_list_entries(
             "topic",
             tuple(expected_topics),
@@ -1161,7 +1168,7 @@ class CompetitionLauncher:
             # 于是启动器把健康的栈判成失败。日志里的 ready 行是权威且无竞态的
             # 证据（test13 的启动器同样读日志而不是 echo 话题）。
             tail = self._read_log_tail("task_orchestrator", 400)
-            if "TASK_FAILED" in tail:
+            if "TASK_FAILED" in tail or "INITIALIZATION_FAILED" in tail:
                 raise RuntimeError(
                     "Task orchestrator entered TASK_FAILED during startup. Log tail:\n"
                     + tail
@@ -1177,7 +1184,7 @@ class CompetitionLauncher:
             state = state_match.group(1) if state_match is not None else None
             if state == "READY":
                 return True
-            if state == "TASK_FAILED":
+            if state in ("TASK_FAILED", "INITIALIZATION_FAILED"):
                 raise RuntimeError(
                     "Task orchestrator entered TASK_FAILED during startup. Log tail:\n"
                     + self._read_log_tail("task_orchestrator")

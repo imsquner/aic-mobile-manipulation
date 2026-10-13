@@ -22,6 +22,7 @@ from rclpy.action import ActionClient
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, DurabilityPolicy
 from sensor_msgs.msg import JointState
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
@@ -177,8 +178,9 @@ class GraspExecutor(Node):
             20,
             callback_group=self._cbg,
         )
+        status_qos = QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL)
         self._status_pub = self.create_publisher(
-            String, "/competition/grasp_execution_status", 10
+            String, "/competition/grasp_execution_status", status_qos
         )
 
         self.create_service(
@@ -264,6 +266,15 @@ class GraspExecutor(Node):
         self._returned = False
         self._released = False
         self._operation_lock = threading.Lock()
+        self._motion_lock = threading.RLock()
+        self._stop_event = threading.Event()
+        self._active_goals = []
+        self._pending_sends = []
+        self._pending_calls = []
+        self._attachment_unknown = False
+        self._tracking_failed = False
+        self.create_service(Trigger, "/competition/stop_grasp", self._on_stop,
+                            callback_group=self._cbg)
         self.add_on_set_parameters_callback(self._on_runtime_parameters)
 
         self._publish(
@@ -385,6 +396,9 @@ class GraspExecutor(Node):
             "motion_enabled": self.allow_motion,
             "attach_enabled": self.allow_attach,
             "detach_enabled": self.allow_detach,
+            "attached": self._attached,
+            "attachment_unknown": self._attachment_unknown,
+            "cube_model": self.cube_model,
         }
         payload.update(details)
         encoded = json.dumps(payload, sort_keys=True)
@@ -408,18 +422,65 @@ class GraspExecutor(Node):
         response.message = str(message)
         return response
 
-    @staticmethod
-    def _wait_future(future, timeout):
-        completed = threading.Event()
-        future.add_done_callback(lambda _: completed.set())
-        if not completed.wait(timeout):
+    def _wait_future(self, future, timeout, allow_stopped=False):
+        if future is None:
             return None
+        self._pending_calls.append(future)
+        deadline = time.monotonic() + timeout
+        while not future.done():
+            if (self._stop_event.is_set() and not allow_stopped) or time.monotonic() >= deadline:
+                return None
+            time.sleep(.02)
         try:
             return future.result()
         except Exception:
             return None
 
-    def _acquire_operation(self, response):
+    def _send_tracked_goal(self, client, goal):
+        with self._motion_lock:
+            if self._stop_event.is_set():
+                return None
+            future = client.send_goal_async(goal)
+            self._pending_sends.append(future)
+        def accepted(done):
+            try:
+                handle = done.result()
+                if handle is not None and handle.accepted:
+                    result = handle.get_result_async()
+                    with self._motion_lock:
+                        self._active_goals.append((handle, result))
+                        if self._stop_event.is_set():
+                            handle.cancel_goal_async()
+            except Exception:
+                self._tracking_failed = True
+            finally:
+                with self._motion_lock:
+                    if done in self._pending_sends:
+                        self._pending_sends.remove(done)
+        future.add_done_callback(accepted)
+        return future
+
+    def _on_stop(self, request, response):
+        # Never acquire _operation_lock: its owner may be waiting on a trajectory.
+        with self._motion_lock:
+            self._stop_event.set()
+            for handle, result in self._active_goals:
+                if not result.done():
+                    handle.cancel_goal_async()
+            for _handle, result in self._active_goals:
+                if result.done() and result.exception() is not None:
+                    self._tracking_failed = True
+            self._active_goals[:] = [(h, f) for h, f in self._active_goals if not f.done()]
+            self._pending_calls[:] = [f for f in self._pending_calls if not f.done()]
+            stopped = not (self._operation_lock.locked() or self._active_goals
+                           or self._pending_sends or self._pending_calls or self._attachment_unknown
+                           or getattr(self, '_tracking_failed', False))
+        self._publish("stopped" if stopped else "stopping")
+        return self._finish(response, stopped, "stopped" if stopped else "waiting for execution termination")
+
+    def _acquire_operation(self, response, allow_stopped=False):
+        if self._stop_event.is_set() and not allow_stopped:
+            return self._finish(response, False, "grasp stopped; reset required")
         if not self._operation_lock.acquire(blocking=False):
             return self._finish(response, False, "another grasp operation is active")
         return None
@@ -532,7 +593,7 @@ class GraspExecutor(Node):
         goal.planning_options.replan = False
 
         goal_handle = self._wait_future(
-            self._move_group.send_goal_async(goal), 8.0
+            self._send_tracked_goal(self._move_group, goal), 8.0
         )
         if goal_handle is None or not goal_handle.accepted:
             return None, "pregrasp planning goal rejected"
@@ -694,7 +755,7 @@ class GraspExecutor(Node):
         goal.trajectory.header.stamp.sec = 0
         goal.trajectory.header.stamp.nanosec = 0
         goal_handle = self._wait_future(
-            self._arm_trajectory.send_goal_async(goal), 5.0
+            self._send_tracked_goal(self._arm_trajectory, goal), 5.0
         )
         if goal_handle is None or not goal_handle.accepted:
             return False, f"{label} execution goal rejected"
@@ -844,8 +905,25 @@ class GraspExecutor(Node):
             attach.link1_name = "link6"
             attach.model2_name = self.cube_model
             attach.link2_name = "link"
-            result = self._wait_future(self._attach.call_async(attach), 5.0)
-            self._attached = bool(result is not None and result.success)
+            with self._motion_lock:
+                if self._stop_event.is_set():
+                    return self._finish(response, False, "attach cancelled")
+                pending = self._attach.call_async(attach)
+                self._pending_calls.append(pending)
+                self._attachment_unknown = True
+            def attached(done):
+                try:
+                    result = done.result()
+                    with self._motion_lock:
+                        self._attached = bool(result is not None and result.success)
+                        self._attachment_unknown = result is None
+                except Exception:
+                    self._attachment_unknown = True
+            pending.add_done_callback(attached)
+            result = self._wait_future(pending, 5.0)
+            if result is not None:
+                self._attached = bool(result.success)
+                self._attachment_unknown = False
             if self._attached:
                 self._lifted = False
                 self._returned = False
@@ -1015,7 +1093,7 @@ class GraspExecutor(Node):
         goal.planning_options.plan_only = True
         goal.planning_options.replan = False
         goal_handle = self._wait_future(
-            self._move_group.send_goal_async(goal), 8.0
+            self._send_tracked_goal(self._move_group, goal), 8.0
         )
         if goal_handle is None or not goal_handle.accepted:
             return None, "recognition-pose planning goal rejected"
@@ -1076,25 +1154,34 @@ class GraspExecutor(Node):
 
     def _on_reset(self, request, response):
         del request
-        if self._attached:
-            return self._finish(response, False, "cannot reset while target is attached")
-        self._ik_status = None
-        self._pregrasp_pose = None
-        self._contact_pose = None
-        self._clear_plan()
-        self._lifted = False
-        self._returned = False
-        self._released = False
-        self._publish("reset")
-        return self._finish(response, True, "pick state reset")
+        if not self._operation_lock.acquire(blocking=False):
+            return self._finish(response, False, "grasp operation is busy")
+        try:
+            if (self._attached or self._attachment_unknown or getattr(self, '_tracking_failed', False)
+                    or self._pending_sends or any(not f.done() for f in self._pending_calls)):
+                return self._finish(response, False, "previous grasp is not settled or cargo remains attached")
+            self._ik_status = None
+            self._pregrasp_pose = None
+            self._contact_pose = None
+            self._clear_plan()
+            self._lifted = False
+            self._returned = False
+            self._released = False
+            self._stop_event.clear()
+            self._publish("reset")
+            return self._finish(response, True, "pick state reset")
+        finally:
+            self._operation_lock.release()
 
     def _on_abort(self, request, response):
         """Best-effort state cleanup after a failed multi-stage sequence."""
         del request
-        busy = self._acquire_operation(response)
+        busy = self._acquire_operation(response, allow_stopped=True)
         if busy:
             return busy
         try:
+            if self._attachment_unknown or self._pending_sends or any(not f.done() for f in self._pending_calls):
+                return self._finish(response, False, "attachment or previous requests remain unknown")
             if self._attached:
                 if not self.allow_detach:
                     return self._finish(response, False, "detach disabled by parameter")
@@ -1102,7 +1189,7 @@ class GraspExecutor(Node):
                     return self._finish(response, False, "/DETACHLINK unavailable")
                 result = self._wait_future(
                     self._detach.call_async(self._make_detach_request(self.cube_model)),
-                    self.detach_timeout,
+                    self.detach_timeout, allow_stopped=True,
                 )
                 if result is None or not result.success:
                     message = result.message if result is not None else "detach timed out"
