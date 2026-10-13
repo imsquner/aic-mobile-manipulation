@@ -99,6 +99,8 @@ def load_scene(selection: str, scenes_root: Path, workspace: Path) -> SceneConfi
         source = "--world"
     if not isinstance(scene_id, str) or not SCENE_ID.fullmatch(scene_id):
         raise SceneError(f"invalid scene id: {scene_id!r}")
+    if scene_id != "world2":
+        raise SceneError(f"only world2 is supported; got {scene_id!r}")
     scene_dir = scenes_root / scene_id
     manifest_file = scene_dir / "scene.yaml"
     manifest = _yaml(manifest_file)

@@ -49,8 +49,8 @@ class LauncherSceneTest(unittest.TestCase):
         self.assertIn("gazebo_world2.launch.py", command)
         self.assertIn(f"entities_file:={launcher.scene.entities_file}", command)
 
-    def test_only_world2_orchestrator_uses_sim_time(self):
-        for world in ("v1", "world2", "world3"):
+    def test_auto_and_world2_orchestrator_use_sim_time(self):
+        for world in ("auto", "world2"):
             with self.subTest(world=world):
                 launcher = launcher_module.CompetitionLauncher(args(world))
                 calls = []
@@ -59,19 +59,8 @@ class LauncherSceneTest(unittest.TestCase):
                 orchestrator = next(
                     command for name, command in calls if name == "task_orchestrator"
                 )
-                if world == "world2":
-                    self.assertIn("use_sim_time:=true", orchestrator)
-                else:
-                    self.assertNotIn("use_sim_time:=true", orchestrator)
+                self.assertIn("use_sim_time:=true", orchestrator)
 
-    def test_world3_does_not_pass_unused_entities_argument(self):
-        launcher = launcher_module.CompetitionLauncher(args("world3"))
-        calls = []
-        launcher._start_process = lambda name, command: calls.append(command)
-        launcher.args.headless = True
-        launcher._launch_gazebo()
-        self.assertFalse(any(item.startswith("entities:=") for item in calls[0]))
-        self.assertEqual(launcher.get_entity_service, "/gazebo/get_entity_state")
 
     def test_reset_remains_available_when_scene_selector_is_broken(self):
         with tempfile.TemporaryDirectory() as folder:

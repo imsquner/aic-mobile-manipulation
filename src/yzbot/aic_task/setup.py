@@ -28,8 +28,6 @@ setup(
             "config/mapping_rules.yaml",
             "config/task_runtime.yaml",
             "config/world2_points.yaml",
-            "config/world3_points.yaml",
-            "config/v1_points.yaml",
         ]),
         *scene_data_files,
     ],

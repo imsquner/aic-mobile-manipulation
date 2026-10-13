@@ -52,7 +52,7 @@ class DynamicObstacleController(Node):
     def __init__(self):
         super().__init__("dynamic_obstacle_controller")
         default_points = str(
-            Path(get_package_share_directory("aic_task")) / "config/world3_points.yaml"
+            Path(get_package_share_directory("aic_task")) / "config/world2_points.yaml"
         )
         self.declare_parameter("set_entity_service", "/set_entity_state")
         self.declare_parameter("points_file", default_points)
@@ -129,7 +129,7 @@ class DynamicObstacleController(Node):
             raise RuntimeError(
                 f"{path} defines no dynamic_obstacles; the dynamic obstacle "
                 "node only applies to worlds that declare them "
-                "(v1_points.yaml, world3_points.yaml)"
+                "(world2_points.yaml)"
             )
 
         obstacles = {}

@@ -37,3 +37,6 @@ Source 私人远程为 `https://github.com/imsquner/AIC_Competition_Source`；�
 ## 每次启动记录与根索引
 所有后续启动（包括启动失败、重启和长测试）在Work/run_records/YYYYMMDD_HHMMSS_<shortcommit>_<purpose>/独立留档；时间Asia/Shanghai，启动前创建record.md并登记Work根run_index.md，运行中更新阶段，结束/失败/中断后写结论、停止时间、退出码和进程清理状态。必须记录真实源码commit及dirty状态、目标/授权、环境、命令、日志路径、检查点、指标、失败/跳过项、证据SHA256和接手动作；未知信息明确写未知，不补造。历史归档标记legacy及证据不完整。结果矩阵仅作证据，不自动覆盖Source冻结矩阵。
 原始logs/checkpoints/构建产物默认ignored；精简record.md与无凭据的必要结果经检查后提交Git。根run_index.md链接到每次记录，避免重复正文。工作流程/问题/修改三个根MD继续维护。真实API配置不复制、不改动、不写入记录。现有launcher仍可能使用旧日志路径，正式启动前必须核验实际落盘路径；先在获授权范围将路径配置到本次Work记录目录，否则停止启动并报告，不能仅靠此规范宣称已自动改写路径。
+
+## 唯一维护世界
+项目仅维护 world2；默认与比赛启动固定 world2，不创建新的世界，不恢复 v1/world3 场景或入口。保留 world2 所需共享资源；world2 points/scene/map 和冻结矩阵仍须另行明确授权才可修改或重算。测试与重启显式 --world world2，核验实际运行清单及资产哈希。

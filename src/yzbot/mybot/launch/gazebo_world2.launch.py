@@ -145,7 +145,7 @@ def generate_launch_description():
     ld.add_action(DeclareLaunchArgument('gui', default_value='true'))
     ld.add_action(DeclareLaunchArgument(
         'entities',
-        default_value='entity_positions.yaml',
+        default_value='entity_positions_world2.yaml',
         description='Legacy entity config filename under mybot/config',
     ))
     ld.add_action(DeclareLaunchArgument(
