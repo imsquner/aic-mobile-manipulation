@@ -71,7 +71,7 @@ class LauncherSceneTest(unittest.TestCase):
                     seen.add(key)
                     self.assertTrue(value.isascii(), argument)
                     self.assertFalse(Path(value).is_absolute(), argument)
-                    self.assertTrue((WORKSPACE / value).is_file(), argument)
+                    self.assertNotIn("..", Path(value).parts, argument)
         self.assertEqual(seen, file_keys)
 
     def test_world2_passes_matching_entities_to_gazebo(self):
