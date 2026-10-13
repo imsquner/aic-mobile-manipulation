@@ -8,13 +8,13 @@
 
 2026-10-13已将实际仓库迁至`/home/ros/AIC_Competition_Source`，绝对路径纯ASCII；桌面`AIC_Competition_Source`保留同名符号链接入口。源码修改只在此仓库，编译/运行产物仍使用按Git commit派生的ASCII缓存快照，禁止直接修改运行副本或原交接包。
 
-用户已删除旧中文记录目录。后续阶段说明递增记录在仓库`RUN_HISTORY.md`，与源码/资源变更一起本地Git提交；原始日志存放`/home/ros/aic_competition_delivery`，不加入源码版本。
+用户已删除旧中文记录目录。后续工作进度、问题与修改记录统一存放在`/home/ros/桌面/AIC_Competition_Work`根目录三个MD文件中，各自Git提交；`RUN_HISTORY.md`仅保留旧历史。后续日志与快照放在Work的ignored子目录，不再向旧目录写入。
 
 ## Git与运行目录
 
 初始源码基线commit：`b2122d4`，tag：`baseline-20261012`。`verification/path_matrix_world2_slots15_release_v2_20260927`是原样旧矩阵输入资产，不是构建输出或测试日志；已保持原SHA。
 
-修改后先在本目录review和commit；用`git archive HEAD`生成独立ASCII运行快照（`/home/ros/.cache/aic_competition_20261012/runtimes/<commit>/dev_ws`），仅另外复制ignored的本地API配置，权限600。在快照中编译并运行，不在快照中修改源码；保存commit、源文件SHA和环境版本到运行证据。
+修改后先在本目录review和commit；用`git archive HEAD`生成独立ASCII运行快照（`/home/ros/桌面/AIC_Competition_Work/runtime/<commit>/dev_ws`），本机真实API配置按老板最新要求不动，不自动复制；快照需要配置时先获得另行授权。在快照中编译并运行，不在快照中修改源码；保存commit、源文件SHA和环境版本到运行证据。
 
 查看历史：`git log --oneline`；比较基线：`git diff baseline-20261012 -- src`。未提交文件的局部回退使用`git restore --source <commit> -- <具体文件>`，操作前先保存需要的改动；已提交修复的回退优先`git revert <commit>`，保留历史。不要自动执行整库reset --hard/clean。私密API文件被Git忽略，回退不会重建或覆盖它。
 
