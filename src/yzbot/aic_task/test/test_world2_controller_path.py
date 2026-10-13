@@ -1,5 +1,8 @@
 """Exercise real xacro and launch actions with package shares under a Unicode path."""
 import importlib.util
+import os
+import subprocess
+import sys
 import tempfile
 import unittest
 import xml.etree.ElementTree as ET
@@ -16,6 +19,15 @@ YZBOT = Path(__file__).resolve().parents[2]
 
 class World2ControllerPathTest(unittest.TestCase):
     def test_gui_and_server_resolve_relative_controller_file_from_config_cwd(self):
+        # Other legacy tests replace rclpy in sys.modules. Exercise ROS launch
+        # in a fresh interpreter so that those stubs cannot mask real behavior.
+        if os.environ.get("AIC_WORLD2_PATH_TEST_CHILD") != "1":
+            env = os.environ.copy()
+            env["AIC_WORLD2_PATH_TEST_CHILD"] = "1"
+            result = subprocess.run([sys.executable, str(Path(__file__).resolve())],
+                                    env=env, capture_output=True, text=True, timeout=30)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return
         with tempfile.TemporaryDirectory(prefix="controller_path_桌面_") as folder:
             shares = Path(folder)
             for package in ("mybot", "mybot_description"):
