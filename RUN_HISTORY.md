@@ -23,3 +23,9 @@
 ## 004 - 2026-10-13 - Closed for user cleanup
 
 老板要求先全关，再自行清理。本次launcher PID30104核对归属后SIGINT优雅停止，已输出All managed subsystems stopped。仿真/导航/MoveIt/任务/RViz/rosbridge/三Foxglove窗口退出，9091及8088-8090监听为空；Domain42 CLI daemon停止。未删除源码、Git、日志或其他文件，用户普通浏览器等无关程序保留。清理核验：/home/ros/aic_competition_delivery/notes/20261013_question_resource/closed_for_cleanup.json。
+
+## 005 - 2026-10-13 - Private GitHub backup and API setup
+
+已将完整提交历史和基线标签同步到 GitHub 私人仓库 imsquner/AIC_Competition_Source。新增根 README.md，说明空白 API 配置模板、首次复制、填写个人密钥、权限600及运行快照配置方法；模板 api_key 改为空字符串。本机 api_secrets.yaml 保持原样并继续 ignored。
+
+验证：配置模板 key 为空、实际配置 ignored 且未 tracked、git diff --check 通过。仅调整配置模板和文档，没有进行 API 调用或重新运行比赛。回退本次变更可 git revert 对应提交；本机私密配置不受影响。

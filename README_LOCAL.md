@@ -4,7 +4,7 @@
 
 源码：`/home/ros/AIC_Competition_Source/src`。来源：桌面B_docking本机候选。未包含工作区build/install/log；保留随工程分发的出题程序、Foxglove离线资源等运行必需资产。
 
-`api_secrets.yaml`为本地私密配置，权限600，已由.gitignore排除；Git提交/回退不包含密钥。仓库仅本地，无remote。
+`api_secrets.yaml`为本地私密配置，权限600，已由.gitignore排除；Git提交/回退不包含密钥。仓库已关联 GitHub 私人远程 `origin`；API 配置步骤见 `README.md`。
 
 2026-10-13已将实际仓库迁至`/home/ros/AIC_Competition_Source`，绝对路径纯ASCII；桌面`AIC_Competition_Source`保留同名符号链接入口。源码修改只在此仓库，编译/运行产物仍使用按Git commit派生的ASCII缓存快照，禁止直接修改运行副本或原交接包。
 
@@ -24,4 +24,4 @@ TMSCQtest_x86_x64.bin是交接包原样出题程序，不在src内；生成运�
 
 ## 每次提交与命名要求
 
-新增文件/目录名与实际源码、构建、运行路径只用ASCII英文。每次修改先验证、检查git diff及私密文件ignored状态，再git add明确文件并git commit；保留本地历史与回退点，无remote、不自动push。文档也提交，编译产物/日志/密钥不提交。运行日志记录实际运行快照commit，不能把只改文档的后续HEAD当已运行版本。
+新增文件/目录名与实际源码、构建、运行路径只用ASCII英文。每次修改先验证、检查git diff及私密文件ignored状态，再git add明确文件并git commit；保留本地历史与回退点；已关联私人远程，提交后按用户授权 push 同步云端。文档也提交，编译产物/日志/密钥不提交。运行日志记录实际运行快照commit，不能把只改文档的后续HEAD当已运行版本。
