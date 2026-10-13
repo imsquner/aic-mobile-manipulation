@@ -40,3 +40,6 @@ Source 私人远程为 `https://github.com/imsquner/AIC_Competition_Source`；�
 
 ## 唯一维护世界
 项目仅维护 world2；默认与比赛启动固定 world2，不创建新的世界，不恢复 v1/world3 场景或入口。保留 world2 所需共享资源；world2 points/scene/map 和冻结矩阵仍须另行明确授权才可修改或重算。测试与重启显式 --world world2，核验实际运行清单及资产哈希。
+
+## ROS文件路径传递边界
+运行资产和日志实际存放在Work。跨ROS launch/参数YAML边界的工作区文件路径统一使用ASCII相对路径，并显式固定工作目录；启动前拒绝越界或非ASCII相对路径。禁止把中文绝对路径直接塞入ROS文件参数，也不把手写Unicode转义当成修复。改动启动链后须验证GUI/headless、地图加载及完整READY，未通过不交付为可测试状态；不得擅自生成许可目录外副本。
