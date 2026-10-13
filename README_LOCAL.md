@@ -2,13 +2,13 @@
 
 用户2026-10-12授权：桌面新建英文文件夹放源码副本，后续只在此目录修改源码，使用本地Git提交和回退。
 
-源码：`/home/ros/桌面/AIC_Competition_Source/src`。来源：桌面B_docking本机候选。未包含工作区build/install/log；保留随工程分发的出题程序、Foxglove离线资源等运行必需资产。
+源码：`/home/ros/AIC_Competition_Source/src`。来源：桌面B_docking本机候选。未包含工作区build/install/log；保留随工程分发的出题程序、Foxglove离线资源等运行必需资产。
 
 `api_secrets.yaml`为本地私密配置，权限600，已由.gitignore排除；Git提交/回退不包含密钥。仓库仅本地，无remote。
 
-桌面父目录仍含“桌面”二字，因此英文文件夹名不等于英文绝对路径。编译/运行产物使用独立ASCII目录；后续源码修改只在此处完成，再同步生成运行副本，禁止直接修改运行副本或原交接包。
+2026-10-13已将实际仓库迁至`/home/ros/AIC_Competition_Source`，绝对路径纯ASCII；桌面`AIC_Competition_Source`保留同名符号链接入口。源码修改只在此仓库，编译/运行产物仍使用按Git commit派生的ASCII缓存快照，禁止直接修改运行副本或原交接包。
 
-详细构建路径和启动诊断将递增记录在桌面省赛本机工作_20261012/05_修改记录与04_运行日志。
+用户已删除旧中文记录目录。后续阶段说明递增记录在仓库`RUN_HISTORY.md`，与源码/资源变更一起本地Git提交；原始日志存放`/home/ros/aic_competition_delivery`，不加入源码版本。
 
 ## Git与运行目录
 
@@ -21,3 +21,7 @@
 ## 必需的工作区根资源（2026-10-13补齐）
 
 TMSCQtest_x86_x64.bin是交接包原样出题程序，不在src内；生成运行快照必须包含它与verification旧矩阵资产。2026-10-13发现仅复制src会遗漏该文件，使QuestionSource不可用；现补入Git，保留原SHA及执行权限。前检必须验证实际QuestionSource.is_available，不能仅凭SYSTEM READY判出题链可用。程序保持在工作区根目录，不迁移目录或改任务逻辑。
+
+## 每次提交与命名要求
+
+新增文件/目录名与实际源码、构建、运行路径只用ASCII英文。每次修改先验证、检查git diff及私密文件ignored状态，再git add明确文件并git commit；保留本地历史与回退点，无remote、不自动push。文档也提交，编译产物/日志/密钥不提交。运行日志记录实际运行快照commit，不能把只改文档的后续HEAD当已运行版本。
