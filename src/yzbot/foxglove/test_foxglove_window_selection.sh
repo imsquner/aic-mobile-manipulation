@@ -54,7 +54,7 @@ for w in map:8088 detection:8089 dashboard:8090; do
 done
 
 # --- 几何 ---
-check "几何 dashboard" "1000,650|100,0" "$(foxglove_window_geometry dashboard)"
+check "几何 dashboard" "1560,1000|0,0" "$(foxglove_window_geometry dashboard)"
 check "几何 detection" "640,480|920,0"  "$(foxglove_window_geometry detection)"
 check "几何 map"       "900,650|0,0"    "$(foxglove_window_geometry map)"
 

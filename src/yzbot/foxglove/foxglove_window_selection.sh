@@ -66,7 +66,7 @@ foxglove_window_geometry() {
   case "$1" in
     map) printf '%s' "900,650|0,0" ;;
     detection) printf '%s' "640,480|920,0" ;;
-    dashboard) printf '%s' "1000,650|100,0" ;;
+    dashboard) printf '%s' "1560,1000|0,0" ;;
     *) return 1 ;;
   esac
 }

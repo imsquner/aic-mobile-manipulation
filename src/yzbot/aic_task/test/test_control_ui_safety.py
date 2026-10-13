@@ -137,14 +137,46 @@ class ParserContractTest(unittest.TestCase):
         node.current_task = None; node.mode = 'competition'; node._task_frozen = False
         node.get_logger = lambda: Logger()
         for attr in ('pub_question','pub_mapping','pub_task_text','pub_task_plan','pub_api_status',
-                     'pub_last_error','pub_red_total','pub_blue_total','pub_total_items'):
+                     'pub_last_error','pub_red_total','pub_blue_total','pub_total_items',
+                     'pub_first_grab','pub_later_grab'):
             setattr(node,attr,Publisher())
         return node
+
+    def test_order_view_waits_for_accepted_plan(self):
+        node = self.parser()
+        node.current_task = SimpleNamespace(ordered_tasks=[
+            SimpleNamespace(sequence=2, color='red', zone='C', count=3),
+            SimpleNamespace(sequence=1, color='blue', zone='A', count=2)])
+        node._set_status('VALIDATING_TASK')
+        self.assertEqual(node.pub_first_grab.messages[-1].data, '待确认任务')
+        node._set_status('PLAN_READY')
+        self.assertEqual(node.pub_first_grab.messages[-1].data, '蓝色 2 个 → A区')
+        self.assertEqual(node.pub_later_grab.messages[-1].data, '红色 3 个 → C区')
+
+    def test_mapping_change_clears_order_view(self):
+        node = self.parser(); node._status = 'PLAN_READY'
+        node.current_task = SimpleNamespace(ordered_tasks=[
+            SimpleNamespace(sequence=1, color='blue', zone='A', count=2)])
+        node._publish_order_view()
+        node._on_mapping_input(Message(data='new mapping'))
+        self.assertEqual(node.pub_first_grab.messages[-1].data, '待确认任务')
+        self.assertEqual(node.pub_later_grab.messages[-1].data, '待确认任务')
+
+    def test_cancel_and_reset_clear_order_view(self):
+        for action in ('_on_cancel', '_on_reset'):
+            node = self.parser(); node._status = 'PLAN_READY'
+            node.current_task = SimpleNamespace(ordered_tasks=[
+                SimpleNamespace(sequence=1, color='red', zone='C', count=3)])
+            node._publish_order_view()
+            getattr(node, action)(Message(data=True))
+            self.assertEqual(node.pub_first_grab.messages[-1].data, '待确认任务')
+            self.assertEqual(node.pub_later_grab.messages[-1].data, '待确认任务')
 
     def test_plan_ready_requires_coordinator_acceptance(self):
         node=self.parser()
         task=SimpleNamespace(validate=lambda:[], to_json=lambda:'{"ordered_tasks":[]}',
-                             to_compact_text=lambda:'[]',red_count=1,blue_count=0,total_items=1)
+                             to_compact_text=lambda:'[]',red_count=1,blue_count=0,total_items=1,
+                             ordered_tasks=[])
         node._question_flow.__globals__['StructuredTask']=SimpleNamespace(from_deepseek_result=lambda result:task)
         node.ds_client=SimpleNamespace(solve_task=lambda *args,**kwargs:({},None))
         node._question_flow(1,'question',None,'mapping')

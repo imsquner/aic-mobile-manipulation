@@ -147,25 +147,76 @@ config["Indicator!zone"].foxglovePanelTitle = "本轮区域";
 config["Publish!resubmit"].buttonText = "重解析";
 config["Publish!generate"].buttonText = "出题";
 config["Publish!mappingInput"].buttonText = "映射";
-// Never write unchanged map/detection layouts during dashboard generation.
-const workflow = grid([
-  ["Publish!generate", "RawMessages!question"],
-  ["Publish!mappingInput", "RawMessages!mapping"],
-  ["RawMessages!planJson"],
-  ["Publish!start", "Publish!resubmit"],
-  ["Publish!cancel", "Publish!reset"],
-]);
-const statuses = grid([
-  ["Indicator!redTotal", "Indicator!blueTotal"],
+// One judging page follows the published layout; secondary data stays in tabs.
+config["Publish!manualQuestion"] = structuredClone(source.configById["Publish!manualQuestion"]);
+for (const [id, title, button] of [
+  ["manualQuestion", "题目确认", "确认题目"],
+  ["mappingInput", "映射确认", "确认映射"],
+]) {
+  Object.assign(config[`Publish!${id}`], { foxglovePanelTitle: title, buttonText: button,
+    advancedView: true, value: '{"data":""}' });
+}
+config["3D!competitionMap"] = JSON.parse(readFileSync(join(here, "window_map.json"), "utf8")).configById["3D!competitionMap"];
+config["3D!competitionMap"].foxglovePanelTitle = "三维 / 导航路径";
+config["Image!base"] = structuredClone(source.configById["Image!rgb"]);
+Object.assign(config["Image!base"], { foxglovePanelTitle: "底盘摄像头",
+  imageMode: { imageTopic: "/camera/image_raw", calibrationTopic: "/camera/camera_info", synchronize: false, rotation: 0 } });
+config["Image!wrist"] = structuredClone(source.configById["Image!rgb"]);
+config["Image!wrist"].foxglovePanelTitle = "机械臂识别摄像头";
+const raw = (id, title, topic, fontSize = 24) => {
+  config[`RawMessages!${id}`] = { ...structuredClone(source.configById["RawMessages!question"]),
+    topicPath: `${topic}.data`, fontSize, foxglovePanelTitle: title };
+};
+raw("firstGrab", "先抓取", "/competition/first_grab", 26);
+raw("laterGrab", "后抓取", "/competition/later_grab", 26);
+config["Indicator!redTotal"].foxglovePanelTitle = "红色数量";
+config["Indicator!blueTotal"].foxglovePanelTitle = "蓝色数量";
+config["Indicator!redTotal"].fontSize = config["Indicator!blueTotal"].fontSize = 34;
+config["Indicator!task"] = structuredClone(source.configById["Indicator!state"]);
+config["Indicator!task"].foxglovePanelTitle = "当前任务";
+config["Indicator!task"].fallbackLabel = "未知";
+config["Indicator!task"].rules.push(...config["Indicator!state"].rules.filter(r =>
+  !config["Indicator!task"].rules.some(original => original.rawValue === r.rawValue)));
+config["Indicator!attachment"].foxglovePanelTitle = "状态 / 吸附释放";
+config["Indicator!attachment"].rules = [
+  rule("UNKNOWN", "未知", yellow), rule("ATTACHED", "已吸附", blue),
+  rule("DETACHED", "已释放", green), rule("DETACHING", "释放中", yellow),
+];
+config["Indicator!item"] = { ...structuredClone(source.configById["Indicator!item"]),
+  foxglovePanelTitle: "任务进度", fontSize: 30, fallbackLabel: "未知",
+  rules: [rule("0", "未开始", grey), ...Array.from({length:10}, (_, i) => rule(String(i+1), `第${i+1}个`, green))] };
+for (const id of ["task", "attachment", "state"]) config[`Indicator!${id}`].fontSize = 28;
+config["RawMessages!elapsed"].fontSize = 18;
+config["RawMessages!elapsed"].topicPath = "/competition/elapsed_seconds.data";
+raw("completed", "已完成数量", "/competition/completed_item_count", 18);
+raw("question", "已确认题目", "/competition/question", 18);
+raw("mapping", "已确认映射", "/competition/mapping_rule", 18);
+raw("planText", "抓取顺序 / 任务表", "/competition/task_plan_text", 18);
+config["Image!detection"] = structuredClone(source.configById["Image!detection"]);
+config["Image!depth"] = structuredClone(source.configById["Image!depth"]);
+const columns = (ids) => ids.reduceRight((tail, id, i) => tail === null ? id : split(id, tail, "row", 100/(ids.length-i)), null);
+const quantityOrder = split(columns(["Indicator!redTotal", "Indicator!blueTotal"]),
+  columns(["RawMessages!firstGrab", "RawMessages!laterGrab"]), "row", 44);
+const cameras = split("Image!base", "Image!wrist", "row", 50);
+const scene = split(cameras, "3D!competitionMap", "column", 44);
+const current = split("Indicator!item", split("Indicator!task", split("Indicator!attachment",
+  split("Indicator!state", "Publish!start", "column", 65), "column", 40), "column", 40), "column", 24);
+const body = split(scene, current, "row", 72);
+const footer = columns(["Publish!cancel", "Publish!reset", "Publish!resubmit", "RawMessages!elapsed", "RawMessages!completed"]);
+const main = split("Publish!manualQuestion", split("Publish!mappingInput", split(quantityOrder,
+  split(body, footer, "column", 89), "column", 15), "column", 11), "column", 10);
+const diagnostics = grid([
+  ["Indicator!network", "Indicator!connection"],
+  ["Indicator!api", "RawMessages!error"],
+  ["Indicator!nav", "Indicator!arm"],
   ["Indicator!redDone", "Indicator!blueDone"],
   ["Indicator!color", "Indicator!zone"],
-  ["Indicator!nav", "Indicator!arm"],
-  ["Indicator!network", "Indicator!connection"],
-  ["Indicator!api", "Indicator!attachment"],
-  ["RawMessages!step"],
-  ["RawMessages!error"],
-  ["RawMessages!updated"],
-  ["RawMessages!elapsed"],
-  ["Indicator!state"],
+  ["RawMessages!step", "RawMessages!updated"],
+  ["RawMessages!planJson"],
 ]);
-output("window_dashboard.json", config, split(workflow, statuses, "row", 54));
+const auxiliary = split(grid([["Publish!generate"], ["RawMessages!question"],
+  ["RawMessages!mapping"], ["RawMessages!planText"]]),
+  split("Image!detection", "Image!depth", "column", 50), "row", 60);
+config["Tab!review"] = {activeTabIdx:0, tabs:[
+  {title:"评审",layout:main}, {title:"诊断",layout:diagnostics}, {title:"辅助",layout:auxiliary}]};
+output("window_dashboard.json", config, "Tab!review");

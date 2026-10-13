@@ -68,6 +68,8 @@ class TaskParserNode(Node):
         self.pub_mapping = self.create_publisher(String, "/competition/mapping_rule", view_qos)
         self.pub_task_plan = self.create_publisher(String, "/competition/task_plan_json", view_qos)
         self.pub_task_text = self.create_publisher(String, "/competition/task_plan_text", view_qos)
+        self.pub_first_grab = self.create_publisher(String, "/competition/first_grab", view_qos)
+        self.pub_later_grab = self.create_publisher(String, "/competition/later_grab", view_qos)
         self.pub_api_status = self.create_publisher(String, "/competition/api_status", view_qos)
         self.pub_network_status = self.create_publisher(
             String, "/competition/network_status", view_qos
@@ -115,6 +117,22 @@ class TaskParserNode(Node):
             self.pub_red_total.publish(Int32(data=self.current_task.red_count if self.current_task else 0))
             self.pub_blue_total.publish(Int32(data=self.current_task.blue_count if self.current_task else 0))
             self.pub_total_items.publish(Int32(data=self.current_task.total_items if self.current_task else 0))
+            self._publish_order_view()
+
+    def _publish_order_view(self):
+        """Judge-facing order comes only from the accepted revision."""
+        first = later = "待确认任务"
+        if self._status == "PLAN_READY" and self.current_task is not None:
+            groups = sorted(self.current_task.ordered_tasks, key=lambda item: item.sequence)
+            descriptions = [
+                f"{ {'red': '红色', 'blue': '蓝色'}.get(item.color, item.color)} "
+                f"{item.count} 个 → {item.zone}区" for item in groups
+            ]
+            if descriptions:
+                first = descriptions[0]
+                later = "；".join(descriptions[1:]) or "无后续任务"
+        self.pub_first_grab.publish(String(data=first))
+        self.pub_later_grab.publish(String(data=later))
 
     def _start_probe(self):
         if self._probe_thread is not None and self._probe_thread.is_alive():
@@ -145,6 +163,7 @@ class TaskParserNode(Node):
                 return True
             self._status = status
             self.pub_api_status.publish(String(data=status))
+            self._publish_order_view()
             self.get_logger().info(f"Task Parser: {status}")
             return True
 
@@ -278,6 +297,8 @@ class TaskParserNode(Node):
         payload.update(round_id=self._round_id, generation=self._generation, valid=False)
         self._last_plan_payload = payload
         self.pub_task_plan.publish(String(data=json.dumps(payload, ensure_ascii=False)))
+        self.pub_first_grab.publish(String(data="待确认任务"))
+        self.pub_later_grab.publish(String(data="待确认任务"))
 
     def _on_manual_question(self, msg):
         with self._parser_lock:
