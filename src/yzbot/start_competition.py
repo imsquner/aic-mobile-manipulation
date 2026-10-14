@@ -69,9 +69,14 @@ class _ChildLogDrain(threading.Thread):
         self._stop = threading.Event()
 
     def run(self):
+        fd = self.stream.fileno()
         try:
             while not self._stop.is_set():
-                chunk = self.stream.read(65536)
+                # os.read 只要管道里有数据就返回。原来的 BufferedReader.read(n) 会一直
+                # 阻塞到凑满 n 字节或 EOF：结果安静节点的日志恒为 0（gazebo/moveit/
+                # task_parser 实测 0 字节），刷屏节点卡在 64KB 整倍数，而且节点自己会
+                # 因为管道写满而阻塞。
+                chunk = os.read(fd, 65536)
                 if not chunk:
                     break
                 if self.max_bytes and self.written >= self.max_bytes:

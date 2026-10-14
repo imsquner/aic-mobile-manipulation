@@ -8,9 +8,9 @@ the fastest writers before it stops the stack.
 """
 
 import importlib.util
-import io
 import os
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -29,11 +29,18 @@ class ChildLogLimitTest(unittest.TestCase):
     def setUpClass(cls):
         cls.launcher = load_launcher()
 
+    @staticmethod
+    def _payload_stream(folder, payload):
+        source = Path(folder) / "child-output.bin"
+        source.write_bytes(payload)
+        return open(source, "rb", buffering=0)
+
     def test_drain_caps_the_file_and_counts_the_rest(self):
         payload = b"L" * 500_000
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "node.log"
-            drain = self.launcher._ChildLogDrain("node", path, 4096, io.BytesIO(payload))
+            stream = self._payload_stream(folder, payload)
+            drain = self.launcher._ChildLogDrain("node", path, 4096, stream)
             drain.run()
             drain.close()
             self.assertEqual(path.stat().st_size, 4096)
@@ -45,12 +52,37 @@ class ChildLogLimitTest(unittest.TestCase):
         payload = b"x" * 1000
         with tempfile.TemporaryDirectory() as folder:
             path = Path(folder) / "node.log"
-            drain = self.launcher._ChildLogDrain("node", path, 0, io.BytesIO(payload))
+            stream = self._payload_stream(folder, payload)
+            drain = self.launcher._ChildLogDrain("node", path, 0, stream)
             drain.run()
             drain.close()
             self.assertEqual(path.stat().st_size, 1000)
             self.assertEqual(drain.dropped, 0)
             self.assertNotIn("dropped", drain.summary())
+
+    def test_small_trickle_is_written_without_waiting_for_a_full_buffer(self):
+        """A quiet node must show output immediately, not after 64 KB accumulates.
+
+        The first implementation used BufferedReader.read(65536), which blocks
+        until the chunk is full: gazebo/moveit/task_parser logs stayed at 0 bytes
+        for a whole run and chatty nodes stalled at multiples of 64 KB.
+        """
+        read_fd, write_fd = os.pipe()
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "node.log"
+            drain = self.launcher._ChildLogDrain(
+                "node", path, 1024 * 1024, os.fdopen(read_fd, "rb", buffering=0)
+            )
+            drain.start()
+            try:
+                os.write(write_fd, b"trickle\n")
+                deadline = time.monotonic() + 3.0
+                while time.monotonic() < deadline and path.stat().st_size < 8:
+                    time.sleep(0.05)
+                self.assertEqual(path.read_bytes(), b"trickle\n")
+            finally:
+                os.close(write_fd)
+                drain.close()
 
     def test_child_log_default_is_bounded(self):
         self.assertGreater(self.launcher.CHILD_LOG_MAX_BYTES, 0)
