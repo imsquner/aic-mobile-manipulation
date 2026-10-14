@@ -8,8 +8,10 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from aic_task.task_input.question_source import (
     QUESTION_BINARY_TMPDIR,
+    QUESTION_MODE_ENV,
     QuestionSource,
     binary_subprocess_env,
+    resolve_generator_args,
 )
 from aic_task.task_input.deepseek_client import DeepSeekClient
 
@@ -26,6 +28,41 @@ class CompetitionQuestionModeTest(unittest.TestCase):
                 self.assertIsNone(error)
                 self.assertEqual(stdout, expected)
                 self.assertEqual(source.binary_info['mode'], 'competition' if mode else 'development')
+
+    def test_random_question_mode_drops_the_official_token(self):
+        # The 30-round acceptance plan asks the generator for its random
+        # (non-competition) question set while the stack stays --mode competition.
+        with tempfile.TemporaryDirectory() as folder:
+            binary = Path(folder) / 'generator'
+            binary.write_text('#!/bin/sh\nprintf "ARGS:%s\\n" "$*"\n')
+            binary.chmod(0o700)
+            with patch.dict(os.environ, {QUESTION_MODE_ENV: 'random'}, clear=False):
+                source = QuestionSource(str(binary), competition_mode=True)
+                stdout, stderr, error = source.run()
+        self.assertIsNone(error)
+        self.assertEqual(stdout, 'ARGS:')
+        self.assertEqual(source.binary_info['args'], [])
+        self.assertEqual(source.binary_info['question_mode'], 'random')
+        self.assertEqual(source.binary_info['mode'], 'competition')
+
+    def test_official_and_unset_question_mode_keep_the_token(self):
+        for value in (None, '', 'official', 'OFFICIAL'):
+            env = {} if value is None else {QUESTION_MODE_ENV: value}
+            with self.subTest(value=value):
+                self.assertEqual(resolve_generator_args(True, env), ['11470507'])
+                self.assertEqual(resolve_generator_args(False, env), [])
+        with tempfile.TemporaryDirectory() as folder:
+            binary = Path(folder) / 'generator'
+            binary.write_text('#!/bin/sh\nprintf "ARGS:%s\\n" "$*"\n')
+            binary.chmod(0o700)
+            with patch.dict(os.environ, {QUESTION_MODE_ENV: 'official'}, clear=False):
+                source = QuestionSource(str(binary), competition_mode=True)
+            self.assertEqual(source.binary_info['question_mode'], 'official')
+            self.assertEqual(source.binary_info['args'], ['11470507'])
+
+    def test_unknown_question_mode_is_refused(self):
+        with self.assertRaises(ValueError):
+            resolve_generator_args(True, {QUESTION_MODE_ENV: 'rndom'})
 
     def test_non_ascii_tmpdir_is_replaced_for_the_bundle(self):
         # PyInstaller one-file bundle: a Chinese TMPDIR makes it print nothing

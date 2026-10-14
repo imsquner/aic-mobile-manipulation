@@ -33,6 +33,31 @@ VARIABLE_PATTERN = r"[A-Za-z][A-Za-z0-9_]*"
 # locale (a launcher started without LANG), so pin a UTF-8 stdio encoding too.
 QUESTION_BINARY_TMPDIR = "/tmp/aic_question_binary"
 
+# Question-source selector. The competition stack runs with --mode competition,
+# which normally pins the official token below. AIC_QUESTION_MODE=random calls
+# the generator with no arguments instead (development/random question set), so a
+# long acceptance run can exercise the published generator's other question
+# templates without changing --mode or any mapping/parsing semantics.
+# Unset/`official` keeps the historical behaviour byte for byte; an unknown value
+# is refused instead of silently falling back to the official token.
+QUESTION_MODE_ENV = "AIC_QUESTION_MODE"
+OFFICIAL_QUESTION_TOKEN = "11470507"
+_RANDOM_QUESTION_MODES = {"random", "development", "dev"}
+_OFFICIAL_QUESTION_MODES = {"", "official", "competition"}
+
+
+def resolve_generator_args(competition_mode: bool, environ: Optional[Dict[str, str]] = None) -> List[str]:
+    """Generator argv from AIC_QUESTION_MODE; default keeps the official token."""
+    env = os.environ if environ is None else environ
+    requested = str(env.get(QUESTION_MODE_ENV, "")).strip().lower()
+    if requested in _RANDOM_QUESTION_MODES:
+        return []
+    if requested in _OFFICIAL_QUESTION_MODES:
+        return [OFFICIAL_QUESTION_TOKEN] if competition_mode else []
+    raise ValueError(
+        f"Unsupported {QUESTION_MODE_ENV}={requested!r}; expected 'official' or 'random'"
+    )
+
 
 def binary_subprocess_env() -> Dict[str, str]:
     """Environment for the question generator: ASCII TMPDIR plus UTF-8 stdio."""
@@ -249,12 +274,14 @@ class QuestionSource:
 
         # Record info
         sha = hashlib.sha256(p.read_bytes()).hexdigest()
+        requested_mode = str(os.environ.get(QUESTION_MODE_ENV, "")).strip().lower()
         self.binary_info = {
             "path": str(p.absolute()),
             "size": p.stat().st_size,
             "sha256": sha,
             "mode": "competition" if self.competition_mode else "development",
-            "args": ["11470507"] if self.competition_mode else [],
+            "question_mode": "random" if requested_mode in _RANDOM_QUESTION_MODES else "official",
+            "args": resolve_generator_args(self.competition_mode),
         }
         self.binary_path = str(p.absolute())
 
