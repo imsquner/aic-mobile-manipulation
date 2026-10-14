@@ -19,6 +19,35 @@ from typing import Dict, List, Optional, Tuple
 
 VARIABLE_PATTERN = r"[A-Za-z][A-Za-z0-9_]*"
 
+# The competition generator is a PyInstaller one-file bundle: its bootloader
+# extracts into TMPDIR, and this build then prints nothing at all (exit 0, empty
+# stdout *and* stderr) whenever TMPDIR contains non-ASCII characters. The
+# workspace path is Chinese and the launcher deliberately points TMPDIR at a
+# per-record directory inside it, so question generation failed silently as
+# "Binary produced no output" (ISSUE-013, 2026-10-13 21:57 PARSE_FAILED).
+# Measured 2026-10-14 with the same binary and tokens:
+#   TMPDIR=/tmp/ascii_tmp               -> 427 B question, exit 0
+#   TMPDIR=/tmp/ascii_tmp/中文子目录      -> 0 B, exit 0
+#   TMPDIR=<Chinese Work path>/logs/tmp -> 0 B, exit 0
+# It also raises UnicodeEncodeError from print() when it inherits an ASCII
+# locale (a launcher started without LANG), so pin a UTF-8 stdio encoding too.
+QUESTION_BINARY_TMPDIR = "/tmp/aic_question_binary"
+
+
+def binary_subprocess_env() -> Dict[str, str]:
+    """Environment for the question generator: ASCII TMPDIR plus UTF-8 stdio."""
+    env = os.environ.copy()
+    if not env.get("TMPDIR", "").isascii():
+        try:
+            os.makedirs(QUESTION_BINARY_TMPDIR, exist_ok=True)
+        except OSError:
+            env["TMPDIR"] = "/tmp"
+        else:
+            env["TMPDIR"] = QUESTION_BINARY_TMPDIR
+    env["PYTHONIOENCODING"] = "utf-8"
+    env.setdefault("LANG", "C.UTF-8")
+    return env
+
 
 def extract_result_variables(text: str) -> List[str]:
     """Extract the requested result-variable order from generator evidence."""
@@ -198,6 +227,7 @@ class QuestionSource:
                 text=True,
                 timeout=timeout,
                 cwd=os.path.dirname(self.binary_path),
+                env=binary_subprocess_env(),
             )
 
             self.last_run_evidence = {
@@ -218,7 +248,10 @@ class QuestionSource:
             stderr = result.stderr.strip() if result.stderr else None
 
             if not stdout:
-                return None, stderr, "Binary produced no output"
+                return None, stderr, (
+                    "Binary produced no output"
+                    " (check the generator TMPDIR is ASCII and its stdio encoding is UTF-8)"
+                )
 
             return stdout, stderr, None
 
