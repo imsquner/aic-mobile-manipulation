@@ -13,7 +13,7 @@ dynamic_obstacles:
     center_x: 3.224256136948969
     center_y: -11.412427419154039
     amplitude_m: 0.6
-    omega_rad_s: 0.125
+    omega_rad_s: 0.3141592653589793
     phase_rad: 0.0
 - name: moving_box_2
   dimensions:
@@ -28,5 +28,5 @@ dynamic_obstacles:
     center_x: 1.1078511389451806
     center_y: -9.806014073377924
     amplitude_m: 0.3
-    omega_rad_s: 0.25
+    omega_rad_s: 0.3141592653589793
     phase_rad: 0.0
