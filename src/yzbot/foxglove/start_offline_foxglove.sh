@@ -290,6 +290,26 @@ if [[ "$NO_BROWSER" -eq 0 ]]; then
     fi
   }
 
+  # 2026-10-14：曾因浏览器输出/缓存无限增长把根分区写满，机器 ENOSPC 宕机。
+  # 浏览器窗口只靠存活检查判定，默认把 stdout/stderr 丢到 /dev/null；
+  # 排障时 FOXGLOVE_BROWSER_LOG=1 才落文件，并自行盯住大小。
+  browser_output() { # $1=窗口名
+    if [[ "${FOXGLOVE_BROWSER_LOG:-0}" = "1" ]]; then
+      printf '%s' "$STATE_DIR/browser-$1.log"
+    else
+      printf '%s' "/dev/null"
+    fi
+  }
+  browser_cache_prefs() { # $1=profile，限制 Firefox 磁盘缓存与会话存储
+    cat >"$1/user.js" <<'PREFS'
+user_pref("browser.cache.disk.capacity", 51200);
+user_pref("browser.cache.disk.smart_size.enabled", false);
+user_pref("browser.cache.disk.enable", true);
+user_pref("browser.sessionstore.interval", 120000);
+user_pref("datareporting.healthreport.uploadEnabled", false);
+PREFS
+  }
+
   browser_start() { # $1=窗口名 $2=profile $3=1 表示先把 profile 清空（首次用干净目录）
     local name="$1" profile="$2" fresh="${3:-0}" url size position width height screen_x screen_y
     url="$(window_url "$name")"
@@ -300,6 +320,7 @@ if [[ "$NO_BROWSER" -eq 0 ]]; then
       rm -rf "$profile"
     fi
     mkdir -p "$profile"
+    browser_cache_prefs "$profile"
     rm -f "$profile/SingletonLock" "$profile/SingletonSocket" "$profile/SingletonCookie" 2>/dev/null || true
     if [[ "$BROWSER_KIND" == "chromium" ]]; then
       # 本 VM 无可用硬件 GL，Chromium 会把 WebGL 拉黑、Foxglove 的 3D 面板报
@@ -307,8 +328,8 @@ if [[ "$NO_BROWSER" -eq 0 ]]; then
       nice -n "$BROWSER_NICE" "$BROWSER_COMMAND" --user-data-dir="$profile" --no-first-run \
         --app="$url" --window-size="$size" --window-position="$position" \
         --ignore-gpu-blocklist --enable-unsafe-swiftshader \
-        --disable-background-networking \
-        >>"$STATE_DIR/browser-$name.log" 2>&1 &
+        --disable-background-networking --disk-cache-size=52428800 \
+        >>"$(browser_output "$name")" 2>&1 &
     else
       IFS=',' read -r width height <<<"$size"
       IFS=',' read -r screen_x screen_y <<<"$position"
@@ -317,7 +338,7 @@ if [[ "$NO_BROWSER" -eq 0 ]]; then
 EOF
       nice -n "$BROWSER_NICE" "$BROWSER_COMMAND" --no-remote --new-instance \
         --profile "$profile" "$url" \
-        >>"$STATE_DIR/browser-$name.log" 2>&1 &
+        >>"$(browser_output "$name")" 2>&1 &
     fi
     printf '%s' "$!"
   }

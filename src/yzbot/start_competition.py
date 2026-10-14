@@ -35,6 +35,133 @@ SCENES_ROOT = WORKSPACE_SRC / "aic_task/config/scenes"
 INITIAL_POSE = (0.0, 0.0, 0.0)
 
 
+def _env_int(name, default):
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+# 2026-10-14：一次 20 轮测试把根分区写满，机器随之宕机（syslog 13:54:52 ENOSPC）。
+# 子进程日志此前直接继承 launcher 打开的文件描述符，父进程无法限长——改名或截断都改不动
+# 子进程手里的 fd 偏移，所以任何刷屏节点都能一路写满磁盘。现在子进程统一走 PIPE，
+# 由父进程限额落盘；再加一个磁盘看门狗，空间不足时先报出写入最快的进程，再优雅停机。
+CHILD_LOG_MAX_BYTES = max(0, _env_int("AIC_LOG_MAX_MB", 32)) * 1024 * 1024
+MIN_FREE_BYTES = max(0, _env_int("AIC_MIN_FREE_GB", 15)) * 1024 ** 3
+DISK_GUARD_INTERVAL = 10.0
+
+
+class _ChildLogDrain(threading.Thread):
+    """父进程侧限额落盘：读子进程 PIPE，超出上限的部分丢弃并计数。
+
+    不能改成给子进程一个文件再由父进程轮转：子进程持有自己的 fd，父进程 rename/truncate
+    既不会把它的写偏移拉回 0，也不会让它换文件，日志照样无限增长。
+    """
+
+    def __init__(self, name, path, max_bytes, stream):
+        super().__init__(name=f"log-drain-{name}", daemon=True)
+        self.path = Path(path)
+        self.max_bytes = max_bytes
+        self.stream = stream
+        self.written = 0
+        self.dropped = 0
+        self.handle = open(self.path, "wb", buffering=0)
+        self._stop = threading.Event()
+
+    def run(self):
+        try:
+            while not self._stop.is_set():
+                chunk = self.stream.read(65536)
+                if not chunk:
+                    break
+                if self.max_bytes and self.written >= self.max_bytes:
+                    self.dropped += len(chunk)
+                    continue
+                room = chunk if not self.max_bytes else chunk[: self.max_bytes - self.written]
+                self.handle.write(room)
+                self.written += len(room)
+                self.dropped += len(chunk) - len(room)
+        except (OSError, ValueError):
+            pass
+        finally:
+            try:
+                self.handle.flush()
+            except (OSError, ValueError):
+                pass
+
+    def summary(self):
+        text = f"{self.written / 1e6:.1f}MB kept"
+        if self.dropped:
+            text += f", {self.dropped / 1e6:.1f}MB dropped (cap {self.max_bytes / 1e6:.0f}MB)"
+        return text
+
+    def close(self):
+        self._stop.set()
+        for target in (self.stream, self.handle):
+            try:
+                target.close()
+            except (OSError, ValueError):
+                pass
+
+
+class _DiskGuard(threading.Thread):
+    """采样剩余空间与各进程写入速率；空间见底时先报告写入者再停机。"""
+
+    def __init__(self, launcher):
+        super().__init__(name="disk-guard", daemon=True)
+        self.launcher = launcher
+        self._stop = threading.Event()
+        self._previous = {}
+
+    def _sample(self):
+        now = time.monotonic()
+        rates = {}
+        for entry in Path("/proc").iterdir():
+            if not entry.name.isdigit():
+                continue
+            try:
+                text = (entry / "io").read_text()
+                written = int(re.search(r"write_bytes:\s*(\d+)", text).group(1))
+                name = (entry / "comm").read_text().strip()
+            except (OSError, AttributeError, ValueError):
+                continue
+            pid = int(entry.name)
+            previous = self._previous.get(pid)
+            if previous is not None:
+                elapsed = max(1e-6, now - previous[1])
+                rates[pid] = (name, max(0.0, (written - previous[0]) / elapsed))
+            self._previous[pid] = (written, now)
+        return rates
+
+    @staticmethod
+    def _top(rates, count=3):
+        ranked = sorted(rates.items(), key=lambda item: item[1][1], reverse=True)[:count]
+        return ", ".join(f"{name}(pid {pid}) {rate / 1e6:.1f}MB/s" for pid, (name, rate) in ranked)
+
+    def run(self):
+        while not self._stop.wait(DISK_GUARD_INTERVAL):
+            try:
+                free = shutil.disk_usage(self.launcher.run_dir).free
+            except OSError:
+                continue
+            rates = self._sample()
+            if free < MIN_FREE_BYTES:
+                self.launcher.log(
+                    f"FATAL: free disk {free / 1e9:.1f}GB below AIC_MIN_FREE_GB="
+                    f"{MIN_FREE_BYTES / 1e9:.0f}; fastest writers: {self._top(rates)}"
+                )
+                for name, drain in list(self.launcher.log_handles.items()):
+                    if getattr(drain, "dropped", 0):
+                        self.launcher.log(f"[disk] {name} log {drain.summary()}")
+                self.launcher._shutdown()
+                os._exit(3)
+            self.launcher.log(f"[disk] free={free / 1e9:.1f}GB fastest writers: {self._top(rates)}")
+
+    def close(self):
+        self._stop.set()
+
+
+
 def log_base_dir():
     """解析本次运行的日志根目录。
 
@@ -205,6 +332,7 @@ class CompetitionLauncher:
             )
         self.processes = {}
         self.log_handles = {}
+        self._disk_guard = None
         self.stage_status = {}
         self.start_time = datetime.now()
         self.run_dir = None
@@ -289,6 +417,8 @@ class CompetitionLauncher:
         self._create_run_dir()
         self._cleanup_residual()
         self._start_heartbeat()
+        self._disk_guard = _DiskGuard(self)
+        self._disk_guard.start()
 
         try:
             self._launch_gazebo()
@@ -556,18 +686,18 @@ class CompetitionLauncher:
 
     def _start_process(self, name, command):
         log_path = self.run_dir / f"{name}.log"
-        handle = open(log_path, "w", buffering=1)
         process = subprocess.Popen(
             command,
-            stdout=handle,
+            stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             env=os.environ,
             cwd=WORKSPACE,
             start_new_session=True,
-            text=True,
         )
+        drain = _ChildLogDrain(name, log_path, CHILD_LOG_MAX_BYTES, process.stdout)
+        drain.start()
         self.processes[name] = process
-        self.log_handles[name] = handle
+        self.log_handles[name] = drain
         self.log(f"[{name}] pid={process.pid} log={log_path}")
         return process
 
@@ -1428,7 +1558,11 @@ class CompetitionLauncher:
                 except ProcessLookupError:
                     pass
         self._cleanup_residual()
-        for handle in self.log_handles.values():
+        if self._disk_guard is not None:
+            self._disk_guard.close()
+        for name, handle in self.log_handles.items():
+            if getattr(handle, "dropped", 0):
+                self.log(f"[{name}] log {handle.summary()}")
             handle.close()
         self.stage_status["shutdown"] = "complete"
         self._write_manifest()
