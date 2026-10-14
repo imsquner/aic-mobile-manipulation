@@ -202,9 +202,10 @@ const scene = split(cameras, "3D!competitionMap", "column", 44);
 const current = split("Indicator!item", split("Indicator!task", split("Indicator!attachment",
   split("Indicator!state", "Publish!start", "column", 65), "column", 40), "column", 40), "column", 24);
 const body = split(scene, current, "row", 72);
+raw("resetSummary", "复位确认", "/competition/reset_summary", 18);
 const footer = columns(["Publish!cancel", "Publish!reset", "Publish!resubmit", "RawMessages!elapsed", "RawMessages!completed"]);
 const main = split("Publish!manualQuestion", split("Publish!mappingInput", split(quantityOrder,
-  split(body, footer, "column", 89), "column", 15), "column", 11), "column", 10);
+  split(body, split("RawMessages!resetSummary", footer, "column", 35), "column", 89), "column", 15), "column", 11), "column", 10);
 const diagnostics = grid([
   ["Indicator!network", "Indicator!connection"],
   ["Indicator!api", "RawMessages!error"],

@@ -79,6 +79,7 @@ class Harness(CONTROL, STATE_PUBLISHER):
     def _wait_arm_still(self): return True
     def _arm(self,*args): self.steps.append('pose'); return True
     def _reset_scene(self): self.steps.append('scene'); return True, {}
+    def _finalize_reset_localization(self,*args):return True, {"verified":True}
     def _set_navigation_profile(self,*args): self.steps.append('profile'); return True
     def _clear_navigation_costmaps(self): self.steps.append('costmap'); return True
     def _publish_placed_cargo_obstacles(self): pass

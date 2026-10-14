@@ -13,7 +13,190 @@ from aic_task.motion_geometry import (
 )
 
 
+class ResetLocalizationGate:
+    """Reset-epoch evidence gate; normal navigation drift limits are unrelated."""
+    def __init__(self, target, started_ns, started_mono, amcl_sequence,
+                 stable_sec=.5, min_samples=5, max_age_sec=1.):
+        self.target = target
+        self.started_ns, self.started_mono = started_ns, started_mono
+        self.amcl_sequence = amcl_sequence
+        self.stable_sec, self.min_samples, self.max_age_sec = stable_sec, min_samples, max_age_sec
+        self.last_ros_ns = started_ns
+        self.invalid_clock = False
+        self.stable_since = None
+        self.samples = 0
+        self.previous = None
+        self.last_stamp = None
+
+    def reject(self, reason, **detail):
+        self.stable_since, self.samples, self.previous, self.last_stamp = None, 0, None, None
+        return {"success": False, "reason": reason, **detail}
+
+    def observe(self, snapshot, amcl, *, now_mono, ros_now_ns, base_speed, odom_age_sec):
+        if ros_now_ns < self.last_ros_ns:
+            self.invalid_clock = True
+        self.last_ros_ns = ros_now_ns
+        if self.invalid_clock:
+            return self.reject("LOC_CLOCK_ROLLBACK")
+        if (not amcl or amcl.get("sequence", 0) <= self.amcl_sequence
+                or amcl.get("receipt_mono", -1) < self.started_mono
+                or amcl.get("stamp_ns", 0) < self.started_ns
+                or amcl.get("frame_id") != "map"):
+            return self.reject("LOC_NO_NEW_AMCL")
+        if not snapshot or snapshot.get("reason"):
+            return self.reject((snapshot or {}).get("reason", "LOC_TF_UNAVAILABLE"))
+        try:
+            poses = [snapshot[key] for key in ("map_base", "odom_base", "map_odom")]
+            if any(len(pose) != 3 or not all(math.isfinite(v) for v in pose) for pose in poses):
+                return self.reject("LOC_TF_UNAVAILABLE")
+            stamp = snapshot["stamp_ns"]
+        except (KeyError, TypeError, ValueError):
+            return self.reject("LOC_TF_UNAVAILABLE")
+        age = (ros_now_ns - stamp) / 1e9
+        if stamp < max(self.started_ns, amcl["stamp_ns"]) or age > self.max_age_sec or age < -.15:
+            return self.reject("LOC_TF_STALE_OR_EPOCH", age_sec=age)
+        if (base_speed is None or odom_age_sec > 1. or base_speed[0] > .01 or base_speed[1] > .02):
+            return self.reject("BASE_NOT_STILL")
+        amcl_pose = amcl.get("pose")
+        if not amcl_pose or len(amcl_pose) != 3 or not all(math.isfinite(v) for v in amcl_pose):
+            return self.reject("LOC_NO_NEW_AMCL")
+        if math.hypot(amcl_pose[0]-self.target[0], amcl_pose[1]-self.target[1]) > .12:
+            return self.reject("LOC_TARGET_XY", source="AMCL")
+        if abs(math.atan2(math.sin(amcl_pose[2]-self.target[2]), math.cos(amcl_pose[2]-self.target[2]))) > math.radians(8):
+            return self.reject("LOC_TARGET_YAW", source="AMCL")
+        pose = snapshot["map_base"]
+        xy = math.hypot(pose[0]-self.target[0], pose[1]-self.target[1])
+        angle = abs(math.atan2(math.sin(pose[2]-self.target[2]), math.cos(pose[2]-self.target[2])))
+        if xy > .12:
+            return self.reject("LOC_TARGET_XY", xy_error_m=xy)
+        if angle > math.radians(8):
+            return self.reject("LOC_TARGET_YAW", yaw_error_rad=angle)
+        if self.previous is not None:
+            for key in ("map_base", "map_odom"):
+                previous, current = self.previous[key], snapshot[key]
+                if (math.hypot(current[0]-previous[0], current[1]-previous[1]) > .03
+                        or abs(math.atan2(math.sin(current[2]-previous[2]), math.cos(current[2]-previous[2]))) > .05):
+                    self.stable_since, self.samples, self.last_stamp = None, 0, None
+                    break
+        if stamp != self.last_stamp:
+            if self.stable_since is None:
+                self.stable_since = now_mono
+            self.samples += 1
+            self.last_stamp = stamp
+            self.previous = dict(snapshot)
+        success = self.samples >= self.min_samples and now_mono-self.stable_since >= self.stable_sec
+        return {"success": success, "verified": success, "reason": "" if success else "LOC_NOT_STABLE",
+                "samples": self.samples, "stable_duration_sec": now_mono-self.stable_since,
+                "xy_error_m": xy, "yaw_error_rad": angle, "snapshot": dict(snapshot),
+                "amcl_sequence": amcl["sequence"], "amcl_stamp_ns": amcl["stamp_ns"]}
+
+
 class LocalizationMixin:
+    def _new_reset_localization_gate(self, target, started_ns, started_mono, amcl_sequence, **kwargs):
+        return ResetLocalizationGate(target, started_ns, started_mono, amcl_sequence, **kwargs)
+
+    def _on_reset_amcl(self, message):
+        pose = message.pose.pose
+        q = pose.orientation
+        planar = (pose.position.x, pose.position.y,
+                  math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z)))
+        if not all(math.isfinite(v) for v in planar):
+            return
+        with self._reset_amcl_lock:
+            self._reset_amcl_sequence += 1
+            self._latest_reset_amcl = {"sequence": self._reset_amcl_sequence,
+                "stamp_ns": message.header.stamp.sec*10**9+message.header.stamp.nanosec,
+                "receipt_mono": time.monotonic(), "frame_id": message.header.frame_id, "pose": planar}
+
+    def _reset_localization_snapshot(self, at_time, target_pose):
+        try:
+            if at_time is None:
+                latest = self._tf_buffer.lookup_transform("map", "base_footprint", rclpy.time.Time())
+                latest_ns = latest.header.stamp.sec*10**9+latest.header.stamp.nanosec
+                at_time = rclpy.time.Time(nanoseconds=min(latest_ns, self.get_clock().now().nanoseconds))
+            result = {"stamp_ns": at_time.nanoseconds, "lookup_stamps_ns": {}}
+            for key, parent, child in (("map_base", "map", "base_footprint"),
+                                       ("odom_base", "odom", "base_footprint"),
+                                       ("map_odom", "map", "odom")):
+                stamped = self._tf_buffer.lookup_transform(parent, child, at_time)
+                t, q = stamped.transform.translation, stamped.transform.rotation
+                result[key] = (t.x, t.y, math.atan2(2*(q.w*q.z+q.x*q.y), 1-2*(q.y*q.y+q.z*q.z)))
+                result["lookup_stamps_ns"][key] = stamped.header.stamp.sec*10**9+stamped.header.stamp.nanosec
+            return result
+        except Exception as exc:
+            return {"reason": "LOC_TF_UNAVAILABLE", "exception": type(exc).__name__}
+
+    def _verify_reset_localization(self, reset_id, target_pose, *, timeout_sec=None,
+                                   stable_sec=None, min_samples=None, publish_initial=True):
+        timeout_sec = self._reset_localization_timeout if timeout_sec is None else timeout_sec
+        with self._reset_amcl_lock:
+            sequence = self._reset_amcl_sequence
+        now = time.monotonic()
+        ros_start = self.get_clock().now().nanoseconds
+        if publish_initial:
+            self._reset_localization_epoch = {"reset_id": reset_id, "target": target_pose,
+                "started_ns": ros_start, "started_mono": now, "amcl_sequence": sequence}
+        epoch = self._reset_localization_epoch
+        if not epoch or epoch["reset_id"] != reset_id:
+            return False, {"reason": "LOC_TF_STALE_OR_EPOCH"}
+        gate = self._new_reset_localization_gate(target_pose, epoch["started_ns"], epoch["started_mono"],
+            epoch["amcl_sequence"], stable_sec=self._reset_localization_stable if stable_sec is None else stable_sec,
+            min_samples=self._reset_localization_samples if min_samples is None else min_samples)
+        deadline = now+timeout_sec
+        gate.last_ros_ns = epoch.get("last_ros_ns", epoch["started_ns"])
+        next_publish = 0.
+        first_publish = True
+        evidence = {"reason": "LOC_NO_NEW_AMCL"}
+        while time.monotonic() < deadline:
+            self._control_checkpoint()
+            now = time.monotonic()
+            with self._reset_amcl_lock:
+                amcl = dict(self._latest_reset_amcl) if self._latest_reset_amcl else None
+            if publish_initial and now >= next_publish and (not amcl or amcl["sequence"] <= sequence):
+                message = PoseWithCovarianceStamped()
+                message.header.frame_id = "map"
+                message.header.stamp = self.get_clock().now().to_msg()
+                message.pose.pose.position.x, message.pose.pose.position.y = target_pose[:2]
+                message.pose.pose.orientation.z = math.sin(target_pose[2]/2)
+                message.pose.pose.orientation.w = math.cos(target_pose[2]/2)
+                message.pose.covariance[0] = message.pose.covariance[7] = message.pose.covariance[35] = .01
+                if first_publish:
+                    with self._reset_amcl_lock:
+                        sequence = self._reset_amcl_sequence
+                    epoch.update(started_ns=message.header.stamp.sec*10**9+message.header.stamp.nanosec,
+                                 started_mono=time.monotonic(), amcl_sequence=sequence)
+                    gate = self._new_reset_localization_gate(target_pose, epoch["started_ns"], epoch["started_mono"],
+                        sequence, stable_sec=self._reset_localization_stable if stable_sec is None else stable_sec,
+                        min_samples=self._reset_localization_samples if min_samples is None else min_samples)
+                    first_publish = False
+                self.pub_initial_pose.publish(message)
+                next_publish = now+.25
+            snapshot = self._reset_localization_snapshot(None, target_pose)
+            evidence = gate.observe(snapshot, amcl, now_mono=now,
+                ros_now_ns=self.get_clock().now().nanoseconds,
+                base_speed=self._latest_base_speed, odom_age_sec=now-self._latest_odom_time)
+            evidence["reset_id"] = reset_id
+            epoch["last_ros_ns"] = gate.last_ros_ns
+            if evidence["success"]:
+                self._event("reset_localization_verified", **evidence)
+                return True, evidence
+            if evidence["reason"] == "LOC_CLOCK_ROLLBACK":
+                break
+            time.sleep(.05)
+        self._event("reset_localization_failed", **evidence)
+        return False, evidence
+
+    def _finalize_reset_localization(self, reset_id, evidence=None):
+        epoch = self._reset_localization_epoch
+        if not epoch or epoch["reset_id"] != reset_id:
+            return False, {"reason": "LOC_TF_STALE_OR_EPOCH"}
+        ok, result = self._verify_reset_localization(reset_id, epoch["target"], publish_initial=False)
+        if ok:
+            self._control_checkpoint()
+            self._map_from_odom_reference = tuple(result["snapshot"]["map_odom"])
+            self._reset_localization_evidence = result
+        return ok, result
+
     def _localization_consistency(self):
         map_pose = self._base_pose("map")
         odom_pose = self._base_pose("odom")

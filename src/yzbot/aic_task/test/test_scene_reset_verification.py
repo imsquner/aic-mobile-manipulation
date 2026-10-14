@@ -23,7 +23,8 @@ class SceneHarness(RESET):
         return True
     def _entity_pose(self,name):return self.positions.get(name)
     def _invalidate_localization_reference(self,*args):pass
-    def _synchronize_localization_to_gazebo(self,*args,**kwargs):return True
+    def _reset_id(self):return "test:1"
+    def _verify_reset_localization(self,*args,**kwargs):return True, {"verified":True}
     def _localization_consistency(self):return {'drifted':False}
     def _wait_for_base_still(self,**kwargs):return True
 
@@ -34,7 +35,7 @@ class SceneResetEvidenceTest(unittest.TestCase):
         self.assertIn('red_cube_1',node._placed_cube_regions)
         self.assertEqual(node._placement_slot_states,{'A1':'verified'})
     def test_localization_failure_prevents_success(self):
-        node=SceneHarness();node._synchronize_localization_to_gazebo=lambda *args,**kwargs:False
+        node=SceneHarness();node._verify_reset_localization=lambda *args,**kwargs:(False, {"reason":"LOC_NOT_STABLE"})
         success,detail=node._reset_scene();self.assertFalse(success)
         self.assertIn('localization',detail);self.assertIn('A1',node._placement_slot_states)
     def test_verified_scene_still_leaves_final_bookkeeping_to_control_owner(self):
