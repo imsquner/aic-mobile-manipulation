@@ -13,24 +13,12 @@ from pathlib import Path
 
 from aic_task.question_source import (
     calculate_generated_answer,
+    calculate_generated_evidence,
     extract_result_variables,
 )
-from aic_task.mapping_contract import validate_mapping_interpretation
+from aic_task.mapping_contract import (MappingRuleError, resolve_mapping, validate_mapping_interpretation)
 
 
-OFFICIAL_COMPETITION_EXAMPLE = (
-    "OFFICIAL COMPETITION EXAMPLE (use this to understand the two-stage mapping; "
-    "do not copy its quantities into the current round):\n"
-    "Question: 题目：每个衣柜有5件衣物；有T恤、裤子两种衣柜；"
-    "小美需要2件T恤、1条裤子；小帅、小丽都需要7件T恤；"
-    "小娜需要2件T恤、1条裤子；小杰需要1条裤子。"
-    "设T恤衣柜数量为x，裤子衣柜数量为y，计算x、y分别为多少。\n"
-    "Mapping rule: x代表红色，y代表蓝色；数量大于等于3的去A区，"
-    "其他数量去C区。\n"
-    "Correct calculation: x=ceil((2+7+7+2)/5)=4, "
-    "y=ceil((1+1+1)/5)=1.\n"
-    "Correct robot instruction: [red,4,A;blue,1,C]"
-)
 
 
 class DeepSeekClient:
@@ -166,34 +154,27 @@ class DeepSeekClient:
 
     @staticmethod
     def _build_messages(question_text, mapping_rules_text, generator_order=None):
-        """Build the exact official-example plus current-round model context."""
+        """Build current-round evidence, formulas and independently resolved mapping."""
         system_prompt = (
-            "You are a math solver and task planner for a robot competition. "
-            "Return only the final JSON object immediately; do not provide reasoning or explanation. "
-            "Given a math problem and mapping rules, compute the "
-            "required quantities and output a strict JSON structure. "
-            'The JSON must include: "question" (full original problem text), '
-            '"mapping_rule" (full mapping rules text), "ordered_tasks" (list of '
-            'objects with sequence, variable, color, count, zone), "calculation" '
-            '(object with variable: value), "mapping_interpretation" (object with '
-            '"variable_to_color" and "count_to_zone" objects), "solver" '
-            '(object with provider and model). '
-            'Colors must be "red" or "blue" only. Zones must be "A", "B", or "C" only. '
-            "Create exactly one ordered_tasks entry for each requested result variable, "
-            "in the order the variables are requested at the end of the question. "
-            "Do not create entries for people, intermediate quantities, or repeated mentions. "
-            "Apply every mapping step exactly: first map each result variable to its cargo "
-            "color, then use that variable's computed count to select its destination zone. "
-            "Each entry count must equal calculation[variable], must be an integer from 1 to 5, "
-            "and each variable may appear only once. Maintain consecutive sequence numbers "
-            "starting at 1. For example, if calculation is x=4 and y=1, ordered_tasks must "
-            "contain exactly two entries with counts 4 and 1. If the mapping says x is red, "
-            "y is blue, count >= 3 goes to A, and count < 3 goes to C, that example must "
-            "produce red/count 4/zone A followed by blue/count 1/zone C. "
-            "In mapping_interpretation, include every requested variable and every computed "
-            "count used by ordered_tasks. Use string count keys, for example "
-            '{"variable_to_color":{"x":"red"},"count_to_zone":{"4":"A"}}. '
-            "Keep the response concise and do not include markdown fences."
+            "You solve robot competition questions. Return one JSON object, without markdown. "
+            "The current original question and mapping are authoritative. Never reuse another round. "
+            "Calculate demands per category before assigning colours and zones. '都' multiplies "
+            "the stated demand by the number of people; '和某人一样' copies that person's demand; "
+            "'换成' transfers its quantity to the named category; '双倍' doubles the specified "
+            "demand; '少一' subtracts one from the specified copied demand. "
+            "For each category use exact integer ceiling: count=(total+capacity-1)//capacity. "
+            "If a rule compares x/y, compare their computed counts, not the raw demand totals. "
+            "Rule clauses can choose colour by variable, threshold, or comparison, and destination "
+            "by variable, colour, or threshold. Apply the current clauses independently. "
+            "Equal values have no larger/smaller unless the rule explicitly defines a tie. "
+            "Return question, mapping_rule, calculation, ordered_tasks, mapping_interpretation. "
+            "ordered_tasks has exactly one entry per requested variable in the original order, "
+            "with consecutive sequence starting at 1, variable, color (red/blue), count (1..5), "
+            "zone (A/B/C). Each count must equal calculation[variable]. "
+            "mapping_interpretation must contain variable_to_color and variable_to_zone. "
+            "Do not infer zones from count alone: equal counts can have different zones. "
+            "The independently checked arithmetic and mapping provided below must agree with "
+            "your output. If the question or rules are ambiguous, do not invent an executable plan."
         )
 
         order_context = str(generator_order or "").strip()
@@ -201,7 +182,6 @@ class DeepSeekClient:
             order_context = "No separate order line; preserve the result-variable order in the question."
 
         user_prompt = (
-            f"{OFFICIAL_COMPETITION_EXAMPLE}\n\n"
             f"CURRENT ROUND QUESTION:\n{question_text}\n\n"
             f"CURRENT ROUND GENERATOR ORDER:\n{order_context}\n\n"
             f"CURRENT ROUND MAPPING RULES:\n{mapping_rules_text}\n\n"
@@ -209,6 +189,16 @@ class DeepSeekClient:
             "Apply its mapping after calculating its x/y "
             "values, and output JSON with ordered_tasks, calculation, and metadata."
         )
+
+        evidence = calculate_generated_evidence(question_text)
+        if evidence is not None:
+            user_prompt += "\nINDEPENDENT ARITHMETIC CHECK:\n" + json.dumps(evidence, ensure_ascii=False)
+            try:
+                contract = resolve_mapping(mapping_rules_text, evidence["calculation"])
+            except MappingRuleError:
+                contract = None
+            if contract is not None:
+                user_prompt += "\nINDEPENDENT MAPPING CHECK:\n" + json.dumps(contract, ensure_ascii=False)
 
         return [
             {"role": "system", "content": system_prompt},
@@ -228,12 +218,30 @@ class DeepSeekClient:
         Args:
             question_text: Raw output from TMSCQtest binary
             mapping_rules_text: Color/zone mapping rules
-            mode: 'competition' (no fallback) or 'development' (fallback allowed)
+            mode: retained for caller compatibility; invalid plans fail in both modes
 
         Returns:
             dict: Structured task with ordered_tasks, or None on failure
             str: Error message if failed
         """
+        # Refuse unsupported/ambiguous input before spending an API request.
+        calculation = calculate_generated_answer(question_text)
+        if calculation is None:
+            return None, "UNVERIFIED_QUESTION: original question is outside the supported complete grammar"
+        try:
+            verified_mapping = resolve_mapping(mapping_rules_text, calculation)
+        except MappingRuleError as exc:
+            return None, f"UNVERIFIED_MAPPING: {exc}"
+
+        inventory = {"red": 0, "blue": 0}
+        for variable, count in calculation.items():
+            inventory[verified_mapping["variable_to_color"][variable]] += count
+        if any(count > 5 for count in inventory.values()):
+            return None, "INSUFFICIENT_INVENTORY: independently resolved colour totals exceed 5"
+        order = extract_result_variables(generator_order) if generator_order else extract_result_variables(question_text)
+        if not order or len(order) != len(calculation) or set(order) != set(calculation):
+            return None, "UNVERIFIED_ORDER: result-variable order cannot be confirmed"
+
         messages = self._build_messages(
             question_text, mapping_rules_text, generator_order=generator_order
         )
@@ -256,6 +264,9 @@ class DeepSeekClient:
 
                     try:
                         result = json.loads(content)
+                        if not isinstance(result, dict):
+                            last_error = "Result is not a JSON object"
+                            continue
                         # Preserve the exact evidence sent to the model instead of
                         # trusting it to echo these fields without alteration.
                         result["question"] = question_text
@@ -272,8 +283,6 @@ class DeepSeekClient:
                         )
                         if errors:
                             last_error = f"Validation errors: {errors}"
-                            if mode == "development":
-                                return result, f"VALIDATION_WARN: {errors}"
                             messages.extend(
                                 [
                                     {"role": "assistant", "content": content},
@@ -289,6 +298,7 @@ class DeepSeekClient:
                                 ]
                             )
                             continue
+                        result["mapping_interpretation"] = verified_mapping
                         return result, None
                     except json.JSONDecodeError as e:
                         last_error = f"Invalid JSON: {e}"
@@ -321,27 +331,6 @@ class DeepSeekClient:
 
         return None, last_error
 
-    @staticmethod
-    def _uses_official_example_mapping(mapping_rules_text):
-        """Recognize the two-level mapping shown in the official rules example."""
-        compact = "".join(str(mapping_rules_text).lower().split())
-        english = all(
-            token in compact
-            for token in (
-                "xrepresentsred",
-                "yrepresentsblue",
-                ">=3",
-                "zonea",
-                "<3",
-                "zonec",
-            )
-        )
-        chinese = all(
-            token in compact
-            for token in ("x代表红色", "y代表蓝色", "大于等于3", "a区", "c区")
-        )
-        return english or chinese
-
     def _validate_task(self, task, mapping_rules_text="", generator_order=None):
         """Validate structured task output. Returns list of error strings."""
         errors = []
@@ -354,7 +343,7 @@ class DeepSeekClient:
             return errors
 
         tasks = task.get("ordered_tasks", [])
-        if not tasks:
+        if not isinstance(tasks, list) or not tasks:
             errors.append("ordered_tasks is empty")
             return errors
 
@@ -369,7 +358,13 @@ class DeepSeekClient:
             calculation = {}
 
         for i, t in enumerate(tasks):
-            seq = t.get("sequence", i + 1)
+            if not isinstance(t, dict):
+                errors.append(f"Task {i + 1}: entry is not an object")
+                continue
+            seq = t.get("sequence")
+            if not isinstance(seq, int) or isinstance(seq, bool):
+                errors.append(f"Task {i + 1}: invalid sequence")
+                continue
             if seq in seen_sequences:
                 errors.append(f"Duplicate sequence {seq}")
             seen_sequences.add(seq)
@@ -383,7 +378,7 @@ class DeepSeekClient:
                 errors.append(f"Task {seq}: duplicate variable '{variable}'")
             seen_variables.add(variable)
 
-            color = t.get("color", "").lower()
+            color = str(t.get("color", "")).lower()
             if color not in valid_colors:
                 errors.append(f"Task {seq}: invalid color '{color}'")
 
@@ -414,24 +409,6 @@ class DeepSeekClient:
                         f"calculation[{variable}]={calculated}"
                     )
 
-            if self._uses_official_example_mapping(mapping_rules_text):
-                expected_color = {"x": "red", "y": "blue"}.get(variable)
-                expected_zone = "A" if isinstance(count, int) and count >= 3 else "C"
-                if expected_color is None:
-                    errors.append(
-                        f"Task {seq}: variable '{variable}' is not in official mapping"
-                    )
-                elif color != expected_color:
-                    errors.append(
-                        f"Task {seq}: official mapping requires {variable} -> "
-                        f"{expected_color}, got {color}"
-                    )
-                if zone != expected_zone:
-                    errors.append(
-                        f"Task {seq}: official mapping requires count {count} -> "
-                        f"zone {expected_zone}, got {zone}"
-                    )
-
         extra_variables = set(calculation) - seen_variables
         if extra_variables:
             errors.append(
@@ -447,7 +424,7 @@ class DeepSeekClient:
         expected_order = extract_result_variables(generator_order)
         if not expected_order:
             expected_order = extract_result_variables(task.get("question", ""))
-        actual_order = [str(item.get("variable", "")).strip() for item in tasks]
+        actual_order = [str(item.get("variable", "")).strip() for item in tasks if isinstance(item, dict)]
         if expected_order and actual_order != expected_order:
             errors.append(
                 f"task variable order {actual_order} does not match "
@@ -455,7 +432,9 @@ class DeepSeekClient:
             )
 
         expected_calculation = calculate_generated_answer(task.get("question", ""))
-        if expected_calculation is not None:
+        if expected_calculation is None:
+            errors.append("Original question cannot be independently verified")
+        else:
             for variable, expected in expected_calculation.items():
                 actual = calculation.get(variable)
                 if actual != expected:
@@ -468,13 +447,6 @@ class DeepSeekClient:
             if missing_expected:
                 errors.append(
                     f"question variables missing from tasks: {sorted(missing_expected)}"
-                )
-
-        if self._uses_official_example_mapping(mapping_rules_text):
-            missing_variables = {"x", "y"} - seen_variables
-            if missing_variables:
-                errors.append(
-                    f"official mapping variables missing from tasks: {sorted(missing_variables)}"
                 )
 
         errors.extend(validate_mapping_interpretation(task, mapping_rules_text))

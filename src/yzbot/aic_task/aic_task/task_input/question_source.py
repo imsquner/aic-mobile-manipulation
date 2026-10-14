@@ -11,15 +11,15 @@ from zoneinfo import ZoneInfo
 import os
 import stat
 import hashlib
-import math
 import re
+import unicodedata
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 
 VARIABLE_PATTERN = r"[A-Za-z][A-Za-z0-9_]*"
 
-# The competition generator is a PyInstaller one-file bundle: its bootloader
+# The competition generator is a Nuitka one-file bundle: its bootloader
 # extracts into TMPDIR, and this build then prints nothing at all (exit 0, empty
 # stdout *and* stderr) whenever TMPDIR contains non-ASCII characters. The
 # workspace path is Chinese and the launcher deliberately points TMPDIR at a
@@ -72,85 +72,143 @@ def extract_result_variables(text: str) -> List[str]:
     )
     if requested:
         return re.findall(VARIABLE_PATTERN, requested.group("variables"))
+    short_request = re.search(
+        rf"计算\s*(?P<variables>{VARIABLE_PATTERN}(?:\s*[,，、]\s*{VARIABLE_PATTERN})+)\s*[。?？]?(?:\s*[-]+)?\s*$",
+        value,
+        flags=re.IGNORECASE,
+    )
+    if short_request:
+        return re.findall(VARIABLE_PATTERN, short_request.group("variables"))
     return []
 
 
-def calculate_generated_answer(question_text: str) -> Optional[Dict[str, int]]:
-    """Independently solve the two-category template emitted by TMSCQtest."""
-    text = str(question_text or "").strip()
-    if not text:
-        return None
+def calculate_generated_evidence(question_text: str) -> Optional[dict]:
+    """Parse every demand, including references, before doing integer arithmetic.
 
-    capacity_match = re.search(r"每个[^;；\n]*?有\s*(\d+)", text)
-    if not capacity_match:
+    Unknown clauses are never skipped. This supports the published generator's
+    grammar, not arbitrary natural-language mathematics.
+    """
+    text = unicodedata.normalize("NFKC", str(question_text or ""))
+    lines = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or re.fullmatch(r"-+", line) or re.fullmatch(r"使用种子:\s*\d+", line):
+            continue
+        lines.append(line)
+    text = "".join(lines)
+    text = re.sub(r"^题目\s*[:：]\s*", "", text)
+    text = re.sub(r"\s+", "", text).replace("；", ";").replace("，", ",")
+    text = text.rstrip("。;")
+    header = re.match(r"每个(?P<container>[^;。]+?)有(?P<capacity>\d+)[^;。]*[;。]"
+                      r"有(?P<first>[^、,;。]+)[、,](?P<second>[^;。]+?)两种"
+                      r"(?P<category_container>[^;。]+)[;。]", text)
+    if not header:
         return None
-    capacity = int(capacity_match.group(1))
-    if capacity <= 0:
+    units = {"衣柜": "件衣物", "宠物店": "只宠物", "果篮": "个水果", "书箱": "本书籍",
+             "礼品盒": "个糖果", "文具盒": "个文具", "玩具箱": "个玩具",
+             "食品袋": "个食品", "球框": "个运动器材"}
+    noun = units.get(header.group("container"))
+    if noun is None or not re.match(re.escape("每个" + header.group("container") + "有" + header.group("capacity") + noun) + r"[;。]", text):
         return None
-
-    clauses = [part.strip() for part in re.split(r"[;；。]", text) if part.strip()]
-    category_index = None
-    categories = None
-    for index, clause in enumerate(clauses):
-        match = re.match(r"有\s*(.+?)\s*[、,，]\s*(.+?)\s*两种", clause)
-        if match:
-            category_index = index
-            categories = (match.group(1).strip(), match.group(2).strip())
-            break
-    if categories is None:
+    capacity = int(header.group("capacity"))
+    container = header.group("container")
+    categories = (header.group("first"), header.group("second"))
+    if capacity <= 0 or categories[0] == categories[1] or header.group("category_container") != container:
         return None
-
-    definition_index = next(
-        (index for index, clause in enumerate(clauses) if clause.startswith("设")),
-        None,
-    )
-    if definition_index is None or definition_index <= category_index:
+    clauses = [part for part in re.split(r"[;。]", text[header.end():]) if part]
+    if len(clauses) < 2 or not clauses[-1].startswith("设"):
         return None
-
+    ending = re.fullmatch(r"设(.+),计算([A-Za-z][A-Za-z0-9_]*[、,][A-Za-z][A-Za-z0-9_]*)"
+                          r"(?:分别为多少|分别是多少)?[?？]?", clauses[-1])
+    if not ending:
+        return None
+    definitions = ending.group(1).split(",")
+    requested = re.split(r"[、,]", ending.group(2))
+    if len(definitions) != 2 or len(set(requested)) != 2:
+        return None
+    aliases = {container}
+    aliases.update({"礼品盒": {"礼盒", "盒"}, "食品袋": {"袋"}, "书箱": {"箱"}}.get(container, set()))
+    suffix = "(?:" + "|".join(re.escape(v) for v in sorted(aliases, key=len, reverse=True)) + ")"
     variable_by_category = {}
-    definition = clauses[definition_index]
-    for category in categories:
-        match = re.search(
-            re.escape(category)
-            + rf"[^,，;；。]*?数量为\s*({VARIABLE_PATTERN})",
-            definition,
-            flags=re.IGNORECASE,
-        )
+    for category, definition in zip(categories, definitions):
+        match = re.fullmatch(re.escape(category) + suffix + r"(?:数量|数)为(" + VARIABLE_PATTERN + ")", definition)
         if not match:
             return None
         variable_by_category[category] = match.group(1)
-
-    totals = {category: 0 for category in categories}
-    action_pattern = re.compile(r"^(?P<subjects>.+?)(?P<all>都)?(?:需要|领养|领取|购买|获得|要)(?P<items>.+)$")
-    for clause in clauses[category_index + 1 : definition_index]:
-        action = action_pattern.match(clause)
-        if not action:
-            return None
-        multiplier = 1
-        if action.group("all"):
-            subjects = [
-                item for item in re.split(r"[、,，]", action.group("subjects")) if item
-            ]
-            multiplier = len(subjects)
-        items = action.group("items")
-        matched_any = False
-        for category in categories:
-            matches = re.findall(
-                rf"(\d+)\s*(?:件|条|只|个|份|箱|包)?\s*{re.escape(category)}",
-                items,
-            )
-            if matches:
-                matched_any = True
-                totals[category] += multiplier * sum(int(value) for value in matches)
-        if not matched_any:
-            return None
-
-    if any(total <= 0 for total in totals.values()):
+    if set(requested) != set(variable_by_category.values()):
         return None
-    return {
-        variable_by_category[category]: math.ceil(totals[category] / capacity)
-        for category in categories
-    }
+
+    people = {}
+    totals = dict.fromkeys(categories, 0)
+    item_pattern = re.compile(r"(\d+)(?:件|条|只|个|份|箱|包|本|盒)?(" +
+                              "|".join(re.escape(v) for v in sorted(categories, key=len, reverse=True)) + ")")
+    for clause in clauses[:-1]:
+        demand = dict.fromkeys(categories, 0)
+        reference = re.fullmatch(r"(.+?)(?:说|也)?和(.+?)(?:需求)?一样(.*)", clause)
+        if reference:
+            subject, previous, tail = reference.groups()
+            if previous not in people:
+                return None
+            demand = dict(people[previous])
+            if tail:
+                swap = re.fullmatch(r"但是换成(.+)", tail)
+                less = re.fullmatch(r",但少(?:一|1)(?:件|条|只|个|份|本|盒)(.+)", tail)
+                if swap and swap.group(1) in categories:
+                    nonzero = [v for v in categories if demand[v]]
+                    if len(nonzero) != 1:
+                        return None
+                    value = demand[nonzero[0]]
+                    demand = dict.fromkeys(categories, 0)
+                    demand[swap.group(1)] = value
+                elif less and less.group(1) in categories:
+                    demand[less.group(1)] -= 1
+                    if demand[less.group(1)] < 0:
+                        return None
+                else:
+                    return None
+            subjects = [subject]
+        else:
+            action = re.fullmatch(r"(.+?)(都)?(?:想要|想玩|需要|领养|领取|购买|获得|借阅|要)(.+)", clause)
+            if not action:
+                return None
+            subject_text, all_people, items = action.groups()
+            subjects = re.split(r"[、,]", subject_text)
+            if any(v.endswith(("不", "没", "未", "无需")) for v in subjects):
+                return None
+            if len(subjects) > 1 and not all_people:
+                return None
+            doubled = False
+            if ",他是双胞胎所以需要双倍" in items:
+                items, descriptor = items.split(",他是双胞胎所以需要双倍", 1)
+                if descriptor not in (categories[0], "水果", "的书"):
+                    return None
+                doubled = True
+            for item in items.split(","):
+                match = item_pattern.fullmatch(item)
+                if not match:
+                    return None
+                demand[match.group(2)] += int(match.group(1))
+            if doubled:
+                if demand[categories[1]] or not demand[categories[0]]:
+                    return None
+                demand[categories[0]] *= 2
+        if not subjects or any(not re.fullmatch(r"小[\u4e00-\u9fff]{1,2}", v) or v in people for v in subjects):
+            return None
+        for subject in subjects:
+            people[subject] = dict(demand)
+            for category in categories:
+                totals[category] += demand[category]
+    if any(v <= 0 for v in totals.values()):
+        return None
+    calculation = {variable_by_category[c]: (totals[c] + capacity - 1) // capacity for c in categories}
+    return {"calculation": calculation, "capacity": capacity, "totals": totals,
+            "variable_by_category": variable_by_category,
+            "formula": "count = (total + capacity - 1) // capacity"}
+
+
+def calculate_generated_answer(question_text: str) -> Optional[Dict[str, int]]:
+    evidence = calculate_generated_evidence(question_text)
+    return evidence["calculation"] if evidence is not None else None
 
 
 class QuestionSource:

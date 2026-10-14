@@ -1,4 +1,3 @@
-import copy
 import dataclasses
 import json
 import sys
@@ -34,12 +33,6 @@ from aic_task.scene_manager import (  # noqa: E402
 
 SCENES = PACKAGE_ROOT / "config" / "scenes"
 WORKSPACE = PACKAGE_ROOT.parents[2]
-OLD_MATRIX = (
-    WORKSPACE
-    / "verification"
-    / "path_matrix_world2_slots15_staging050_20260926_235400"
-    / "static_path_matrix.json"
-)
 ROUTE_POLICY_VERSION = "world2_slot_release_nav2_v1"
 
 
@@ -287,10 +280,16 @@ class World2ReleaseRouteMatrixTest(unittest.TestCase):
         self.assertEqual(plan.steps[0].slot_exit_time_sec, 0.5)
         self.assertEqual(plan.steps[1].slot_exit_time_sec, 0.0)
 
+    def test_synthetic_metadata_fixture_passes_before_targeted_mutations(self):
+        scene = load_scene("world2", SCENES, WORKSPACE)
+        validate_scene(scene, matrix=_complete_scene_matrix(scene))
+
     def test_slot_scene_rejects_old_matrix_without_release_contract(self):
         scene = load_scene("world2", SCENES, WORKSPACE)
-        old_matrix = json.loads(OLD_MATRIX.read_text(encoding="utf-8"))
-        _pin_matrix_to_scene(old_matrix, scene.matrix_source_hash)
+        old_matrix = _complete_scene_matrix(scene)
+        old_matrix["route_policy_version"] = "staging-only-v1"
+        old_matrix["node_names"] = [name for name in old_matrix["node_names"] if not name.endswith("_release")]
+        old_matrix.pop("node_poses")
 
         with self.assertRaisesRegex(SceneError, "route policy|release"):
             validate_scene(scene, matrix=old_matrix)
@@ -352,8 +351,10 @@ def _complete_scene_matrix(scene):
                     float(slot["yaw"]),
                 ),
             )
-    base = json.loads(OLD_MATRIX.read_text(encoding="utf-8"))
-    entries = copy.deepcopy(base.get("entries", {}))
+    # Synthetic metadata fixture, never a measured navigation matrix. These
+    # tests check rejection contracts and must not depend on retired run assets.
+    base = {"schema_version": "1.0", "frame_id": "map"}
+    entries = {}
     source_hash = scene.matrix_source_hash
     if not source_hash:
         raise AssertionError("scene fixture must pin its matrix source hash")
@@ -399,14 +400,6 @@ def _complete_scene_matrix(scene):
         "entries": entries,
     }
 
-
-def _pin_matrix_to_scene(matrix, source_hash):
-    if not source_hash:
-        raise AssertionError("scene fixture must pin its matrix source hash")
-    matrix["source_hash"] = source_hash
-    for entry in matrix.get("entries", {}).values():
-        entry["source_hash"] = source_hash
-    return matrix
 
 
 if __name__ == "__main__":

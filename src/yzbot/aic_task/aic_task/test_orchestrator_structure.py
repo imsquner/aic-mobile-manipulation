@@ -154,4 +154,9 @@ print()
 print("通过 %d 项，失败 %d 项" % (PASS[0], len(FAIL)))
 for line in FAIL:
     print("FAIL: %s" % line)
-sys.exit(1 if FAIL else 0)
+def test_orchestrator_structure_checks():
+    assert not FAIL, "\n".join(FAIL)
+
+
+if __name__ == "__main__":
+    sys.exit(1 if FAIL else 0)
