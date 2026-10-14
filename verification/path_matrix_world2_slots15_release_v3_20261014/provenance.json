@@ -1,0 +1,36 @@
+{
+  "status": "CANDIDATE_NOT_ACTIVATED",
+  "record_id": "20261014_201959_14d8820_matrix_regen",
+  "source_head_at_generation": "15e8a21499ab49f2d74110e0a9b71804a76e767e",
+  "actual_runtime_source": "14d88200b416f840c491f6d7edbaaf1322a1c18c",
+  "source_hash": "c7778639259ab1b6e5db44823de0304c2bc61b7e1044b0622003ae6da6a5af6a",
+  "input_sha256": {
+    "src/yzbot/start_competition.py": "12730cf98da134899969d5a3e50a9aec1ca68f0ce032848ec0775e2c7ec23a31",
+    "src/yzbot/aic_task/aic_task/planning/path_matrix.py": "f30263d4fb6a38720f1262bca73dbfae378d203ef6f131ecda376ec74ded3358",
+    "src/yzbot/bot_navigation/param/originbot_nav2_2.yaml": "3e590f54f79b2bc50d6bf1777a77cf4172d028d9e48845b6bd71e27a34995b1a",
+    "src/yzbot/aic_task/config/scenes/world2/points.yaml": "bb227c6045413f3af8f62730bb3d128932b63b56cc919f0140bf77dc1e5dcc3b",
+    "src/yzbot/aic_task/config/scenes/world2/scene.yaml": "1dac1dd4c393a2016365e002b4b37091bb333677c09101fa6ccb33927a460fbc",
+    "src/yzbot/aic_task/config/scenes/world2/entities.yaml": "7459a51abf995ecb24fda4f3e529496a6c5bb6dc84ea74ba9777e3ff06d35f31",
+    "verification/path_matrix_world2_slots15_release_v2_20260927/static_path_matrix.json": "e219441de0d0ed28d167ed39db2996b205a799192bb5d36fa98600e9f0b6a384"
+  },
+  "runtime_parameters": {
+    "planner_plugins": [
+      "GridBased"
+    ],
+    "GridBased.plugin": "nav2_navfn_planner/NavfnPlanner",
+    "GridBased.use_astar": false,
+    "global_robot_radius": 0.3,
+    "global_inflation_radius": 0.6,
+    "controller_vx_max": 1.0,
+    "controller_wz_max": 1.0
+  },
+  "validation": {
+    "json_csv_consistent": true,
+    "required_edge_set_equal": true,
+    "old_asset_unchanged": true,
+    "actual_planner_hash_equals_source": true
+  },
+  "geometry_identical_to_release_v2": true,
+  "complete_reachable_edges": 503,
+  "physical_observation_samples": 0
+}
