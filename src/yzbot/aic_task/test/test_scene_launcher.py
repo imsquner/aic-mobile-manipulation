@@ -21,7 +21,7 @@ def args(world):
         mode="competition", world=world, display=":0", ros_domain_id=42,
         initial_pose_x=0.0, initial_pose_y=0.0, initial_pose_yaw=0.0,
         dynamic_obstacle_names="all",
-        no_task_parser=False, time_limit_sec=None, development_cube_start_index=0,
+        no_task_parser=False, no_dynamic_obstacles=False, time_limit_sec=None, development_cube_start_index=0,
     )
 
 
@@ -81,7 +81,7 @@ class LauncherSceneTest(unittest.TestCase):
         launcher.args.headless = True
         launcher._launch_gazebo()
         self.assertEqual(launcher.scene.scene_id, "world2")
-        self.assertEqual(launcher.dynamic_obstacle_names, ())
+        self.assertEqual(launcher.dynamic_obstacle_names, ('moving_box_1', 'moving_box_2'))
         self.assertEqual(launcher.initial_pose[:2], (-0.884483, -11.938343))
         command = calls[0][1]
         self.assertIn("gazebo_world2.launch.py", command)

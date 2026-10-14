@@ -34,6 +34,7 @@ class ControlFlowMixin:
         self._reset_localization_epoch = None
         self._reset_localization_evidence = None
         self._reset_scene_evidence = None
+        self._reset_dynamic_evidence = None
         self._control_lock = threading.RLock()
         self._motion_command_lock = threading.RLock()
         self._control_mode = None
@@ -92,7 +93,8 @@ class ControlFlowMixin:
                    'elapsed_seconds': 0.0 if success else (getattr(self, '_frozen_elapsed', None) or 0.0),
                    'current_target': getattr(self, '_active_cube_id', None),
                    'physical': {'verified': self._reset_scene_verified,
-                                'evidence': self._reset_scene_evidence},
+                                'evidence': self._reset_scene_evidence,
+                                'dynamic_obstacles': getattr(self, '_reset_dynamic_evidence', None)},
                    'localization': evidence, 'monotonic_sec': time.monotonic()}
         if hasattr(self, 'pub_reset_result'):
             self.pub_reset_result.publish(String(data=json.dumps(payload, ensure_ascii=False)))
@@ -101,6 +103,24 @@ class ControlFlowMixin:
             self.pub_reset_summary.publish(String(data=text))
         self._event('reset_result', **payload)
         return payload
+
+    def _reset_dynamic_obstacles(self):
+        self._reset_dynamic_evidence = None
+        if not getattr(self, '_dynamic_obstacles_enabled', False):
+            return True
+        self._set_step('移动障碍物归位')
+        reply = self._control_service(self._dynamic_reset_client, 4.0)
+        if reply is None or not reply.success:
+            return False
+        try:
+            evidence = json.loads(reply.message)
+            if evidence.get('verified') is not True or set(evidence.get('obstacles', {})) != set(self._dynamic_obstacle_names):
+                return False
+        except (ValueError, TypeError):
+            return False
+        self._reset_dynamic_evidence = evidence
+        self._event('dynamic_obstacles_reset_verified', **evidence)
+        return True
 
     def _is_control_worker(self):
         return threading.current_thread() is getattr(self, '_control_thread', None)
@@ -291,6 +311,7 @@ class ControlFlowMixin:
             self._reset_localization_epoch = None
             self._reset_localization_evidence = None
             self._reset_scene_evidence = None
+            self._reset_dynamic_evidence = None
             self._reset_scene_verified = False
             self._control_mode = mode
             self._stop_exec = True
@@ -414,6 +435,8 @@ class ControlFlowMixin:
                     scene_ok, detail = self._reset_scene()
                     if not scene_ok:
                         raise RuntimeError('归位未完成: ' + str(detail))
+                    if not self._reset_dynamic_obstacles():
+                        raise RuntimeError('移动障碍物归位未确认')
                     self._reset_scene_verified = True
                     self._reset_scene_evidence = detail
                 if not self._recover_recognition_pose():

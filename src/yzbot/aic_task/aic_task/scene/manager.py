@@ -48,6 +48,7 @@ class SceneConfig:
     matrix_source_hash: str | None
     matrix_route_policy_version: str | None
     points_sha256: str | None
+    obstacles_file: Path | None = None
 
     def asset_hashes(self) -> dict[str, str | None]:
         assets = {
@@ -57,6 +58,7 @@ class SceneConfig:
             "world": self.world_file,
             "map": self.map_file,
             "matrix": self.matrix_file,
+            "obstacles": self.obstacles_file,
         }
         return {
             name: hashlib.sha256(path.read_bytes()).hexdigest()
@@ -142,6 +144,7 @@ def load_scene(selection: str, scenes_root: Path, workspace: Path) -> SceneConfi
         matrix_source_hash=manifest.get("matrix_source_hash"),
         matrix_route_policy_version=manifest.get("matrix_route_policy_version"),
         points_sha256=manifest.get("points_sha256"),
+        obstacles_file=_relative(scene_dir, manifest["obstacles"], "obstacles") if manifest.get("obstacles") else None,
     )
     validate_scene(scene)
     return scene
@@ -306,8 +309,15 @@ def validate_scene(
             for axis in axes:
                 _numeric(zone[section].get(axis), f"zone_{name}.{section}.{axis}")
     expected_ids = set(ids) | {f"zone_{name.lower()}" for name in zones}
+    obstacle_config = _yaml(scene.obstacles_file) if scene.obstacles_file else points
+    if scene.obstacles_file:
+        from aic_task.navigation.obstacle_motion import load_obstacle_motions
+        try:
+            load_obstacle_motions(scene.obstacles_file)
+        except (ValueError, KeyError, TypeError) as exc:
+            raise SceneError("invalid dynamic obstacle configuration") from exc
     point_obstacles = {
-        obstacle.get("name") for obstacle in points.get("dynamic_obstacles", [])
+        obstacle.get("name") for obstacle in obstacle_config.get("dynamic_obstacles", [])
         if isinstance(obstacle, dict)
     }
     if not set(scene.dynamic_obstacles).issubset(point_obstacles):
@@ -338,6 +348,20 @@ def validate_scene(
             raise SceneError(f"service_prefix differs from world plugin in {scene.scene_id}")
         if slots:
             _validate_slot_model_states_remapping(state_plugins[0], scene.scene_id)
+        if scene.obstacles_file:
+            for motion in load_obstacle_motions(scene.obstacles_file).values():
+                if motion.name not in scene.dynamic_obstacles:
+                    continue
+                model = next((m for m in world.iter('model') if m.get('name') == motion.name), None)
+                if model is None:
+                    raise SceneError('dynamic obstacle geometry model is missing')
+                for kind in ('collision', 'visual'):
+                    sizes = model.findtext(f'link/{kind}/geometry/box/size', default='').split()
+                    if len(sizes) != 3 or any(abs(float(a)-b) > 1e-6 for a,b in zip(sizes,motion.dimensions)):
+                        raise SceneError('dynamic obstacle geometry differs from its configuration')
+                pose = tuple(float(v) for v in model.findtext('pose', default='').split())
+                if len(pose) != 6 or math.dist(pose[:3], (*motion.center,motion.z)) > .001 or abs(math.atan2(math.sin(pose[5]-motion.yaw),math.cos(pose[5]-motion.yaw))) > .001:
+                    raise SceneError('dynamic obstacle geometry initial pose differs from configuration')
         world_models = {model.get("name") for model in world.iter("model")}
         missing_models = expected_ids.union(scene.dynamic_obstacles) - world_models
         if missing_models:

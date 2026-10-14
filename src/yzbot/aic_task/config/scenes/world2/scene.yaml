@@ -7,7 +7,8 @@ launch: gazebo_world2.launch.py
 world: install/mybot_description/share/mybot_description/worlds/offic_room.world
 map: install/bot_navigation/share/bot_navigation/maps/mapn3.yaml
 service_prefix: ''
-dynamic_obstacles: []
+dynamic_obstacles: [moving_box_1, moving_box_2]
+obstacles: obstacles.yaml
 matrix: verification/path_matrix_world2_slots15_release_v2_20260927/static_path_matrix.json
 matrix_source_hash: 970c1c6bcdb2dee77091e5e023dc345f9e27c41cbda8550ee509cdd44abbaef1
 matrix_route_policy_version: world2_slot_release_nav2_v1

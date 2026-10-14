@@ -437,7 +437,7 @@ class CompetitionLauncher:
             if self.dynamic_obstacle_names and not self.args.no_dynamic_obstacles:
                 self._launch_dynamic_obstacles()
                 self._mark_stage(
-                    "dynamic_obstacles", self._wait_dynamic_obstacles_ready()
+                    "dynamic_obstacles", self._wait_dynamic_obstacles_configured()
                 )
             elif self.dynamic_obstacle_names:
                 self._mark_stage("dynamic_obstacles", "disabled_for_static_acceptance")
@@ -463,6 +463,9 @@ class CompetitionLauncher:
                 self._launch_foxglove()
                 self._mark_stage("foxglove_bridge", self._wait_foxglove_ready())
 
+            if self.dynamic_obstacle_names and not self.args.no_dynamic_obstacles:
+                self._enable_dynamic_obstacles()
+                self._mark_stage('dynamic_obstacle_motion', self._wait_dynamic_obstacles_ready())
             self._write_manifest()
             self.log("SYSTEM READY: generate question, confirm mapping and parsed plan, then start.")
             self._wait_shutdown()
@@ -746,7 +749,7 @@ class CompetitionLauncher:
                 "-p",
                 "use_sim_time:=true",
                 "-p",
-                f"points_file:={ros_file_parameter(self.points_file)}",
+                f"points_file:={ros_file_parameter(self.scene.obstacles_file or self.points_file)}",
                 "-p",
                 "enabled_obstacles:=" + ",".join(self.dynamic_obstacle_names),
             ],
@@ -813,6 +816,8 @@ class CompetitionLauncher:
             orchestrator_command.extend(
                 ["-p", f"time_limit_sec:={self.args.time_limit_sec}"]
             )
+        if self.dynamic_obstacle_names and not self.args.no_dynamic_obstacles:
+            orchestrator_command.extend(['-p', 'dynamic_obstacle_names:=' + ','.join(self.dynamic_obstacle_names)])
         self._start_process("task_orchestrator", orchestrator_command)
 
     def _launch_lifecycle_watchdog(self):
@@ -960,6 +965,25 @@ class CompetitionLauncher:
         return self._wait_lifecycle_nodes(
             ("map_server", "amcl", "collision_monitor"), 60.0
         )
+
+    def _enable_dynamic_obstacles(self):
+        result = self._run_ros(['service', 'call', '/competition/start_dynamic_obstacles',
+                                'std_srvs/srv/Trigger', '{}'], timeout=10.0)
+        if result.returncode != 0 or 'success=True' not in result.stdout:
+            raise RuntimeError('dynamic obstacle motion enable was not confirmed')
+
+    def _wait_dynamic_obstacles_configured(self):
+        self._wait_process_alive('dynamic_obstacles', 2.0)
+        self._wait_for_list_entries('node', ('/dynamic_obstacle_controller',), 15.0)
+        deadline = time.monotonic() + 10.0
+        while time.monotonic() < deadline:
+            self._assert_process_alive('dynamic_obstacles')
+            if 'configured; awaiting READY' in self._read_log_tail('dynamic_obstacles'):
+                for name in self.dynamic_obstacle_names:
+                    self._get_entity_xy(name)
+                return True
+            time.sleep(.2)
+        raise RuntimeError('dynamic obstacle configuration was not confirmed')
 
     def _wait_dynamic_obstacles_ready(self):
         self._wait_process_alive("dynamic_obstacles", 2.0)

@@ -37,7 +37,7 @@ class SceneManagerTest(unittest.TestCase):
         self.assertEqual(world2.launch_file, "gazebo_world2.launch.py")
         self.assertEqual(world2.points_file.parts[-2:], ("world2", "points.yaml"))
         self.assertEqual(world2.entities_file.parts[-2:], ("world2", "entities.yaml"))
-        self.assertEqual(world2.dynamic_obstacles, ())
+        self.assertEqual(world2.dynamic_obstacles, ('moving_box_1', 'moving_box_2'))
 
     def test_rejects_bad_active_selector(self):
         with tempfile.TemporaryDirectory() as folder:

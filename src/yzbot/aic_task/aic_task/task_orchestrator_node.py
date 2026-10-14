@@ -924,6 +924,10 @@ class TaskOrchestratorNode(
         self._grasp_abort_client = self.create_client(
             Trigger, "/competition/abort_pick", callback_group=self._cbg
         )
+        self.declare_parameter('dynamic_obstacle_names', '')
+        self._dynamic_obstacle_names = tuple(v for v in str(self.get_parameter('dynamic_obstacle_names').value).split(',') if v)
+        self._dynamic_obstacles_enabled = bool(self._dynamic_obstacle_names)
+        self._dynamic_reset_client = self.create_client(Trigger, '/competition/reset_dynamic_obstacles', callback_group=self._cbg)
         self._tf_buffer = Buffer()
         self._tf_listener = TransformListener(self._tf_buffer, self)
 

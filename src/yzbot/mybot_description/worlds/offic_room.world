@@ -3902,13 +3902,13 @@
       <pose>0.968798 -5.71233 0.5 0 -0 0</pose>
     </model>
   <model name="moving_box_1">
-  <pose>0.353 -3.460 0.250 0 0 0</pose>
+  <pose>3.224256137 -11.412427419 0.15 0 0 -1.327877956</pose>
 
   <link name="link">
     <collision name="collision">
       <geometry>
         <box>
-          <size>0.4 0.4 0.5</size>
+          <size>0.38 0.40 0.30</size>
         </box>
       </geometry>
     </collision>
@@ -3916,20 +3916,20 @@
     <visual name="visual">
       <geometry>
         <box>
-          <size>0.4 0.4 0.5</size>
+          <size>0.38 0.40 0.30</size>
         </box>
       </geometry>
     </visual>
   </link>
 </model>
 <model name="moving_box_2">
-  <pose>-0.595 0.906 0.250 0 0 0</pose>
+  <pose>1.107851139 -9.806014073 0.15 0 0 0.000003483</pose>
 
   <link name="link">
     <collision name="collision">
       <geometry>
         <box>
-          <size>0.4 0.4 0.5</size>
+          <size>0.38 0.40 0.30</size>
         </box>
       </geometry>
     </collision>
@@ -3937,7 +3937,7 @@
     <visual name="visual">
       <geometry>
         <box>
-          <size>0.4 0.4 0.5</size>
+          <size>0.38 0.40 0.30</size>
         </box>
       </geometry>
     </visual>
