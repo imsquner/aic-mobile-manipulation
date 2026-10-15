@@ -33,12 +33,17 @@
       "estimated_time_sec": 8.811,
       "worst_time_sec": 19.979,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 7.631,
+      "sample_count": 3,
       "failure_count": 0,
       "action_elapsed_sec": 0.786,
       "error": "",
-      "effective_worst_time_sec": 19.979
+      "effective_worst_time_sec": 19.979,
+      "observed_mean_time_sec": 7.085,
+      "success_count": 3,
+      "last_observed_time_sec": 7.631,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:56:57.665546+00:00"
     },
     "start->red_cube_2": {
       "from": "start",
@@ -75,12 +80,17 @@
       "estimated_time_sec": 15.675,
       "worst_time_sec": 31.648,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.499,
+      "sample_count": 5,
       "failure_count": 0,
       "action_elapsed_sec": 0.02,
       "error": "",
-      "effective_worst_time_sec": 31.648
+      "effective_worst_time_sec": 31.648,
+      "observed_mean_time_sec": 11.968,
+      "success_count": 5,
+      "last_observed_time_sec": 11.862,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:19:56.273274+00:00"
     },
     "start->red_cube_3": {
       "from": "start",
@@ -143,12 +153,17 @@
       "estimated_time_sec": 10.207,
       "worst_time_sec": 22.352,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.058,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.013,
       "error": "",
-      "effective_worst_time_sec": 22.352
+      "effective_worst_time_sec": 22.352,
+      "observed_mean_time_sec": 10.62,
+      "success_count": 9,
+      "last_observed_time_sec": 10.54,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:18:11.033164+00:00"
     },
     "start->blue_cube_1": {
       "from": "start",
@@ -181,12 +196,17 @@
       "estimated_time_sec": 10.566,
       "worst_time_sec": 22.962,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
-      "failure_count": 0,
+      "observed_max_time_sec": 60.631,
+      "sample_count": 2,
+      "failure_count": 1,
       "action_elapsed_sec": 0.015,
       "error": "",
-      "effective_worst_time_sec": 22.962
+      "effective_worst_time_sec": 60.631,
+      "observed_mean_time_sec": 11.018,
+      "success_count": 1,
+      "last_observed_time_sec": 60.631,
+      "last_observation_success": false,
+      "last_observed_at": "2026-10-15T04:15:53.387753+00:00"
     },
     "start->blue_cube_2": {
       "from": "start",
@@ -257,12 +277,17 @@
       "estimated_time_sec": 7.427,
       "worst_time_sec": 17.626,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 8.606,
+      "sample_count": 8,
       "failure_count": 0,
       "action_elapsed_sec": 0.006,
       "error": "",
-      "effective_worst_time_sec": 17.626
+      "effective_worst_time_sec": 17.626,
+      "observed_mean_time_sec": 8.002,
+      "success_count": 8,
+      "last_observed_time_sec": 7.834,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:15:07.216727+00:00"
     },
     "start->blue_cube_4": {
       "from": "start",
@@ -2413,12 +2438,17 @@
       "estimated_time_sec": 4.536,
       "worst_time_sec": 12.711,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 11.133,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.004,
       "error": "",
-      "effective_worst_time_sec": 12.711
+      "effective_worst_time_sec": 12.711,
+      "observed_mean_time_sec": 11.133,
+      "success_count": 1,
+      "last_observed_time_sec": 11.133,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:22:33.708673+00:00"
     },
     "zone_A_slot_4_exit->red_cube_4": {
       "from": "zone_A_slot_4_exit",
@@ -9069,12 +9099,17 @@
       "estimated_time_sec": 10.261,
       "worst_time_sec": 22.444,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 11.877,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.019,
       "error": "",
-      "effective_worst_time_sec": 22.444
+      "effective_worst_time_sec": 22.444,
+      "observed_mean_time_sec": 9.423,
+      "success_count": 9,
+      "last_observed_time_sec": 9.252,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T07:11:27.632551+00:00"
     },
     "red_cube_1->zone_A_slot_2_release": {
       "from": "red_cube_1",
@@ -9103,12 +9138,17 @@
       "estimated_time_sec": 10.567,
       "worst_time_sec": 22.964,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.452,
+      "sample_count": 3,
       "failure_count": 0,
       "action_elapsed_sec": 0.016,
       "error": "",
-      "effective_worst_time_sec": 22.964
+      "effective_worst_time_sec": 22.964,
+      "observed_mean_time_sec": 9.321,
+      "success_count": 3,
+      "last_observed_time_sec": 9.098,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:09:10.734302+00:00"
     },
     "red_cube_1->zone_A_slot_3_release": {
       "from": "red_cube_1",
@@ -9141,12 +9181,17 @@
       "estimated_time_sec": 11.117,
       "worst_time_sec": 23.899,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
-      "failure_count": 0,
+      "observed_max_time_sec": 35.104,
+      "sample_count": 1,
+      "failure_count": 1,
       "action_elapsed_sec": 0.021,
       "error": "",
-      "effective_worst_time_sec": 23.899
+      "effective_worst_time_sec": 35.104,
+      "observed_mean_time_sec": null,
+      "success_count": 0,
+      "last_observed_time_sec": 35.104,
+      "last_observation_success": false,
+      "last_observed_at": "2026-10-15T04:21:54.090751+00:00"
     },
     "red_cube_1->zone_A_slot_4_release": {
       "from": "red_cube_1",
@@ -9251,12 +9296,17 @@
       "estimated_time_sec": 12.65,
       "worst_time_sec": 26.505,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.041,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.015,
       "error": "",
-      "effective_worst_time_sec": 26.505
+      "effective_worst_time_sec": 26.505,
+      "observed_mean_time_sec": 8.74,
+      "success_count": 2,
+      "last_observed_time_sec": 8.438,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:50:22.983005+00:00"
     },
     "red_cube_1->zone_B_slot_2_release": {
       "from": "red_cube_1",
@@ -9441,12 +9491,17 @@
       "estimated_time_sec": 11.702,
       "worst_time_sec": 24.893,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.465,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.016,
       "error": "",
-      "effective_worst_time_sec": 24.893
+      "effective_worst_time_sec": 24.893,
+      "observed_mean_time_sec": 8.705,
+      "success_count": 4,
+      "last_observed_time_sec": 8.399,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:04:10.745829+00:00"
     },
     "red_cube_1->zone_C_slot_2_release": {
       "from": "red_cube_1",
@@ -9475,12 +9530,17 @@
       "estimated_time_sec": 11.325,
       "worst_time_sec": 24.252,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.566,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.026,
       "error": "",
-      "effective_worst_time_sec": 24.252
+      "effective_worst_time_sec": 24.252,
+      "observed_mean_time_sec": 8.411,
+      "success_count": 9,
+      "last_observed_time_sec": 8.131,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:19:06.841933+00:00"
     },
     "red_cube_1->zone_C_slot_3_release": {
       "from": "red_cube_1",
@@ -9619,12 +9679,17 @@
       "estimated_time_sec": 17.326,
       "worst_time_sec": 34.454,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 14.398,
+      "sample_count": 5,
       "failure_count": 0,
       "action_elapsed_sec": 0.023,
       "error": "",
-      "effective_worst_time_sec": 34.454
+      "effective_worst_time_sec": 34.454,
+      "observed_mean_time_sec": 13.454,
+      "success_count": 5,
+      "last_observed_time_sec": 13.592,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:20:14.705090+00:00"
     },
     "red_cube_2->zone_A_slot_2_release": {
       "from": "red_cube_2",
@@ -9661,12 +9726,17 @@
       "estimated_time_sec": 17.679,
       "worst_time_sec": 35.054,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 18.197,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.019,
       "error": "",
-      "effective_worst_time_sec": 35.054
+      "effective_worst_time_sec": 35.054,
+      "observed_mean_time_sec": 18.197,
+      "success_count": 1,
+      "last_observed_time_sec": 18.197,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:57:58.402316+00:00"
     },
     "red_cube_2->zone_A_slot_3_release": {
       "from": "red_cube_2",
@@ -9901,12 +9971,17 @@
       "estimated_time_sec": 9.872,
       "worst_time_sec": 21.782,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 6.677,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.014,
       "error": "",
-      "effective_worst_time_sec": 21.782
+      "effective_worst_time_sec": 21.782,
+      "observed_mean_time_sec": 6.482,
+      "success_count": 2,
+      "last_observed_time_sec": 6.677,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:51:46.046836+00:00"
     },
     "red_cube_2->zone_B_slot_4_release": {
       "from": "red_cube_2",
@@ -10265,12 +10340,17 @@
       "estimated_time_sec": 4.807,
       "worst_time_sec": 13.172,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.088,
+      "sample_count": 10,
       "failure_count": 0,
       "action_elapsed_sec": 0.013,
       "error": "",
-      "effective_worst_time_sec": 13.172
+      "effective_worst_time_sec": 13.172,
+      "observed_mean_time_sec": 6.167,
+      "success_count": 10,
+      "last_observed_time_sec": 4.796,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T07:12:35.440740+00:00"
     },
     "red_cube_3->zone_A_slot_4_release": {
       "from": "red_cube_3",
@@ -10299,12 +10379,17 @@
       "estimated_time_sec": 4.456,
       "worst_time_sec": 12.575,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 5.601,
+      "sample_count": 3,
       "failure_count": 0,
       "action_elapsed_sec": 0.02,
       "error": "",
-      "effective_worst_time_sec": 12.575
+      "effective_worst_time_sec": 12.575,
+      "observed_mean_time_sec": 4.825,
+      "success_count": 3,
+      "last_observed_time_sec": 4.526,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:59:07.191012+00:00"
     },
     "red_cube_3->zone_A_slot_5_release": {
       "from": "red_cube_3",
@@ -10397,12 +10482,17 @@
       "estimated_time_sec": 14.964,
       "worst_time_sec": 30.439,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.702,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.02,
       "error": "",
-      "effective_worst_time_sec": 30.439
+      "effective_worst_time_sec": 30.439,
+      "observed_mean_time_sec": 11.952,
+      "success_count": 2,
+      "last_observed_time_sec": 12.702,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:51:13.732167+00:00"
     },
     "red_cube_3->zone_B_slot_3_release": {
       "from": "red_cube_3",
@@ -10765,12 +10855,17 @@
       "estimated_time_sec": 12.655,
       "worst_time_sec": 26.513,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 13.991,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.033,
       "error": "",
-      "effective_worst_time_sec": 26.513
+      "effective_worst_time_sec": 26.513,
+      "observed_mean_time_sec": 11.278,
+      "success_count": 9,
+      "last_observed_time_sec": 11.76,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T07:12:05.180128+00:00"
     },
     "red_cube_4->zone_A_slot_3_release": {
       "from": "red_cube_4",
@@ -10803,12 +10898,17 @@
       "estimated_time_sec": 13.147,
       "worst_time_sec": 27.35,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 34.704,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.021,
       "error": "",
-      "effective_worst_time_sec": 27.35
+      "effective_worst_time_sec": 34.704,
+      "observed_mean_time_sec": 24.136,
+      "success_count": 2,
+      "last_observed_time_sec": 13.569,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:58:38.683575+00:00"
     },
     "red_cube_4->zone_A_slot_4_release": {
       "from": "red_cube_4",
@@ -10837,12 +10937,17 @@
       "estimated_time_sec": 11.292,
       "worst_time_sec": 24.196,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
-      "failure_count": 0,
+      "observed_max_time_sec": 35.104,
+      "sample_count": 2,
+      "failure_count": 1,
       "action_elapsed_sec": 0.017,
       "error": "",
-      "effective_worst_time_sec": 24.196
+      "effective_worst_time_sec": 35.104,
+      "observed_mean_time_sec": 14.044,
+      "success_count": 1,
+      "last_observed_time_sec": 35.104,
+      "last_observation_success": false,
+      "last_observed_at": "2026-10-15T04:10:44.662094+00:00"
     },
     "red_cube_4->zone_A_slot_5_release": {
       "from": "red_cube_4",
@@ -10995,12 +11100,17 @@
       "estimated_time_sec": 7.975,
       "worst_time_sec": 18.557,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 8.672,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.017,
       "error": "",
-      "effective_worst_time_sec": 18.557
+      "effective_worst_time_sec": 18.557,
+      "observed_mean_time_sec": 8.326,
+      "success_count": 2,
+      "last_observed_time_sec": 7.98,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:52:20.258782+00:00"
     },
     "red_cube_4->zone_B_slot_5_release": {
       "from": "red_cube_4",
@@ -11063,12 +11173,17 @@
       "estimated_time_sec": 14.034,
       "worst_time_sec": 28.858,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 13.647,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.021,
       "error": "",
-      "effective_worst_time_sec": 28.858
+      "effective_worst_time_sec": 28.858,
+      "observed_mean_time_sec": 11.294,
+      "success_count": 9,
+      "last_observed_time_sec": 10.908,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:18:29.137601+00:00"
     },
     "red_cube_4->zone_C_slot_2_release": {
       "from": "red_cube_4",
@@ -11287,12 +11402,17 @@
       "estimated_time_sec": 8.501,
       "worst_time_sec": 19.452,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 7.507,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.018,
       "error": "",
-      "effective_worst_time_sec": 19.452
+      "effective_worst_time_sec": 19.452,
+      "observed_mean_time_sec": 6.441,
+      "success_count": 4,
+      "last_observed_time_sec": 7.507,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:06:49.902153+00:00"
     },
     "blue_cube_1->zone_A_slot_3_release": {
       "from": "blue_cube_1",
@@ -11435,12 +11555,17 @@
       "estimated_time_sec": 14.204,
       "worst_time_sec": 29.147,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 11.99,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.021,
       "error": "",
-      "effective_worst_time_sec": 29.147
+      "effective_worst_time_sec": 29.147,
+      "observed_mean_time_sec": 11.99,
+      "success_count": 1,
+      "last_observed_time_sec": 11.99,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T03:43:38.991423+00:00"
     },
     "blue_cube_1->zone_B_slot_2_release": {
       "from": "blue_cube_1",
@@ -11473,12 +11598,17 @@
       "estimated_time_sec": 13.723,
       "worst_time_sec": 28.329,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.226,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.021,
       "error": "",
-      "effective_worst_time_sec": 28.329
+      "effective_worst_time_sec": 28.329,
+      "observed_mean_time_sec": 11.987,
+      "success_count": 2,
+      "last_observed_time_sec": 12.226,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:02:18.724709+00:00"
     },
     "blue_cube_1->zone_B_slot_3_release": {
       "from": "blue_cube_1",
@@ -12067,12 +12197,17 @@
       "estimated_time_sec": 10.161,
       "worst_time_sec": 22.274,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.761,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.02,
       "error": "",
-      "effective_worst_time_sec": 22.274
+      "effective_worst_time_sec": 22.274,
+      "observed_mean_time_sec": 8.556,
+      "success_count": 4,
+      "last_observed_time_sec": 8.874,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:20:15.796011+00:00"
     },
     "blue_cube_2->zone_B_slot_3_release": {
       "from": "blue_cube_2",
@@ -12105,12 +12240,17 @@
       "estimated_time_sec": 9.624,
       "worst_time_sec": 21.361,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.178,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.019,
       "error": "",
-      "effective_worst_time_sec": 21.361
+      "effective_worst_time_sec": 21.361,
+      "observed_mean_time_sec": 9.722,
+      "success_count": 4,
+      "last_observed_time_sec": 9.78,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:02:50.782380+00:00"
     },
     "blue_cube_2->zone_B_slot_4_release": {
       "from": "blue_cube_2",
@@ -12421,12 +12561,17 @@
       "estimated_time_sec": 7.362,
       "worst_time_sec": 17.515,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 6.871,
+      "sample_count": 2,
       "failure_count": 0,
       "action_elapsed_sec": 0.018,
       "error": "",
-      "effective_worst_time_sec": 17.515
+      "effective_worst_time_sec": 17.515,
+      "observed_mean_time_sec": 5.912,
+      "success_count": 2,
+      "last_observed_time_sec": 6.871,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:52:50.262924+00:00"
     },
     "blue_cube_3->zone_A_slot_2_release": {
       "from": "blue_cube_3",
@@ -12489,12 +12634,17 @@
       "estimated_time_sec": 8.205,
       "worst_time_sec": 18.948,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 9.609,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.017,
       "error": "",
-      "effective_worst_time_sec": 18.948
+      "effective_worst_time_sec": 18.948,
+      "observed_mean_time_sec": 8.703,
+      "success_count": 4,
+      "last_observed_time_sec": 7.96,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:07:19.232352+00:00"
     },
     "blue_cube_3->zone_A_slot_4_release": {
       "from": "blue_cube_3",
@@ -12591,12 +12741,17 @@
       "estimated_time_sec": 10.852,
       "worst_time_sec": 23.448,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 10.372,
+      "sample_count": 15,
       "failure_count": 0,
       "action_elapsed_sec": 0.018,
       "error": "",
-      "effective_worst_time_sec": 23.448
+      "effective_worst_time_sec": 23.448,
+      "observed_mean_time_sec": 9.578,
+      "success_count": 15,
+      "last_observed_time_sec": 9.447,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T07:10:21.322502+00:00"
     },
     "blue_cube_3->zone_B_slot_2_release": {
       "from": "blue_cube_3",
@@ -12625,12 +12780,17 @@
       "estimated_time_sec": 10.393,
       "worst_time_sec": 22.668,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 20.535,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.017,
       "error": "",
-      "effective_worst_time_sec": 22.668
+      "effective_worst_time_sec": 22.668,
+      "observed_mean_time_sec": 20.535,
+      "success_count": 1,
+      "last_observed_time_sec": 20.535,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T03:44:22.481015+00:00"
     },
     "blue_cube_3->zone_B_slot_3_release": {
       "from": "blue_cube_3",
@@ -12765,12 +12925,17 @@
       "estimated_time_sec": 11.03,
       "worst_time_sec": 23.751,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 11.596,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.017,
       "error": "",
-      "effective_worst_time_sec": 23.751
+      "effective_worst_time_sec": 23.751,
+      "observed_mean_time_sec": 9.581,
+      "success_count": 4,
+      "last_observed_time_sec": 11.596,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:59:43.050467+00:00"
     },
     "blue_cube_3->zone_C_slot_2_release": {
       "from": "blue_cube_3",
@@ -12955,12 +13120,17 @@
       "estimated_time_sec": 15.668,
       "worst_time_sec": 31.636,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 16.141,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.025,
       "error": "",
-      "effective_worst_time_sec": 31.636
+      "effective_worst_time_sec": 31.636,
+      "observed_mean_time_sec": 13.047,
+      "success_count": 4,
+      "last_observed_time_sec": 13.943,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:06:16.496865+00:00"
     },
     "blue_cube_4->zone_A_slot_2_release": {
       "from": "blue_cube_4",
@@ -13183,12 +13353,17 @@
       "estimated_time_sec": 7.874,
       "worst_time_sec": 18.386,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 12.417,
+      "sample_count": 9,
       "failure_count": 0,
       "action_elapsed_sec": 0.016,
       "error": "",
-      "effective_worst_time_sec": 18.386
+      "effective_worst_time_sec": 18.386,
+      "observed_mean_time_sec": 7.296,
+      "success_count": 9,
+      "last_observed_time_sec": 7.455,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T07:10:51.766761+00:00"
     },
     "blue_cube_4->zone_B_slot_3_release": {
       "from": "blue_cube_4",
@@ -13221,12 +13396,17 @@
       "estimated_time_sec": 7.22,
       "worst_time_sec": 17.274,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 7.682,
+      "sample_count": 4,
       "failure_count": 0,
       "action_elapsed_sec": 0.018,
       "error": "",
-      "effective_worst_time_sec": 17.274
+      "effective_worst_time_sec": 17.274,
+      "observed_mean_time_sec": 6.968,
+      "success_count": 4,
+      "last_observed_time_sec": 6.997,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:20:45.401719+00:00"
     },
     "blue_cube_4->zone_B_slot_4_release": {
       "from": "blue_cube_4",
@@ -13255,12 +13435,17 @@
       "estimated_time_sec": 7.072,
       "worst_time_sec": 17.022,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 8.58,
+      "sample_count": 3,
       "failure_count": 0,
       "action_elapsed_sec": 0.016,
       "error": "",
-      "effective_worst_time_sec": 17.022
+      "effective_worst_time_sec": 17.022,
+      "observed_mean_time_sec": 6.862,
+      "success_count": 3,
+      "last_observed_time_sec": 8.58,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T05:03:21.791639+00:00"
     },
     "blue_cube_4->zone_B_slot_5_release": {
       "from": "blue_cube_4",
@@ -13589,12 +13774,17 @@
       "estimated_time_sec": 11.305,
       "worst_time_sec": 24.218,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 19.815,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.019,
       "error": "",
-      "effective_worst_time_sec": 24.218
+      "effective_worst_time_sec": 24.218,
+      "observed_mean_time_sec": 19.815,
+      "success_count": 1,
+      "last_observed_time_sec": 19.815,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:22:14.240305+00:00"
     },
     "red_cube_1->zone_A_slot_4_staging": {
       "from": "red_cube_1",
@@ -15245,12 +15435,17 @@
       "estimated_time_sec": 10.884,
       "worst_time_sec": 23.503,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
-      "failure_count": 0,
+      "observed_max_time_sec": 9.044,
+      "sample_count": 1,
+      "failure_count": 1,
       "action_elapsed_sec": 0.025,
       "error": "",
-      "effective_worst_time_sec": 23.503
+      "effective_worst_time_sec": 23.503,
+      "observed_mean_time_sec": null,
+      "success_count": 0,
+      "last_observed_time_sec": 9.044,
+      "last_observation_success": false,
+      "last_observed_at": "2026-10-15T04:10:54.040697+00:00"
     },
     "red_cube_4->zone_A_slot_5_staging": {
       "from": "red_cube_4",
@@ -17921,12 +18116,17 @@
       "estimated_time_sec": 3.36,
       "worst_time_sec": 10.712,
       "hard_timeout_sec": 55.0,
-      "observed_max_time_sec": null,
-      "sample_count": 0,
+      "observed_max_time_sec": 1.444,
+      "sample_count": 1,
       "failure_count": 0,
       "action_elapsed_sec": 0.018,
       "error": "",
-      "effective_worst_time_sec": 10.712
+      "effective_worst_time_sec": 10.712,
+      "observed_mean_time_sec": 1.444,
+      "success_count": 1,
+      "last_observed_time_sec": 1.444,
+      "last_observation_success": true,
+      "last_observed_at": "2026-10-15T04:22:15.717008+00:00"
     },
     "zone_A_slot_4_staging->zone_A_slot_4_release": {
       "from": "zone_A_slot_4_staging",
@@ -18404,13 +18604,13 @@
       "yaw": -0.539043
     },
     "zone_B": {
-      "x": 2.22001,
-      "y": -12.581897,
+      "x": 2.151916,
+      "y": -12.84457,
       "yaw": -1.824446
     },
     "zone_C": {
-      "x": -1.860276,
-      "y": -10.018595,
+      "x": -2.077974,
+      "y": -9.880656,
       "yaw": -0.564777
     },
     "zone_A_slot_1_staging": {
@@ -18489,153 +18689,153 @@
       "yaw": -2.129825286209
     },
     "zone_B_slot_1_staging": {
-      "x": 2.6222,
-      "y": -13.5103,
+      "x": 2.5541,
+      "y": -13.773,
       "yaw": 2.887123648649
     },
     "zone_B_slot_1_release": {
-      "x": 2.1383,
-      "y": -13.3844,
+      "x": 2.0702,
+      "y": -13.6471,
       "yaw": 2.887123648649
     },
     "zone_B_slot_1_exit": {
-      "x": 3.1061,
-      "y": -13.6361,
+      "x": 3.038,
+      "y": -13.8988,
       "yaw": 2.887123648649
     },
     "zone_B_slot_2_staging": {
-      "x": 2.8013,
-      "y": -13.3023,
+      "x": 2.7332,
+      "y": -13.565,
       "yaw": 2.887123648649
     },
     "zone_B_slot_2_release": {
-      "x": 2.3174,
-      "y": -13.1764,
+      "x": 2.2493,
+      "y": -13.4391,
       "yaw": 2.887123648649
     },
     "zone_B_slot_2_exit": {
-      "x": 3.2852,
-      "y": -13.4281,
+      "x": 3.2171,
+      "y": -13.6908,
       "yaw": 2.887123648649
     },
     "zone_B_slot_3_staging": {
-      "x": 2.9961,
-      "y": -13.0239,
+      "x": 2.928,
+      "y": -13.2866,
       "yaw": 2.887123648649
     },
     "zone_B_slot_3_release": {
-      "x": 2.5122,
-      "y": -12.898,
+      "x": 2.4441,
+      "y": -13.1607,
       "yaw": 2.887123648649
     },
     "zone_B_slot_3_exit": {
-      "x": 3.48,
-      "y": -13.1497,
+      "x": 3.4119,
+      "y": -13.4124,
       "yaw": 2.887123648649
     },
     "zone_B_slot_4_staging": {
-      "x": 3.1518,
-      "y": -12.8149,
+      "x": 3.0837,
+      "y": -13.0776,
       "yaw": 2.887123648649
     },
     "zone_B_slot_4_release": {
-      "x": 2.6679,
-      "y": -12.689,
+      "x": 2.5998,
+      "y": -12.9517,
       "yaw": 2.887123648649
     },
     "zone_B_slot_4_exit": {
-      "x": 3.6357,
-      "y": -12.9407,
+      "x": 3.5676,
+      "y": -13.2034,
       "yaw": 2.887123648649
     },
     "zone_B_slot_5_staging": {
-      "x": 3.0639,
-      "y": -13.2007,
+      "x": 2.9958,
+      "y": -13.4634,
       "yaw": 2.887123648649
     },
     "zone_B_slot_5_release": {
-      "x": 2.58,
-      "y": -13.0748,
+      "x": 2.5119,
+      "y": -13.3375,
       "yaw": 2.887123648649
     },
     "zone_B_slot_5_exit": {
-      "x": 3.5478,
-      "y": -13.3265,
+      "x": 3.4797,
+      "y": -13.5892,
       "yaw": 2.887123648649
     },
     "zone_C_slot_1_staging": {
-      "x": -2.1449,
-      "y": -10.6397,
+      "x": -2.3626,
+      "y": -10.5018,
       "yaw": 1.037598240311
     },
     "zone_C_slot_1_release": {
-      "x": -1.8908,
-      "y": -10.2091,
+      "x": -2.1085,
+      "y": -10.0712,
       "yaw": 1.037598240311
     },
     "zone_C_slot_1_exit": {
-      "x": -2.3991,
-      "y": -11.0703,
+      "x": -2.6168,
+      "y": -10.9324,
       "yaw": 1.037598240311
     },
     "zone_C_slot_2_staging": {
-      "x": -1.9755,
-      "y": -10.8285,
+      "x": -2.1932,
+      "y": -10.6906,
       "yaw": 1.037598240311
     },
     "zone_C_slot_2_release": {
-      "x": -1.7214,
-      "y": -10.3979,
+      "x": -1.9391,
+      "y": -10.26,
       "yaw": 1.037598240311
     },
     "zone_C_slot_2_exit": {
-      "x": -2.2297,
-      "y": -11.2591,
+      "x": -2.4474,
+      "y": -11.1212,
       "yaw": 1.037598240311
     },
     "zone_C_slot_3_staging": {
-      "x": -1.7821,
-      "y": -11.1073,
+      "x": -1.9998,
+      "y": -10.9694,
       "yaw": 1.037598240311
     },
     "zone_C_slot_3_release": {
-      "x": -1.528,
-      "y": -10.6767,
+      "x": -1.7457,
+      "y": -10.5388,
       "yaw": 1.037598240311
     },
     "zone_C_slot_3_exit": {
-      "x": -2.0363,
-      "y": -11.5379,
+      "x": -2.254,
+      "y": -11.4,
       "yaw": 1.037598240311
     },
     "zone_C_slot_4_staging": {
-      "x": -1.6337,
-      "y": -11.3439,
+      "x": -1.8514,
+      "y": -11.206,
       "yaw": 1.037598240311
     },
     "zone_C_slot_4_release": {
-      "x": -1.3796,
-      "y": -10.9133,
+      "x": -1.5973,
+      "y": -10.7754,
       "yaw": 1.037598240311
     },
     "zone_C_slot_4_exit": {
-      "x": -1.8879,
-      "y": -11.7745,
+      "x": -2.1056,
+      "y": -11.6366,
       "yaw": 1.037598240311
     },
     "zone_C_slot_5_staging": {
-      "x": -1.9943,
-      "y": -11.1435,
+      "x": -2.212,
+      "y": -11.0056,
       "yaw": 1.037598240311
     },
     "zone_C_slot_5_release": {
-      "x": -1.7402,
-      "y": -10.7129,
+      "x": -1.9579,
+      "y": -10.575,
       "yaw": 1.037598240311
     },
     "zone_C_slot_5_exit": {
-      "x": -2.2485,
-      "y": -11.5741,
+      "x": -2.4662,
+      "y": -11.4362,
       "yaw": 1.037598240311
     }
   },
@@ -18754,18 +18954,18 @@
       "zone": "B",
       "slot_number": 1,
       "staging_pose": {
-        "x": 2.6222,
-        "y": -13.5103,
+        "x": 2.5541,
+        "y": -13.773,
         "yaw": 2.887123648649
       },
       "release_pose": {
-        "x": 2.1383,
-        "y": -13.3844,
+        "x": 2.0702,
+        "y": -13.6471,
         "yaw": 2.887123648649
       },
       "exit_pose": {
-        "x": 3.1061,
-        "y": -13.6361,
+        "x": 3.038,
+        "y": -13.8988,
         "yaw": 2.887123648649
       },
       "exit_direction": "reverse",
@@ -18776,18 +18976,18 @@
       "zone": "B",
       "slot_number": 2,
       "staging_pose": {
-        "x": 2.8013,
-        "y": -13.3023,
+        "x": 2.7332,
+        "y": -13.565,
         "yaw": 2.887123648649
       },
       "release_pose": {
-        "x": 2.3174,
-        "y": -13.1764,
+        "x": 2.2493,
+        "y": -13.4391,
         "yaw": 2.887123648649
       },
       "exit_pose": {
-        "x": 3.2852,
-        "y": -13.4281,
+        "x": 3.2171,
+        "y": -13.6908,
         "yaw": 2.887123648649
       },
       "exit_direction": "reverse",
@@ -18798,18 +18998,18 @@
       "zone": "B",
       "slot_number": 3,
       "staging_pose": {
-        "x": 2.9961,
-        "y": -13.0239,
+        "x": 2.928,
+        "y": -13.2866,
         "yaw": 2.887123648649
       },
       "release_pose": {
-        "x": 2.5122,
-        "y": -12.898,
+        "x": 2.4441,
+        "y": -13.1607,
         "yaw": 2.887123648649
       },
       "exit_pose": {
-        "x": 3.48,
-        "y": -13.1497,
+        "x": 3.4119,
+        "y": -13.4124,
         "yaw": 2.887123648649
       },
       "exit_direction": "reverse",
@@ -18820,18 +19020,18 @@
       "zone": "B",
       "slot_number": 4,
       "staging_pose": {
-        "x": 3.1518,
-        "y": -12.8149,
+        "x": 3.0837,
+        "y": -13.0776,
         "yaw": 2.887123648649
       },
       "release_pose": {
-        "x": 2.6679,
-        "y": -12.689,
+        "x": 2.5998,
+        "y": -12.9517,
         "yaw": 2.887123648649
       },
       "exit_pose": {
-        "x": 3.6357,
-        "y": -12.9407,
+        "x": 3.5676,
+        "y": -13.2034,
         "yaw": 2.887123648649
       },
       "exit_direction": "reverse",
@@ -18842,18 +19042,18 @@
       "zone": "B",
       "slot_number": 5,
       "staging_pose": {
-        "x": 3.0639,
-        "y": -13.2007,
+        "x": 2.9958,
+        "y": -13.4634,
         "yaw": 2.887123648649
       },
       "release_pose": {
-        "x": 2.58,
-        "y": -13.0748,
+        "x": 2.5119,
+        "y": -13.3375,
         "yaw": 2.887123648649
       },
       "exit_pose": {
-        "x": 3.5478,
-        "y": -13.3265,
+        "x": 3.4797,
+        "y": -13.5892,
         "yaw": 2.887123648649
       },
       "exit_direction": "reverse",
@@ -18864,18 +19064,18 @@
       "zone": "C",
       "slot_number": 1,
       "staging_pose": {
-        "x": -2.1449,
-        "y": -10.6397,
+        "x": -2.3626,
+        "y": -10.5018,
         "yaw": 1.037598240311
       },
       "release_pose": {
-        "x": -1.8908,
-        "y": -10.2091,
+        "x": -2.1085,
+        "y": -10.0712,
         "yaw": 1.037598240311
       },
       "exit_pose": {
-        "x": -2.3991,
-        "y": -11.0703,
+        "x": -2.6168,
+        "y": -10.9324,
         "yaw": 1.037598240311
       },
       "exit_direction": "reverse",
@@ -18886,18 +19086,18 @@
       "zone": "C",
       "slot_number": 2,
       "staging_pose": {
-        "x": -1.9755,
-        "y": -10.8285,
+        "x": -2.1932,
+        "y": -10.6906,
         "yaw": 1.037598240311
       },
       "release_pose": {
-        "x": -1.7214,
-        "y": -10.3979,
+        "x": -1.9391,
+        "y": -10.26,
         "yaw": 1.037598240311
       },
       "exit_pose": {
-        "x": -2.2297,
-        "y": -11.2591,
+        "x": -2.4474,
+        "y": -11.1212,
         "yaw": 1.037598240311
       },
       "exit_direction": "reverse",
@@ -18908,18 +19108,18 @@
       "zone": "C",
       "slot_number": 3,
       "staging_pose": {
-        "x": -1.7821,
-        "y": -11.1073,
+        "x": -1.9998,
+        "y": -10.9694,
         "yaw": 1.037598240311
       },
       "release_pose": {
-        "x": -1.528,
-        "y": -10.6767,
+        "x": -1.7457,
+        "y": -10.5388,
         "yaw": 1.037598240311
       },
       "exit_pose": {
-        "x": -2.0363,
-        "y": -11.5379,
+        "x": -2.254,
+        "y": -11.4,
         "yaw": 1.037598240311
       },
       "exit_direction": "reverse",
@@ -18930,18 +19130,18 @@
       "zone": "C",
       "slot_number": 4,
       "staging_pose": {
-        "x": -1.6337,
-        "y": -11.3439,
+        "x": -1.8514,
+        "y": -11.206,
         "yaw": 1.037598240311
       },
       "release_pose": {
-        "x": -1.3796,
-        "y": -10.9133,
+        "x": -1.5973,
+        "y": -10.7754,
         "yaw": 1.037598240311
       },
       "exit_pose": {
-        "x": -1.8879,
-        "y": -11.7745,
+        "x": -2.1056,
+        "y": -11.6366,
         "yaw": 1.037598240311
       },
       "exit_direction": "reverse",
@@ -18952,18 +19152,18 @@
       "zone": "C",
       "slot_number": 5,
       "staging_pose": {
-        "x": -1.9943,
-        "y": -11.1435,
+        "x": -2.212,
+        "y": -11.0056,
         "yaw": 1.037598240311
       },
       "release_pose": {
-        "x": -1.7402,
-        "y": -10.7129,
+        "x": -1.9579,
+        "y": -10.575,
         "yaw": 1.037598240311
       },
       "exit_pose": {
-        "x": -2.2485,
-        "y": -11.5741,
+        "x": -2.4662,
+        "y": -11.4362,
         "yaw": 1.037598240311
       },
       "exit_direction": "reverse",
@@ -18979,5 +19179,6 @@
     "worst_time_multiplier": 1.7,
     "dynamic_delay_sec": 5.0,
     "hard_timeout_sec": 55.0
-  }
+  },
+  "observations_updated_at": "2026-10-15T07:12:35.440740+00:00"
 }

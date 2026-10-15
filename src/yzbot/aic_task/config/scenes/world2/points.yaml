@@ -5,7 +5,7 @@
 #
 # 与 v1 场景的区别：物块位置、区域位置、小车初始位置**全部不同**（都在房间下半部）：
 #   初始  (-0.884483, -11.938343, yaw -0.007388)
-#   区域  A(-0.933257, -9.430909)  B(2.032836, -12.909407)  C(-1.410625, -10.243129)
+#   区域  A(-0.933257, -9.430909)  B(1.964742, -13.172080)  C(-1.628323, -10.105190)   ← B/C 于 2026-10-15 平移（原值见 git 历史）
 #   物块  8 个，Y 约 -7.8 ~ -14.2
 #   （v1 是：初始(0,0,0)、区域 A(4.388,-1.533)/B(-5.193,3.483)/C(7.000,3.096)、物块 Y 约 -5.1~4.2）
 #   地图两者相同（mapn3），所以本文件只切"场景布局"。
@@ -135,75 +135,75 @@ zones:
         yaw: -2.129825286209
         exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.0753, y: -8.1203}}
   B:
-    position: {x: 2.032836, y: -12.909407, z: 0.010000, zone_yaw: -1.824446, region_yaw: -1.824446, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
-    parking: {x: 2.220010, y: -12.581897, yaw: -1.824446, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}
+    position: {x: 1.964742, y: -13.172080, z: 0.010000, zone_yaw: -1.824446, region_yaw: -1.824446, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    parking: {x: 2.151916, y: -12.844570, yaw: -1.824446, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}
     description: "Zone B"
     placement_slots:
       - id: B1
-        drop: {x: 1.7506, y: -13.2860, z: 0.0140}
-        staging: {x: 2.6222, y: -13.5103}
-        release: {x: 2.1383, y: -13.3844}
+        drop: {x: 1.6825, y: -13.5487, z: 0.0140}
+        staging: {x: 2.5541, y: -13.7730}
+        release: {x: 2.0702, y: -13.6471}
         yaw: 2.887123648649
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.1061, y: -13.6361}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.0380, y: -13.8988}}
       - id: B2
-        drop: {x: 1.9297, y: -13.0780, z: 0.0140}
-        staging: {x: 2.8013, y: -13.3023}
-        release: {x: 2.3174, y: -13.1764}
+        drop: {x: 1.8616, y: -13.3407, z: 0.0140}
+        staging: {x: 2.7332, y: -13.5650}
+        release: {x: 2.2493, y: -13.4391}
         yaw: 2.887123648649
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.2852, y: -13.4281}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.2171, y: -13.6908}}
       - id: B3
-        drop: {x: 2.1245, y: -12.7996, z: 0.0140}
-        staging: {x: 2.9961, y: -13.0239}
-        release: {x: 2.5122, y: -12.8980}
+        drop: {x: 2.0564, y: -13.0623, z: 0.0140}
+        staging: {x: 2.9280, y: -13.2866}
+        release: {x: 2.4441, y: -13.1607}
         yaw: 2.887123648649
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.4800, y: -13.1497}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.4119, y: -13.4124}}
       - id: B4
-        drop: {x: 2.2802, y: -12.5906, z: 0.0140}
-        staging: {x: 3.1518, y: -12.8149}
-        release: {x: 2.6679, y: -12.6890}
+        drop: {x: 2.2121, y: -12.8533, z: 0.0140}
+        staging: {x: 3.0837, y: -13.0776}
+        release: {x: 2.5998, y: -12.9517}
         yaw: 2.887123648649
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.6357, y: -12.9407}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.5676, y: -13.2034}}
       - id: B5
-        drop: {x: 2.1923, y: -12.9764, z: 0.0144}
-        staging: {x: 3.0639, y: -13.2007}
-        release: {x: 2.5800, y: -13.0748}
+        drop: {x: 2.1242, y: -13.2391, z: 0.0144}
+        staging: {x: 2.9958, y: -13.4634}
+        release: {x: 2.5119, y: -13.3375}
         yaw: 2.887123648649
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.5478, y: -13.3265}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.4797, y: -13.5892}}
   C:
-    position: {x: -1.410625, y: -10.243129, z: 0.010000, zone_yaw: -0.564777, region_yaw: -0.564777, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
-    parking: {x: -1.860276, y: -10.018595, yaw: -0.564777, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.2617993877991494}
+    position: {x: -1.628323, y: -10.105190, z: 0.010000, zone_yaw: -0.564777, region_yaw: -0.564777, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    parking: {x: -2.077974, y: -9.880656, yaw: -0.564777, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.2617993877991494}
     description: "Zone C"
     placement_slots:
       - id: C1
-        drop: {x: -1.6880, y: -9.8643, z: 0.0140}
-        staging: {x: -2.1449, y: -10.6397}
-        release: {x: -1.8908, y: -10.2091}
+        drop: {x: -1.9057, y: -9.7264, z: 0.0140}
+        staging: {x: -2.3626, y: -10.5018}
+        release: {x: -2.1085, y: -10.0712}
         yaw: 1.037598240311
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.3991, y: -11.0703}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.6168, y: -10.9324}}
       - id: C2
-        drop: {x: -1.5186, y: -10.0531, z: 0.0140}
-        staging: {x: -1.9755, y: -10.8285}
-        release: {x: -1.7214, y: -10.3979}
+        drop: {x: -1.7363, y: -9.9152, z: 0.0140}
+        staging: {x: -2.1932, y: -10.6906}
+        release: {x: -1.9391, y: -10.2600}
         yaw: 1.037598240311
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.2297, y: -11.2591}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.4474, y: -11.1212}}
       - id: C3
-        drop: {x: -1.3252, y: -10.3319, z: 0.0140}
-        staging: {x: -1.7821, y: -11.1073}
-        release: {x: -1.5280, y: -10.6767}
+        drop: {x: -1.5429, y: -10.1940, z: 0.0140}
+        staging: {x: -1.9998, y: -10.9694}
+        release: {x: -1.7457, y: -10.5388}
         yaw: 1.037598240311
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.0363, y: -11.5379}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.2540, y: -11.4000}}
       - id: C4
-        drop: {x: -1.1768, y: -10.5685, z: 0.0140}
-        staging: {x: -1.6337, y: -11.3439}
-        release: {x: -1.3796, y: -10.9133}
+        drop: {x: -1.3945, y: -10.4306, z: 0.0140}
+        staging: {x: -1.8514, y: -11.2060}
+        release: {x: -1.5973, y: -10.7754}
         yaw: 1.037598240311
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -1.8879, y: -11.7745}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.1056, y: -11.6366}}
       - id: C5
-        drop: {x: -1.5374, y: -10.3681, z: 0.0145}
-        staging: {x: -1.9943, y: -11.1435}
-        release: {x: -1.7402, y: -10.7129}
+        drop: {x: -1.7551, y: -10.2302, z: 0.0145}
+        staging: {x: -2.2120, y: -11.0056}
+        release: {x: -1.9579, y: -10.5750}
         yaw: 1.037598240311
-        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.2485, y: -11.5741}}
+        exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.4662, y: -11.4362}}
 
 dynamic_obstacles:
   - name: moving_box_1

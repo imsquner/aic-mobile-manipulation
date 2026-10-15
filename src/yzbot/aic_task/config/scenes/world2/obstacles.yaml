@@ -10,10 +10,10 @@ dynamic_obstacles:
   safety_radius_m: 0.65
   motion:
     type: sine_x
-    center_x: 3.224256136948969
+    center_x: 3.3605
     center_y: -11.412427419154039
-    amplitude_m: 0.6
-    omega_rad_s: 0.3141592653589793
+    amplitude_m: 1.3615
+    omega_rad_s: 0.6283185307179586
     phase_rad: 0.0
 - name: moving_box_2
   dimensions:
