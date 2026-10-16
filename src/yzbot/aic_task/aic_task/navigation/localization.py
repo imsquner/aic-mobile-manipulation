@@ -155,7 +155,15 @@ class LocalizationMixin:
             if publish_initial and now >= next_publish and (not amcl or amcl["sequence"] <= sequence):
                 message = PoseWithCovarianceStamped()
                 message.header.frame_id = "map"
-                message.header.stamp = self.get_clock().now().to_msg()
+                # Plan G fix 2 (2026-10-16): stamping this with "now" makes AMCL look up a transform
+                # the TF buffer has not produced yet ("Failed to transform initial pose in time ...
+                # extrapolation into the future"), so the reset's initial pose was silently dropped
+                # and the gate then timed out with LOC_NO_NEW_AMCL (5 of the 10 reset failures in the
+                # 54-round run). A zero stamp means "latest available" for tf2, which is what AMCL
+                # should use; the freshness epoch below still uses the real publish time.
+                publish_ns = self.get_clock().now().nanoseconds
+                message.header.stamp.sec = 0
+                message.header.stamp.nanosec = 0
                 message.pose.pose.position.x, message.pose.pose.position.y = target_pose[:2]
                 message.pose.pose.orientation.z = math.sin(target_pose[2]/2)
                 message.pose.pose.orientation.w = math.cos(target_pose[2]/2)
@@ -163,7 +171,7 @@ class LocalizationMixin:
                 if first_publish:
                     with self._reset_amcl_lock:
                         sequence = self._reset_amcl_sequence
-                    epoch.update(started_ns=message.header.stamp.sec*10**9+message.header.stamp.nanosec,
+                    epoch.update(started_ns=publish_ns,
                                  started_mono=time.monotonic(), amcl_sequence=sequence)
                     gate = self._new_reset_localization_gate(target_pose, epoch["started_ns"], epoch["started_mono"],
                         sequence, stable_sec=self._reset_localization_stable if stable_sec is None else stable_sec,
