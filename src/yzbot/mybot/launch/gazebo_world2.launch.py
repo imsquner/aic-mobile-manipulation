@@ -73,7 +73,7 @@ def generate_launch_description():
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        parameters=[{'use_sim_time': True}, params, {"publish_frequency": 15.0}],
+        parameters=[{'use_sim_time': True}, params, {"publish_frequency": 50.0}],
         output='screen'
     )
 
