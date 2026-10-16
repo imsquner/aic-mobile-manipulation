@@ -5,7 +5,9 @@
 #
 # 与 v1 场景的区别：物块位置、区域位置、小车初始位置**全部不同**（都在房间下半部）：
 #   初始  (-0.884483, -11.938343, yaw -0.007388)
-#   区域  A(-0.933257, -9.430909)  B(1.964742, -13.172080)  C(-1.628323, -10.105190)   ← B/C 于 2026-10-15 平移（原值见 git 历史）
+#   区域  A(-0.933257, -9.430909)  B(1.889516, -13.462265)  C(-1.784860, -10.006005)
+#         （B/C 于 2026-10-15 首移、2026-10-16 按老板给的坐标再移；原值见 git 历史。
+#          本次只移动 zones.*.position 与 entities 的区域牌，parking/placement_slots 一律未动。）
 #   物块  8 个，Y 约 -7.8 ~ -14.2
 #   （v1 是：初始(0,0,0)、区域 A(4.388,-1.533)/B(-5.193,3.483)/C(7.000,3.096)、物块 Y 约 -5.1~4.2）
 #   地图两者相同（mapn3），所以本文件只切"场景布局"。
@@ -135,7 +137,7 @@ zones:
         yaw: -2.129825286209
         exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -0.0753, y: -8.1203}}
   B:
-    position: {x: 1.964742, y: -13.172080, z: 0.010000, zone_yaw: -1.824446, region_yaw: -1.824446, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    position: {x: 1.889516, y: -13.462265, z: 0.010000, zone_yaw: -1.824446, region_yaw: -1.824446, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
     parking: {x: 2.151916, y: -12.844570, yaw: -1.824446, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.17453292519943295}
     description: "Zone B"
     placement_slots:
@@ -170,7 +172,7 @@ zones:
         yaw: 2.887123648649
         exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: 3.4797, y: -13.5892}}
   C:
-    position: {x: -1.628323, y: -10.105190, z: 0.010000, zone_yaw: -0.564777, region_yaw: -0.564777, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
+    position: {x: -1.784860, y: -10.006005, z: 0.010000, zone_yaw: -0.564777, region_yaw: -0.564777, size_x_m: 1.0, size_y_m: 0.5, placement_lateral_bias_m: 0.0}
     parking: {x: -2.077974, y: -9.880656, yaw: -0.564777, xy_tolerance_m: 0.10, yaw_tolerance_rad: 0.2617993877991494}
     description: "Zone C"
     placement_slots:
@@ -204,13 +206,3 @@ zones:
         release: {x: -1.9579, y: -10.5750}
         yaw: 1.037598240311
         exit: {direction: reverse, max_distance_m: 1.0, nominal_distance_m: 1.0, endpoint: {x: -2.4662, y: -11.4362}}
-
-dynamic_obstacles:
-  - name: moving_box_1
-    z: 0.25
-    safety_radius_m: 0.65
-    motion: {type: sine_x, center_x: 0.353, center_y: -3.460, amplitude_m: 1.2, omega_rad_s: 0.125, phase_rad: 0.0}
-  - name: moving_box_2
-    z: 0.25
-    safety_radius_m: 0.65
-    motion: {type: sine_x, center_x: -0.595, center_y: 0.906, amplitude_m: 0.6, omega_rad_s: 0.25, phase_rad: 1.5707963268}

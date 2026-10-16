@@ -27,6 +27,6 @@ dynamic_obstacles:
     type: sine_x
     center_x: 1.1078511389451806
     center_y: -9.806014073377924
-    amplitude_m: 0.3
-    omega_rad_s: 0.3141592653589793
+    amplitude_m: 0.15
+    omega_rad_s: 0.6283185307179586
     phase_rad: 0.0

@@ -3,6 +3,9 @@
 import math
 import time
 from dataclasses import replace
+from pathlib import Path
+
+import yaml
 
 from nav2_msgs.action import ComputePathToPose
 
@@ -454,6 +457,65 @@ class AllocationMixin:
         )
         return selected
 
+    # 2026-10-16 老板要求：把移动障碍物的行驶路径当"墙"，不允许把停车点选在路径上。
+    # 禁止带半宽 = 障碍安全半径(obstacles.yaml) + 机器人半径 + 余量。
+    MOVING_OBSTACLE_ROBOT_RADIUS_M = 0.30
+    MOVING_OBSTACLE_MARGIN_M = 0.05
+
+    def _moving_obstacle_corridors(self):
+        """`[(x_min, x_max, y, safety_radius_m), ...]` for the scene's `sine_x` obstacles.
+
+        Read from `obstacles.yaml` next to the active scene `points_file`. Any failure is reported
+        and then degrades to "no corridor" (fail-open) so a missing/renamed config can never block
+        picking; the event makes the degradation visible instead of silent.
+        """
+        cached = getattr(self, "_moving_corridors", None)
+        if cached is not None:
+            return cached
+        corridors = []
+        try:
+            points_file = getattr(self, "points_file", None)
+            if not points_file:
+                raise RuntimeError("points_file unavailable")
+            path = Path(points_file).parent / "obstacles.yaml"
+            data = yaml.safe_load(Path(path).read_text()) or {}
+            for obstacle in data.get("dynamic_obstacles", []) or []:
+                motion = obstacle.get("motion") or {}
+                if motion.get("type") != "sine_x":
+                    continue
+                center_x = float(motion["center_x"])
+                amplitude = abs(float(motion["amplitude_m"]))
+                corridors.append((
+                    center_x - amplitude,
+                    center_x + amplitude,
+                    float(motion["center_y"]),
+                    float(obstacle.get("safety_radius_m", 0.0)),
+                ))
+        except Exception as exc:  # noqa: BLE001 - never block picking on a config problem
+            self._event("moving_obstacle_corridor_unavailable", reason=str(exc))
+            corridors = []
+        self._moving_corridors = corridors
+        return corridors
+
+    def _moving_obstacle_clearance(self, x, y):
+        """False when (x, y) is inside a moving obstacle's swept corridor.
+
+        A `sine_x` obstacle sweeps one straight segment; parking within
+        `safety_radius + robot_radius + margin` of that segment means the box can reach the robot.
+        Distance is measured to the segment (not an infinite band) so only the range the box
+        actually travels is refused.
+        """
+        for x_min, x_max, corridor_y, safety in self._moving_obstacle_corridors():
+            if x_min <= x <= x_max:
+                distance = abs(y - corridor_y)
+            else:
+                nearest = x_min if x < x_min else x_max
+                distance = math.hypot(x - nearest, y - corridor_y)
+            if distance < (safety + self.MOVING_OBSTACLE_ROBOT_RADIUS_M
+                           + self.MOVING_OBSTACLE_MARGIN_M):
+                return False
+        return True
+
     def _object_circle_candidates(self, object_position, fallback_parking, radius_m):
         """Return two path-ranked circle goals without approaching through cargo."""
         current_pose = self._base_pose("map")
@@ -467,6 +529,7 @@ class AllocationMixin:
             candidate_count=self.object_circle_candidate_count,
         )
         accepted = []
+        corridor_rejected = 0
         for candidate in generated:
             path_clearance = segment_point_clearance(
                 current_pose, (candidate["x"], candidate["y"]), object_xy
@@ -477,6 +540,9 @@ class AllocationMixin:
                 candidate["x"], candidate["y"], self.object_circle_map_clearance
             ):
                 continue
+            if not self._moving_obstacle_clearance(candidate["x"], candidate["y"]):
+                corridor_rejected += 1
+                continue
             parking = dict(candidate)
             parking["xy_tolerance_m"] = 0.10
             parking["yaw_tolerance_rad"] = float(
@@ -484,11 +550,23 @@ class AllocationMixin:
             )
             parking["path_cube_clearance_m"] = path_clearance
             accepted.append(parking)
+        if corridor_rejected:
+            # 绝不静默：把"被移动障碍走廊排除掉的候选数"写进事件，便于复盘与验收。
+            self._event(
+                "object_circle_candidates_forbidden",
+                reason="moving obstacle corridor excluded candidate parking poses",
+                object_x=float(object_position["x"]),
+                object_y=float(object_position["y"]),
+                candidate_count=len(generated),
+                corridor_rejected=corridor_rejected,
+                accepted_count=len(accepted),
+            )
         if accepted:
             return self._rank_object_circle_candidates(accepted)
         self._event(
             "object_circle_candidates_degraded",
             reason="no map-clear circle candidate; using configured parking",
             candidate_count=len(generated),
+            corridor_rejected=corridor_rejected,
         )
         return [dict(fallback_parking)]

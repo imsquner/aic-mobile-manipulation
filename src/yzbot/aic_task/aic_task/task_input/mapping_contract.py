@@ -27,6 +27,21 @@ def _normalise_zone(value: Any) -> str:
     return value if value in {"A", "B", "C"} else ""
 
 
+def _strip_clause_noise(clause: str) -> str:
+    """Drop list numbering and edge quotes an operator copies along with the question text.
+
+    The competition mapping sentence is published inside the question, often as a numbered,
+    quoted fragment (e.g. `2."xy 中` or a trailing `"`). Those decorations carry no mapping
+    meaning, so they are removed *before* the grammar is applied. Nothing else is relaxed:
+    a clause that still fails to match raises as before (fail-closed).
+    """
+    value = str(clause or "").strip()
+    for _ in range(2):
+        value = re.sub(r"^\(?\d+\)?\s*[.、)）:：]?\s*", "", value)
+        value = value.strip("\"'“”‘’[]【】()（）").strip()
+    return value
+
+
 def _compile_mapping(mapping_text: str) -> dict:
     text = unicodedata.normalize("NFKC", str(mapping_text or "")).lower()
     text = text.replace("≥", ">=").replace("＜", "<")
@@ -45,7 +60,8 @@ def _compile_mapping(mapping_text: str) -> dict:
         target[key] = value
 
     for clause in clauses:
-        if clause == "xy中":
+        clause = _strip_clause_noise(clause)
+        if not clause or clause == "xy中":
             continue
         m = re.fullmatch(rf"({VARIABLE})(?:represents?|means?|mapsto|代表|对应|映射为|为)({COLOR})", clause)
         if m:
