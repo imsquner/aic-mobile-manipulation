@@ -474,13 +474,6 @@ def handoff_then_dock(
             cube=cube_id,
             reason=blocked,
             handoff_reason=handoff.reason,
-            # 2026-10-16 Plan I instrument: the failing attempts never logged how far the robot
-            # actually was from the cube, so "why did we not enter the handoff band" could not be
-            # measured. `target` is the resampled (or original) visual sample for this attempt.
-            distance_m=None if not target else target.get("distance_m"),
-            sample_valid=None if not target else bool(target.get("valid")),
-            handoff_min_m=handoff_min_m,
-            handoff_max_m=handoff_max_m,
             velocity_chain_states=(
                 velocity_chain_states() if velocity_chain_states is not None else None
             ),

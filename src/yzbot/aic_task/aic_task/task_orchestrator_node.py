@@ -924,10 +924,6 @@ class TaskOrchestratorNode(
         self._grasp_abort_client = self.create_client(
             Trigger, "/competition/abort_pick", callback_group=self._cbg
         )
-        self.declare_parameter('dynamic_obstacle_names', '')
-        self._dynamic_obstacle_names = tuple(v for v in str(self.get_parameter('dynamic_obstacle_names').value).split(',') if v)
-        self._dynamic_obstacles_enabled = bool(self._dynamic_obstacle_names)
-        self._dynamic_reset_client = self.create_client(Trigger, '/competition/reset_dynamic_obstacles', callback_group=self._cbg)
         self._tf_buffer = Buffer()
         self._tf_listener = TransformListener(self._tf_buffer, self)
 
@@ -945,12 +941,6 @@ class TaskOrchestratorNode(
         self.pub_step = self.create_publisher(String, "/competition/current_step", view_qos)
         self.pub_attachment = self.create_publisher(String, "/competition/attachment_state", view_qos)
         self.pub_updated = self.create_publisher(String, "/competition/state_updated", view_qos)
-        self.pub_reset_progress = self.create_publisher(String, "/competition/reset_progress", view_qos)
-        self.pub_reset_result = self.create_publisher(String, "/competition/reset_result", view_qos)
-        self.pub_reset_summary = self.create_publisher(String, "/competition/reset_summary", view_qos)
-        self.create_subscription(PoseWithCovarianceStamped, "/amcl_pose", self._on_reset_amcl,
-                                 QoSProfile(depth=10, reliability=ReliabilityPolicy.BEST_EFFORT),
-                                 callback_group=self._cbg)
         self.create_subscription(String, "/competition/grasp_execution_status", self._on_grasp_execution, view_qos,
                                  callback_group=self._cbg)
         self.create_subscription(String, "/competition/pick_sequence_status", self._on_pick_status, 10,

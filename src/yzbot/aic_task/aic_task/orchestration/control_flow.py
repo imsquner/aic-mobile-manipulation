@@ -22,19 +22,6 @@ class ControlInterrupted(RuntimeError):
 
 class ControlFlowMixin:
     def _init_control_flow(self, config):
-        from uuid import uuid4
-        self._reset_boot_id = uuid4().hex
-        self._reset_event_sequence = 0
-        self._reset_localization_timeout = max(.1, float(config.get('reset_localization_timeout_sec', 3.0)))
-        self._reset_localization_stable = max(.1, float(config.get('reset_localization_stable_sec', .5)))
-        self._reset_localization_samples = max(2, int(config.get('reset_localization_min_samples', 5)))
-        self._reset_amcl_lock = threading.Lock()
-        self._reset_amcl_sequence = 0
-        self._latest_reset_amcl = None
-        self._reset_localization_epoch = None
-        self._reset_localization_evidence = None
-        self._reset_scene_evidence = None
-        self._reset_dynamic_evidence = None
         self._control_lock = threading.RLock()
         self._motion_command_lock = threading.RLock()
         self._control_mode = None
@@ -63,65 +50,6 @@ class ControlFlowMixin:
             'pose': max(1.0, float(config.get('pose_timeout_sec', 15.0))),
         }
 
-    def _reset_id(self):
-        return f"{self._reset_boot_id}:{self._control_generation}"
-
-    def _publish_reset_progress(self):
-        if self._control_mode != 'reset':
-            return
-        if self._is_control_worker() and getattr(self._control_local, 'generation', None) != self._control_generation:
-            return
-        self._reset_event_sequence += 1
-        payload = {'reset_id': self._reset_id(), 'sequence': self._reset_event_sequence,
-                   'state': 'RESETTING', 'phase': self._step_text,
-                   'monotonic_sec': time.monotonic()}
-        if hasattr(self, 'pub_reset_progress'):
-            self.pub_reset_progress.publish(String(data=json.dumps(payload, ensure_ascii=False)))
-        if hasattr(self, 'pub_reset_summary'):
-            self.pub_reset_summary.publish(String(data='复位中：' + self._step_text))
-
-    def _publish_reset_result(self, success, evidence, reason=''):
-        if self._control_mode != 'reset' or getattr(self._control_local, 'generation', None) != self._control_generation:
-            return None
-        payload = {'reset_id': self._reset_id(), 'success': bool(success),
-                   'state': 'READY' if success else 'RESET_FAILED',
-                   'failed_phase': '' if success else self._step_text,
-                   'error': '' if success else str(reason),
-                   'counts': {'completed': self.completed_count,
-                              'failed': getattr(self, 'failed_count', 0),
-                              'total': len(self.expanded_items)},
-                   'elapsed_seconds': 0.0 if success else (getattr(self, '_frozen_elapsed', None) or 0.0),
-                   'current_target': getattr(self, '_active_cube_id', None),
-                   'physical': {'verified': self._reset_scene_verified,
-                                'evidence': self._reset_scene_evidence,
-                                'dynamic_obstacles': getattr(self, '_reset_dynamic_evidence', None)},
-                   'localization': evidence, 'monotonic_sec': time.monotonic()}
-        if hasattr(self, 'pub_reset_result'):
-            self.pub_reset_result.publish(String(data=json.dumps(payload, ensure_ascii=False)))
-        if hasattr(self, 'pub_reset_summary'):
-            text = '复位完成：位置、定位与机械臂已核验' if success else '复位失败：' + str(reason)
-            self.pub_reset_summary.publish(String(data=text))
-        self._event('reset_result', **payload)
-        return payload
-
-    def _reset_dynamic_obstacles(self):
-        self._reset_dynamic_evidence = None
-        if not getattr(self, '_dynamic_obstacles_enabled', False):
-            return True
-        self._set_step('移动障碍物归位')
-        reply = self._control_service(self._dynamic_reset_client, 4.0)
-        if reply is None or not reply.success:
-            return False
-        try:
-            evidence = json.loads(reply.message)
-            if evidence.get('verified') is not True or set(evidence.get('obstacles', {})) != set(self._dynamic_obstacle_names):
-                return False
-        except (ValueError, TypeError):
-            return False
-        self._reset_dynamic_evidence = evidence
-        self._event('dynamic_obstacles_reset_verified', **evidence)
-        return True
-
     def _is_control_worker(self):
         return threading.current_thread() is getattr(self, '_control_thread', None)
 
@@ -138,7 +66,6 @@ class ControlFlowMixin:
         if self._control_mode == 'reset' and self.completed_count:
             self._step_text += ' | 计数待清'
         self._publish_operator_view()
-        self._publish_reset_progress()
 
     def _publish_operator_view(self):
         if not hasattr(self, 'pub_step'):
@@ -308,10 +235,6 @@ class ControlFlowMixin:
             if mode == 'cancel' and self.state == TaskState.CANCELLED:
                 return
             self._control_generation += 1
-            self._reset_localization_epoch = None
-            self._reset_localization_evidence = None
-            self._reset_scene_evidence = None
-            self._reset_dynamic_evidence = None
             self._reset_scene_verified = False
             self._control_mode = mode
             self._stop_exec = True
@@ -323,7 +246,6 @@ class ControlFlowMixin:
             self._transition(TaskState.RESETTING if mode == 'reset' else TaskState.CANCELLING,
                              control=True)
             self._step_text = '停止全部动作'
-            self._publish_reset_progress()
             self.pub_navigation.publish(String(data='STOPPING'))
             self.pub_manipulation.publish(String(data='STOPPING'))
             self._cancel_navigation()
@@ -435,10 +357,7 @@ class ControlFlowMixin:
                     scene_ok, detail = self._reset_scene()
                     if not scene_ok:
                         raise RuntimeError('归位未完成: ' + str(detail))
-                    if not self._reset_dynamic_obstacles():
-                        raise RuntimeError('移动障碍物归位未确认')
                     self._reset_scene_verified = True
-                    self._reset_scene_evidence = detail
                 if not self._recover_recognition_pose():
                     raise RuntimeError('识别姿态未确认')
                 self._set_step('恢复导航环境')
@@ -448,12 +367,6 @@ class ControlFlowMixin:
                     self._publish_placed_cargo_obstacles()
                 if mode == 'reset' and not self._clear_navigation_costmaps():
                     raise RuntimeError('导航地图清理失败')
-                if mode == 'reset':
-                    self._set_step('定位最终核验')
-                    verified, evidence = self._finalize_reset_localization(self._reset_id(), self._reset_localization_evidence)
-                    if not verified:
-                        raise RuntimeError('localization: ' + evidence.get('reason', 'LOC_NOT_STABLE'))
-                    self._reset_localization_evidence = evidence
                 with self._control_lock:
                     self._control_checkpoint()
                     if mode == 'reset':
@@ -466,8 +379,6 @@ class ControlFlowMixin:
                         self._last_reset_finished_at = time.monotonic()
                         self.pub_last_error.publish(String(data=''))
                     self._set_step('复位完成，请出题' if mode == 'reset' else '取消完成，请复位')
-                    if mode == 'reset':
-                        self._publish_reset_result(True, self._reset_localization_evidence)
                     self._transition(TaskState.READY if mode == 'reset' else TaskState.CANCELLED,
                                      control=True)
                     self._control_mode = None
@@ -483,8 +394,6 @@ class ControlFlowMixin:
                     self._stop_exec = True
                     self._publish_precision_stop()
                     self.pub_last_error.publish(String(data=str(exc)))
-                    if mode == 'reset':
-                        self._publish_reset_result(False, self._reset_localization_evidence, str(exc))
                     self._set_step(str(exc))
                     self._transition(TaskState.RESET_FAILED if mode == 'reset' else TaskState.CANCEL_FAILED,
                                      control=True)

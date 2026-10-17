@@ -82,11 +82,12 @@ class SceneResetMixin:
             return False, detail
         self._set_step("定位同步")
         self._invalidate_localization_reference("scene_reset")
+        if not self._synchronize_localization_to_gazebo((x, y, 0.0, yaw), timeout=3.0):
+            return False, "localization synchronization failed"
+        consistency = self._localization_consistency()
+        if consistency is None or consistency.get("drifted"):
+            return False, "localization verification failed"
         if not self._wait_for_base_still(frame_id="odom"):
-            return False, "BASE_NOT_STILL"
-        ok, evidence = self._verify_reset_localization(self._reset_id(), (x, y, yaw))
-        self._reset_localization_evidence = evidence
-        if not ok:
-            return False, "localization: " + evidence.get("reason", "LOC_NOT_STABLE")
+            return False, "base did not settle after reset"
         self._event("scene_reset", success=True, cubes_verified=len(cubes), robot_verified=True)
         return True, detail

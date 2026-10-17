@@ -3,22 +3,17 @@
 
 import math
 import time
-import json
-import threading
-from std_msgs.msg import String
-from std_srvs.srv import Trigger
-from rclpy.callback_groups import ReentrantCallbackGroup
-from rclpy.executors import MultiThreadedExecutor
-from rclpy.qos import QoSProfile, DurabilityPolicy, ReliabilityPolicy
-from .obstacle_motion import load_obstacle_motions
 from pathlib import Path
 
 import rclpy
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from rclpy.node import Node
 from gazebo_msgs.srv import SetEntityState
 from gazebo_msgs.msg import EntityState, ModelStates
+from geometry_msgs.msg import Pose, Twist
 
+from aic_task.motion_geometry import farthest_waypoint, has_minimum_clearance
 
 
 def select_obstacle_names(selector, available_names):
@@ -52,135 +47,258 @@ def select_obstacle_names(selector, available_names):
 
 
 class DynamicObstacleController(Node):
-    """Advance by ROS simulation time; reset requires fresh physical proof."""
+    """Moves obstacles along predefined trajectories."""
+
     def __init__(self):
-        super().__init__('dynamic_obstacle_controller')
-        if not self.get_parameter('use_sim_time').value:
-            raise RuntimeError('world2 dynamic obstacles require use_sim_time=true')
-        self.declare_parameter('points_file',str(Path(get_package_share_directory('aic_task'))/'config/scenes/world2/obstacles.yaml'))
-        self.declare_parameter('enabled_obstacles','all')
-        self.declare_parameter('set_entity_service','/set_entity_state')
-        self._cbg=ReentrantCallbackGroup();self._lock=threading.RLock()
-        self.cli=self.create_client(SetEntityState,str(self.get_parameter('set_entity_service').value),callback_group=self._cbg)
-        if not self.cli.wait_for_service(timeout_sec=10.):raise RuntimeError('Gazebo state service unavailable')
-        all_motions=load_obstacle_motions(str(self.get_parameter('points_file').value))
-        names=select_obstacle_names(self.get_parameter('enabled_obstacles').value,all_motions)
-        self.obstacles={n:all_motions[n] for n in names};self._pending={};self._actual={};self._model_sequence=0
-        self._robot_xy=None;self._model_receipt=0.;self._last_sim_ns=None;self._last_status=0.;self._resetting=False;self._failure='';self._enabled=False
-        self.create_subscription(ModelStates,'/gazebo/model_states',self._on_model_states,
-                                 QoSProfile(depth=5,reliability=ReliabilityPolicy.BEST_EFFORT),callback_group=self._cbg)
-        retained=QoSProfile(depth=1,durability=DurabilityPolicy.TRANSIENT_LOCAL)
-        self.create_subscription(String,'/competition/current_state',self._on_system_state,retained,callback_group=self._cbg)
-        self.pub_status=self.create_publisher(String,'/competition/dynamic_obstacles_status',retained)
-        self.create_service(Trigger,'/competition/start_dynamic_obstacles',self._enable,callback_group=self._cbg)
-        self.create_service(Trigger,'/competition/reset_dynamic_obstacles',self._reset,callback_group=self._cbg)
-        self.create_timer(.1,self._update,callback_group=self._cbg)
-        self.get_logger().info('Dynamic obstacle controller configured; awaiting READY: '+str(list(self.obstacles)))
+        super().__init__("dynamic_obstacle_controller")
+        default_points = str(
+            Path(get_package_share_directory("aic_task")) / "config/world2_points.yaml"
+        )
+        self.declare_parameter("set_entity_service", "/set_entity_state")
+        self.declare_parameter("points_file", default_points)
+        self.declare_parameter("enabled_obstacles", "all")
+        self.declare_parameter("service_wait_timeout_sec", 60.0)
+        service_name = self.get_parameter("set_entity_service").value
+        self.cli = self.create_client(SetEntityState, service_name)
+        # Bounded wait: an unbounded loop here looks like "the process is alive
+        # but never ready", which is the hardest possible failure to diagnose
+        # from the launcher side. Fail loudly instead.
+        service_wait_timeout = float(
+            self.get_parameter("service_wait_timeout_sec").value
+        )
+        service_deadline = time.monotonic() + service_wait_timeout
+        while rclpy.ok() and not self.cli.wait_for_service(timeout_sec=1.0):
+            remaining = service_deadline - time.monotonic()
+            if remaining <= 0.0:
+                raise RuntimeError(
+                    f"Gazebo service {service_name} not available after "
+                    f"{service_wait_timeout:.1f}s"
+                )
+            self.get_logger().info(
+                f"Waiting for {service_name}... ({remaining:.0f}s left)"
+            )
+        if not rclpy.ok():
+            raise RuntimeError("ROS shutdown before Gazebo service became available")
 
-    def _on_system_state(self,message):
-        with self._lock:
-            for motion in self.obstacles.values():motion.observe_state(message.data)
+        points_file = Path(str(self.get_parameter("points_file").value))
+        all_obstacles = self._load_obstacles(points_file)
+        enabled_names = select_obstacle_names(
+            self.get_parameter("enabled_obstacles").value,
+            all_obstacles,
+        )
+        self.obstacles = {
+            name: obstacle
+            for name, obstacle in all_obstacles.items()
+            if name in enabled_names
+        }
+        self.disabled_obstacles = {
+            name: obstacle
+            for name, obstacle in all_obstacles.items()
+            if name not in enabled_names
+        }
+        self._pending = {}
+        self._started_at = time.monotonic()
+        self._robot_xy = None
+        self._last_clearance_event = {}
+        self.create_subscription(
+            ModelStates, "/gazebo/model_states", self._on_model_states, 10
+        )
+        self.create_timer(0.1, self._update)
+        for index, (name, obstacle) in enumerate(self.disabled_obstacles.items()):
+            self._set_model_position(
+                name,
+                12.0 + float(index),
+                12.0,
+                obstacle["z"],
+            )
+        self.get_logger().info(
+            f"Dynamic obstacle controller started: points={points_file}, "
+            f"enabled={list(self.obstacles)}, "
+            f"parked={list(self.disabled_obstacles)}"
+        )
 
-    def _on_model_states(self,message):
-        now=time.monotonic()
-        with self._lock:
-            self._model_sequence+=1;self._model_receipt=now
-            if 'six_arm' in message.name:
-                p=message.pose[message.name.index('six_arm')].position;self._robot_xy=(p.x,p.y)
-            else:self._robot_xy=None
-            self._actual={}
-            for name in self.obstacles:
-                if name not in message.name:continue
-                pose=message.pose[message.name.index(name)];p,q=pose.position,pose.orientation
-                self._actual[name]=(p.x,p.y,p.z,math.atan2(2*(q.w*q.z+q.x*q.y),1-2*(q.y*q.y+q.z*q.z)))
+    @staticmethod
+    def _load_obstacles(path):
+        with path.open("r") as handle:
+            config = yaml.safe_load(handle) or {}
+        entries = config.get("dynamic_obstacles", [])
+        if not entries:
+            # Name the file and the key: world2_points.yaml legitimately has no
+            # `dynamic_obstacles:` section, and the old message gave no hint
+            # which of the three points files was at fault.
+            raise RuntimeError(
+                f"{path} defines no dynamic_obstacles; the dynamic obstacle "
+                "node only applies to worlds that declare them "
+                "(world2_points.yaml)"
+            )
 
-    def _status(self):
-        payload={'enabled':self._enabled,'resetting':self._resetting,'failure':self._failure,'sim_ns':self.get_clock().now().nanoseconds,
-                 'obstacles':{n:{'target':(*m.position,m.z,m.yaw),'actual':self._actual.get(n),'elapsed_sim_sec':m.elapsed,
-                                 'state':m.state,'ready':m.ready,'clock_fault':m.clock_fault} for n,m in self.obstacles.items()}}
-        self.pub_status.publish(String(data=json.dumps(payload)))
+        obstacles = {}
+        for entry in entries:
+            name = str(entry["name"])
+            obstacle = {
+                "z": float(entry.get("z", 0.5)),
+                "safety_radius_m": float(entry.get("safety_radius_m", 1.0)),
+            }
+            if "motion" in entry:
+                motion = dict(entry["motion"])
+                if motion.get("type") != "sine_x":
+                    raise RuntimeError(f"Unsupported motion for {name}: {motion!r}")
+                obstacle.update(
+                    motion=motion,
+                    position=[float(motion["center_x"]), float(motion["center_y"])],
+                )
+            else:
+                path_points = [tuple(map(float, point)) for point in entry["path"]]
+                speed = float(entry["speed"])
+                if len(path_points) < 2 or speed <= 0.0:
+                    raise RuntimeError(f"Invalid path or speed for {name}")
+                obstacle.update(
+                    path=path_points,
+                    index=0,
+                    speed=speed,
+                    position=list(path_points[0]),
+                )
+            obstacles[name] = obstacle
+        return obstacles
+
+    def _on_model_states(self, message):
+        try:
+            index = message.name.index("six_arm")
+        except ValueError:
+            return
+        position = message.pose[index].position
+        self._robot_xy = (position.x, position.y)
 
     def _update(self):
-        with self._lock:
-            current=self.get_clock().now().nanoseconds
-            dt=0. if self._last_sim_ns is None else (current-self._last_sim_ns)/1e9
-            self._last_sim_ns=current
-            if self._enabled and not self._resetting and not self._failure:
-                for name,motion in self.obstacles.items():
-                    if name in self._pending:
-                        future=self._pending[name]
-                        if not future.done():continue
-                        if future.exception() is not None or future.result() is None or not future.result().success:
-                            self._failure='Gazebo obstacle update failed';break
-                    if name not in self._actual:continue
-                    before=motion.position
-                    target=motion.advance(dt,self._robot_xy,time.monotonic()-self._model_receipt<1.)
-                    if target!=before:self._set_position(name,motion)
-            if time.monotonic()-self._last_status>=.5:
-                self._last_status=time.monotonic();self._status()
+        for name, obstacle in self.obstacles.items():
+            if "motion" in obstacle:
+                self._move_sine(name, obstacle)
+            else:
+                self._move_along_path(name, obstacle)
 
-    def _set_position(self,name,motion):
-        req=SetEntityState.Request();req.state=EntityState();req.state.name=name;req.state.reference_frame='world'
-        req.state.pose.position.x,req.state.pose.position.y=motion.position;req.state.pose.position.z=motion.z
-        req.state.pose.orientation.z=math.sin(motion.yaw/2);req.state.pose.orientation.w=math.cos(motion.yaw/2)
-        future=self.cli.call_async(req);self._pending[name]=future
-        return future
+    def _move_sine(self, name, obstacle):
+        motion = obstacle["motion"]
+        elapsed = time.monotonic() - self._started_at
+        candidate_x = float(motion["center_x"]) + float(
+            motion["amplitude_m"]
+        ) * math.sin(
+            float(motion["omega_rad_s"]) * elapsed
+            + float(motion.get("phase_rad", 0.0))
+        )
+        candidate_y = float(motion["center_y"])
+        if not has_minimum_clearance(
+            candidate_x,
+            candidate_y,
+            self._robot_xy,
+            obstacle["safety_radius_m"],
+        ):
+            return
+        obstacle["position"][:] = [candidate_x, candidate_y]
+        self._set_model_position(name, candidate_x, candidate_y, obstacle["z"])
 
-    def _enable(self,request,response):
-        with self._lock:
-            response.success=all(m.ready for m in self.obstacles.values()) and not self._resetting and not self._failure
-            if response.success:
-                self._enabled=True;self._last_sim_ns=self.get_clock().now().nanoseconds
-            response.message='enabled after READY' if response.success else 'system is not ready'
-        return response
+    def _move_along_path(self, name, obstacle):
+        """Move obstacle toward next waypoint."""
+        path = obstacle["path"]
+        idx = obstacle["index"]
+        target_x, target_y = path[(idx + 1) % len(path)]
+        curr = obstacle["position"]
 
-    def _reset(self,request,response):
-        with self._lock:
-            if self._resetting:
-                response.success=False;response.message='reset already in progress';return response
-            self._resetting=True
-        deadline=time.monotonic()+3.;evidence={'verified':False,'obstacles':{}};issued=False;reply_baseline=None
+        dx = target_x - curr[0]
+        dy = target_y - curr[1]
+        dist = math.sqrt(dx * dx + dy * dy)
+
+        if dist < 0.1:
+            obstacle["index"] = (idx + 1) % len(path)
+            return
+
+        step = obstacle["speed"] * 0.1
+        if step >= dist:
+            candidate_x, candidate_y = target_x, target_y
+        else:
+            candidate_x = curr[0] + (dx / dist) * step
+            candidate_y = curr[1] + (dy / dist) * step
+
+        if not has_minimum_clearance(
+            candidate_x,
+            candidate_y,
+            self._robot_xy,
+            obstacle["safety_radius_m"],
+        ):
+            safe_index, safe_point = farthest_waypoint(path, self._robot_xy)
+            can_relocate = has_minimum_clearance(
+                safe_point[0],
+                safe_point[1],
+                self._robot_xy,
+                obstacle["safety_radius_m"],
+            )
+            if can_relocate:
+                obstacle["index"] = safe_index
+                curr[0], curr[1] = safe_point
+                self._set_model_position(name, curr[0], curr[1], obstacle["z"])
+            now = time.monotonic()
+            if now - self._last_clearance_event.get(name, 0.0) >= 2.0:
+                self._last_clearance_event[name] = now
+                if can_relocate:
+                    self.get_logger().info(
+                        f"{name} relocated to safe waypoint {safe_point} before "
+                        f"robot safety radius {obstacle['safety_radius_m']:.2f} m"
+                    )
+                else:
+                    self.get_logger().info(
+                        f"{name} paused because all waypoints are inside robot "
+                        f"safety radius {obstacle['safety_radius_m']:.2f} m"
+                    )
+            return
+
+        curr[0], curr[1] = candidate_x, candidate_y
+        self._set_model_position(name, curr[0], curr[1], obstacle["z"])
+
+    def _set_model_position(self, name, x, y, z):
+        """Set model position in Gazebo."""
+        pending = self._pending.get(name)
+        if pending is not None and not pending.done():
+            return
+
+        req = SetEntityState.Request()
+        req.state = EntityState()
+        req.state.name = name
+        req.state.pose = Pose()
+        req.state.pose.position.x = x
+        req.state.pose.position.y = y
+        req.state.pose.position.z = z
+        req.state.pose.orientation.w = 1.0
+        req.state.reference_frame = "world"
+        future = self.cli.call_async(req)
+        self._pending[name] = future
+        future.add_done_callback(
+            lambda done, model=name: self._on_set_complete(model, done)
+        )
+
+    def _on_set_complete(self, name, future):
         try:
-            while time.monotonic()<deadline:
-                with self._lock:
-                    if (not issued and all(f.done() for f in self._pending.values())
-                            and self._robot_xy is not None and time.monotonic()-self._model_receipt<1.):
-                        for m in self.obstacles.values():
-                            if math.hypot(m.center[0]-self._robot_xy[0],m.center[1]-self._robot_xy[1])<m.radius:
-                                raise RuntimeError('reset center is too close to robot')
-                        for name,m in self.obstacles.items():m.reset();self._set_position(name,m)
-                        baseline=self._model_sequence;issued=True
-                    replies_ok=issued and all(f.done() and f.exception() is None and f.result() is not None and f.result().success for f in self._pending.values())
-                    if replies_ok and reply_baseline is None:
-                        reply_baseline=self._model_sequence
-                    if replies_ok and self._model_sequence>reply_baseline:
-                        evidence['obstacles']={n:self._actual.get(n) for n in self.obstacles}
-                        ok=all(n in self._actual and math.dist(self._actual[n][:3],(*m.position,m.z))<.03 and
-                               abs(math.atan2(math.sin(self._actual[n][3]-m.yaw),math.cos(self._actual[n][3]-m.yaw)))<.03 for n,m in self.obstacles.items())
-                        if ok:
-                            evidence.update(verified=True,model_sequence=self._model_sequence,sim_ns=self.get_clock().now().nanoseconds)
-                            self._failure='';self._last_sim_ns=self.get_clock().now().nanoseconds;break
-                time.sleep(.02)
-            response.success=evidence['verified']
-            if not response.success:evidence['error']='dynamic reset physical verification timeout'
+            response = future.result()
+            if response is None or not response.success:
+                message = response.status_message if response is not None else "no response"
+                self.get_logger().error(f"Failed to move {name}: {message}")
         except Exception as exc:
-            response.success=False;evidence['error']=str(exc)
-        finally:
-            with self._lock:
-                self._resetting=False
-                if not response.success:self._failure=evidence.get('error','reset failed')
-                self._status()
-        response.message=json.dumps(evidence);return response
+            self.get_logger().error(f"Failed to move {name}: {exc}")
 
 
 def main():
-    rclpy.init();node=None;executor=MultiThreadedExecutor(num_threads=3)
+    rclpy.init()
+    node = None
     try:
-        node=DynamicObstacleController();executor.add_node(node);executor.spin()
-    except KeyboardInterrupt:pass
+        node = DynamicObstacleController()
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
     finally:
-        executor.shutdown()
-        if node is not None:node.destroy_node()
-        rclpy.try_shutdown()
+        if node is not None:
+            node.destroy_node()
+        if rclpy.ok():
+            rclpy.shutdown()
 
-if __name__=='__main__':main()
+
+if __name__ == "__main__":
+    main()
+

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 import math
-import os
-import sys
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Callable, Iterable, Mapping, Sequence
@@ -111,21 +109,6 @@ def minimum_drop_obstacle_distance(
         distances.append(straight_line_length(drop_xy, obstacle_xy))
     return min(distances) if distances else None
 
-def _slot_boundary_override() -> bool:
-    """2026-10-16 老板指示：只移动区域坐标、槽位几何绝对不动。
-
-    区域（1.0 x 0.5 m）中心移动后，槽位 drop 必然落到严格边界外。默认仍然拦截（fail-closed），
-    只有显式设置 `AIC_SLOT_BOUNDARY_CHECK=0` 才跳过该条，并打印一次 WARNING 便于溯源；
-    其余全部几何校验（release 0.40 m、朝向、exit 端点、间距等）一律不变。
-    """
-    return str(os.environ.get("AIC_SLOT_BOUNDARY_CHECK", "")).strip().lower() in {
-        "0", "off", "false", "no",
-    }
-
-
-_SLOT_BOUNDARY_WARNED = False
-
-
 def validate_placement_slots(points: Mapping[str, Any]) -> None:
     """Validate configured slot count, geometry, order, and region inclusion."""
     points_data = _mapping(points, "points")
@@ -183,17 +166,7 @@ def validate_placement_slots(points: Mapping[str, Any]) -> None:
                 raise PlacementSlotError(f"{prefix} nominal exit endpoint disagrees with release yaw")
             zone_point = Point2D(slot.drop.x, slot.drop.y)
             if not point_inside_region(zone, zone_point):
-                if not _slot_boundary_override():
-                    raise PlacementSlotError(f"{prefix} drop is outside the strict zone boundary")
-                global _SLOT_BOUNDARY_WARNED
-                if not _SLOT_BOUNDARY_WARNED:
-                    _SLOT_BOUNDARY_WARNED = True
-                    print(
-                        "WARNING: AIC_SLOT_BOUNDARY_CHECK=off — accepting placement slots whose "
-                        f"drop lies outside the strict zone boundary (first: {prefix}). "
-                        "Zone position and slot geometry are intentionally decoupled.",
-                        file=sys.stderr,
-                    )
+                raise PlacementSlotError(f"{prefix} drop is outside the strict zone boundary")
 
         nearest_slot_distance = minimum_drop_spacing(slots)
         if nearest_slot_distance is not None and nearest_slot_distance <= _DISTINCT_POINT_EPSILON_M:

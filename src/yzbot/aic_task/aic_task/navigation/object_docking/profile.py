@@ -11,12 +11,7 @@ FIXED_WORLD2_RUNTIME = MappingProxyType({
     'object_docking_timeout_sec': 12.0,
     'object_docking_frequency_hz': 50.0,
     'object_docking_max_retries': 1,
-    # 2026-10-16 Plan I fix: the Nav2 approach consistently settles at ~0.48 m from the cube
-    # (A0 probe, 18/18 navigations succeeded, median 0.484 m), i.e. just BELOW the old 0.50 m floor,
-    # so the soft handoff never engaged and every candidate was burned with
-    # handoff_band_not_reached. 0.40 keeps the closed-loop docking entry compatible with its own
-    # parking gate [0.35, 0.48] and hard floor 0.22 m.
-    'object_docking_handoff_min_m': 0.40,
+    'object_docking_handoff_min_m': 0.50,
     'object_docking_handoff_max_m': 0.85,
     'object_docking_handoff_zero_hold_sec': 0.10,
     'object_docking_target_max_age_sec': 0.20,
