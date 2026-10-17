@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-17T03:53:22+0800",
+  "record": "/home/ros/桌面/AIC_Competition_Work/run_records/20261017_020702_312e163_plan_o_avoidance_after60",
+  "processes": [
+    "38529 bash -c cd /home/ros/桌面/AIC_Competition_Work; R=run_records/20261017_020702_312e163_plan_o_avoidance_after60; while pgrep -f plan_d_round_driver.py >/dev/null 2>&1; do python3 scratch/plan_o_watch_line.py \"$R\" >> scratch/plan_o_watch.log 2>&1; sleep 300; done; echo \"$(date +%H:%M:%S) | DRIVER EXITED\" >> scratch/plan_o_watch.log",
+    "45783 bash -c sleep 1800; echo \"=== checkpoint $(date +%H:%M:%S) ===\"; tail -4 /home/ros/桌面/AIC_Competition_Work/scratch/plan_o_watch.log; pgrep -f plan_d_round_driver.py >/dev/null && echo DRIVER=RUNNING || echo DRIVER=GONE",
+    "47703 bash -c sleep 45; if pgrep -f plan_d_round_driver.py >/dev/null; then echo \"still running → SIGTERM\"; pkill -TERM -f plan_d_round_driver.py; sleep 15; fi pgrep -f plan_d_round_driver.py >/dev/null && echo \"driver STILL RUNNING\" || echo \"driver stopped\" echo \"=== measure.sh still alive? ===\"; pgrep -f plan_o_measure.sh >/dev/null && echo YES || echo NO"
+  ],
+  "busy_ports": [],
+  "launcher": {
+    "launcher_pid": "33047",
+    "alive": false
+  },
+  "clean": false
+}

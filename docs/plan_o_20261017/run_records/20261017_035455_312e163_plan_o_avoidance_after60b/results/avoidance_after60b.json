@@ -1,0 +1,6323 @@
+{
+ "args": {
+  "robot": "six_arm",
+  "boxes": "moving_box_1,moving_box_2",
+  "robot_radius": 0.3,
+  "near": 0.3,
+  "danger": 0.15,
+  "scene": "/home/ros/桌面/AIC_Competition_Work/runtime/312e163/dev_ws/src/yzbot/aic_task/config/scenes/world2/obstacles.yaml",
+  "out": "/home/ros/桌面/AIC_Competition_Work/run_records/20261017_035455_312e163_plan_o_avoidance_after60b/results/avoidance_after60b.json"
+ },
+ "boxes": {
+  "moving_box_1": [
+   0.19,
+   0.2
+  ],
+  "moving_box_2": [
+   0.19,
+   0.2
+  ]
+ },
+ "overall": {
+  "moving_box_1": {
+   "min_clearance": -0.13407465674661861,
+   "near": 90612,
+   "danger": 74064,
+   "contact": 44457,
+   "speed_at_min": 0.13408814501287922,
+   "min_time": 1618.21
+  },
+  "moving_box_2": {
+   "min_clearance": -0.08229393327222165,
+   "near": 10291,
+   "danger": 3903,
+   "contact": 790,
+   "speed_at_min": 0.8418088785027541,
+   "min_time": 1458.42
+  }
+ },
+ "items": [
+  {
+   "item": 1,
+   "started_s": 8.43,
+   "ended_s": 13.37,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.6797458703530364,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.975645263911656e-06,
+     "min_time": 9.94
+    },
+    "moving_box_2": {
+     "min_clearance": 2.2911263787686664,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.975645263911656e-06,
+     "min_time": 9.94
+    }
+   }
+  },
+  {
+   "item": 2,
+   "started_s": 14.38,
+   "ended_s": 19.25,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.759029331159028,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0289952258324781e-06,
+     "min_time": 19.24
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420556121228144,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0289952258324781e-06,
+     "min_time": 19.24
+    }
+   }
+  },
+  {
+   "item": 3,
+   "started_s": 23.65,
+   "ended_s": 51.79,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.0083359599136057,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.928544053595402e-06,
+     "min_time": 30.57
+    },
+    "moving_box_2": {
+     "min_clearance": 0.28938988222606116,
+     "near": 25,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7769848610994443,
+     "min_time": 41.38
+    }
+   }
+  },
+  {
+   "item": 4,
+   "started_s": 52.07,
+   "ended_s": 92.75,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.0783567114427452,
+     "near": 170,
+     "danger": 80,
+     "contact": 0,
+     "speed_at_min": 0.9156591274539486,
+     "min_time": 78.04
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2857414720790246,
+     "near": 27,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9209430578982615,
+     "min_time": 54.71
+    }
+   }
+  },
+  {
+   "item": 5,
+   "started_s": 92.86,
+   "ended_s": 132.71,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.5511623553033151,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6713233547255952,
+     "min_time": 120.49
+    },
+    "moving_box_2": {
+     "min_clearance": 0.10295602768704587,
+     "near": 284,
+     "danger": 123,
+     "contact": 0,
+     "speed_at_min": 0.7950080077338245,
+     "min_time": 119.89
+    }
+   }
+  },
+  {
+   "item": 6,
+   "started_s": 133.03,
+   "ended_s": 160.72,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.136045276702092,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.3577281635768693,
+     "min_time": 134.5
+    },
+    "moving_box_2": {
+     "min_clearance": 1.1612184252056394,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.22041284388532154,
+     "min_time": 134.3
+    }
+   }
+  },
+  {
+   "item": 7,
+   "started_s": 160.91,
+   "ended_s": 191.78,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.4893740438919822,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 3.802968560007687e-06,
+     "min_time": 180.84
+    },
+    "moving_box_2": {
+     "min_clearance": 0.010875013815604684,
+     "near": 1091,
+     "danger": 560,
+     "contact": 0,
+     "speed_at_min": 0.06462088770385163,
+     "min_time": 169.98
+    }
+   }
+  },
+  {
+   "item": 8,
+   "started_s": 193.79,
+   "ended_s": 199.66,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.75698780025904,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.001815998049982688,
+     "min_time": 199.66
+    },
+    "moving_box_2": {
+     "min_clearance": 2.251373259533237,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0018156863184872294,
+     "min_time": 197.42
+    }
+   }
+  },
+  {
+   "item": 9,
+   "started_s": 200.67,
+   "ended_s": 205.59,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7582759232577754,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0003213856851836259,
+     "min_time": 205.59
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3415884186037164,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0003213856851836259,
+     "min_time": 205.59
+    }
+   }
+  },
+  {
+   "item": 10,
+   "started_s": 209.61,
+   "ended_s": 297.2,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10650752857763912,
+     "near": 3003,
+     "danger": 2791,
+     "contact": 2518,
+     "speed_at_min": 0.13986627823126244,
+     "min_time": 255.98
+    },
+    "moving_box_2": {
+     "min_clearance": 0.029940775692657184,
+     "near": 541,
+     "danger": 115,
+     "contact": 0,
+     "speed_at_min": 0.6571797408506121,
+     "min_time": 264.91
+    }
+   }
+  },
+  {
+   "item": 11,
+   "started_s": 299.21,
+   "ended_s": 305.17,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.727045099117462,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.7098677418319097e-06,
+     "min_time": 300.74
+    },
+    "moving_box_2": {
+     "min_clearance": 0.4385478084233256,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.3368736438009722e-06,
+     "min_time": 299.22
+    }
+   }
+  },
+  {
+   "item": 12,
+   "started_s": 306.18,
+   "ended_s": 311.17,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7590593053960015,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.990754082500275e-07,
+     "min_time": 311.16
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420787285214812,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.990754082500275e-07,
+     "min_time": 311.16
+    }
+   }
+  },
+  {
+   "item": 13,
+   "started_s": 314.31,
+   "ended_s": 367.16,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.04619292604605629,
+     "near": 2341,
+     "danger": 2301,
+     "contact": 871,
+     "speed_at_min": 0.00685738242245992,
+     "min_time": 345.24
+    },
+    "moving_box_2": {
+     "min_clearance": 0.5199959889856476,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0069974119777343,
+     "min_time": 333.23
+    }
+   }
+  },
+  {
+   "item": 14,
+   "started_s": 367.57,
+   "ended_s": 419.7,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.051255184409836674,
+     "near": 271,
+     "danger": 199,
+     "contact": 58,
+     "speed_at_min": 0.6714223071995439,
+     "min_time": 408.87
+    },
+    "moving_box_2": {
+     "min_clearance": 0.3172106898033928,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5635384840798465,
+     "min_time": 376.21
+    }
+   }
+  },
+  {
+   "item": 15,
+   "started_s": 420.07,
+   "ended_s": 447.79,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.3424310116005993,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 7.010053371289849e-08,
+     "min_time": 447.79
+    },
+    "moving_box_2": {
+     "min_clearance": 3.1091953780936947,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.0360427493970554e-06,
+     "min_time": 444.2
+    }
+   }
+  },
+  {
+   "item": 16,
+   "started_s": 447.96,
+   "ended_s": 486.84,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.0533677448475427,
+     "near": 1913,
+     "danger": 1293,
+     "contact": 0,
+     "speed_at_min": 0.9802454410061305,
+     "min_time": 476.6
+    },
+    "moving_box_2": {
+     "min_clearance": 2.336857255823533,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.67827153698385,
+     "min_time": 477.85
+    }
+   }
+  },
+  {
+   "item": 17,
+   "started_s": 488.85,
+   "ended_s": 494.69,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.335278434910111,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.614312134652257e-05,
+     "min_time": 490.36
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341901133335802,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.110642112155466e-07,
+     "min_time": 494.67
+    }
+   }
+  },
+  {
+   "item": 18,
+   "started_s": 495.69,
+   "ended_s": 500.63,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758966397064447,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 9.498388729829805e-07,
+     "min_time": 500.61
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420139991374747,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 9.498388729829805e-07,
+     "min_time": 500.61
+    }
+   }
+  },
+  {
+   "item": 19,
+   "started_s": 504.24,
+   "ended_s": 535.68,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9846883180032624,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017743573471783465,
+     "min_time": 512.04
+    },
+    "moving_box_2": {
+     "min_clearance": 1.2947961418856035,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.06394211845331,
+     "min_time": 525.36
+    }
+   }
+  },
+  {
+   "item": 20,
+   "started_s": 535.84,
+   "ended_s": 574.77,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.05421136381985303,
+     "near": 714,
+     "danger": 567,
+     "contact": 0,
+     "speed_at_min": 0.05765449942444848,
+     "min_time": 547.6
+    },
+    "moving_box_2": {
+     "min_clearance": 0.27169975591325085,
+     "near": 31,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7794816001270064,
+     "min_time": 562.54
+    }
+   }
+  },
+  {
+   "item": 21,
+   "started_s": 575.25,
+   "ended_s": 616.0,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.7672678606229235,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7690272995668059,
+     "min_time": 603.46
+    },
+    "moving_box_2": {
+     "min_clearance": 0.21992170276415873,
+     "near": 126,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7540154037501562,
+     "min_time": 606.26
+    }
+   }
+  },
+  {
+   "item": 22,
+   "started_s": 616.42,
+   "ended_s": 649.15,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4299272472588695,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.07920361273206798,
+     "min_time": 637.69
+    },
+    "moving_box_2": {
+     "min_clearance": 0.505766406810934,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.14133267333983607,
+     "min_time": 627.08
+    }
+   }
+  },
+  {
+   "item": 23,
+   "started_s": 649.27,
+   "ended_s": 731.58,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.737769523365144,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.1773666973762928,
+     "min_time": 667.82
+    },
+    "moving_box_2": {
+     "min_clearance": 0.39370189636801106,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.1228382882109313,
+     "min_time": 667.53
+    }
+   }
+  },
+  {
+   "item": 24,
+   "started_s": 733.59,
+   "ended_s": 745.27,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7586302107862553,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1597772371157816e-06,
+     "min_time": 745.26
+    },
+    "moving_box_2": {
+     "min_clearance": 2.34176241790663,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1597772371157816e-06,
+     "min_time": 745.26
+    }
+   }
+  },
+  {
+   "item": 25,
+   "started_s": 746.28,
+   "ended_s": 751.21,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7587859464161015,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.283826732668441e-06,
+     "min_time": 751.2
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3418697360457035,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.283826732668441e-06,
+     "min_time": 751.2
+    }
+   }
+  },
+  {
+   "item": 26,
+   "started_s": 754.79,
+   "ended_s": 783.01,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.11498955628726826,
+     "near": 92,
+     "danger": 35,
+     "contact": 0,
+     "speed_at_min": 0.7377813308884501,
+     "min_time": 774.35
+    },
+    "moving_box_2": {
+     "min_clearance": 0.8136342588029883,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5895055757211303,
+     "min_time": 772.85
+    }
+   }
+  },
+  {
+   "item": 27,
+   "started_s": 783.47,
+   "ended_s": 838.16,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.2213421810040463,
+     "near": 62,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7013660460739534,
+     "min_time": 823.93
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2324052060942235,
+     "near": 83,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1598587410027827,
+     "min_time": 789.76
+    }
+   }
+  },
+  {
+   "item": 28,
+   "started_s": 838.51,
+   "ended_s": 873.36,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.4309379706238566,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5941976391972487,
+     "min_time": 844.25
+    },
+    "moving_box_2": {
+     "min_clearance": 2.8243901392558275,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.4429841184339184,
+     "min_time": 842.36
+    }
+   }
+  },
+  {
+   "item": 29,
+   "started_s": 873.58,
+   "ended_s": 908.92,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.08300625783177262,
+     "near": 270,
+     "danger": 163,
+     "contact": 0,
+     "speed_at_min": 0.7377382646675038,
+     "min_time": 900.83
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6462786333908883,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.911168973938268e-05,
+     "min_time": 893.91
+    }
+   }
+  },
+  {
+   "item": 30,
+   "started_s": 909.45,
+   "ended_s": 938.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.0719151343281545,
+     "near": 278,
+     "danger": 105,
+     "contact": 0,
+     "speed_at_min": 0.894752719831162,
+     "min_time": 914.7
+    },
+    "moving_box_2": {
+     "min_clearance": 0.30678733994743473,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6642114884640937,
+     "min_time": 919.52
+    }
+   }
+  },
+  {
+   "item": 31,
+   "started_s": 940.58,
+   "ended_s": 946.71,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758946499675326,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.4088992021679474e-06,
+     "min_time": 946.7
+    },
+    "moving_box_2": {
+     "min_clearance": 0.9397152500425934,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.002111137991889031,
+     "min_time": 940.59
+    }
+   }
+  },
+  {
+   "item": 32,
+   "started_s": 947.73,
+   "ended_s": 952.61,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7591304410304387,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.9654587487485045e-06,
+     "min_time": 952.6
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342147998258861,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.9654587487485045e-06,
+     "min_time": 952.6
+    }
+   }
+  },
+  {
+   "item": 33,
+   "started_s": 956.68,
+   "ended_s": 987.52,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9939888376026973,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00028807907078998363,
+     "min_time": 963.94
+    },
+    "moving_box_2": {
+     "min_clearance": 1.346904916204731,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9784527782294247,
+     "min_time": 976.26
+    }
+   }
+  },
+  {
+   "item": 34,
+   "started_s": 987.71,
+   "ended_s": 1025.12,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.054228846188678514,
+     "near": 683,
+     "danger": 562,
+     "contact": 0,
+     "speed_at_min": 0.06273856068698165,
+     "min_time": 999.58
+    },
+    "moving_box_2": {
+     "min_clearance": 0.17275497325230033,
+     "near": 57,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9745323792866836,
+     "min_time": 1013.26
+    }
+   }
+  },
+  {
+   "item": 35,
+   "started_s": 1025.65,
+   "ended_s": 1074.67,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.5313801098297348,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6524739044178818,
+     "min_time": 1061.17
+    },
+    "moving_box_2": {
+     "min_clearance": 0.1266796744922683,
+     "near": 177,
+     "danger": 30,
+     "contact": 0,
+     "speed_at_min": 0.752158979447104,
+     "min_time": 1032.23
+    }
+   }
+  },
+  {
+   "item": 36,
+   "started_s": 1074.87,
+   "ended_s": 1129.59,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.04534191171101798,
+     "near": 1082,
+     "danger": 747,
+     "contact": 228,
+     "speed_at_min": 0.23970441147561444,
+     "min_time": 1109.27
+    },
+    "moving_box_2": {
+     "min_clearance": 1.8939284225360684,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.02408214234250329,
+     "min_time": 1115.64
+    }
+   }
+  },
+  {
+   "item": 37,
+   "started_s": 1130.17,
+   "ended_s": 1152.28,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.564989775073552,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00033818511017163664,
+     "min_time": 1138.83
+    },
+    "moving_box_2": {
+     "min_clearance": 3.5140567862683523,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0828525620842854,
+     "min_time": 1135.29
+    }
+   }
+  },
+  {
+   "item": 38,
+   "started_s": 1152.59,
+   "ended_s": 1195.41,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.01139896948753627,
+     "near": 549,
+     "danger": 167,
+     "contact": 17,
+     "speed_at_min": 0.991339187347338,
+     "min_time": 1182.65
+    },
+    "moving_box_2": {
+     "min_clearance": 0.30806857672122906,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8661865207111286,
+     "min_time": 1178.71
+    }
+   }
+  },
+  {
+   "item": 39,
+   "started_s": 1197.43,
+   "ended_s": 1203.32,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.297129556970482,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.2547121283744284e-07,
+     "min_time": 1198.94
+    },
+    "moving_box_2": {
+     "min_clearance": 2.277859705656779,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017059025586177213,
+     "min_time": 1201.07
+    }
+   }
+  },
+  {
+   "item": 40,
+   "started_s": 1204.33,
+   "ended_s": 1209.2,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.75901650506309,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.5522957087790866e-06,
+     "min_time": 1209.19
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342047336011435,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.5522957087790866e-06,
+     "min_time": 1209.19
+    }
+   }
+  },
+  {
+   "item": 41,
+   "started_s": 1212.97,
+   "ended_s": 1241.55,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.014571006369942,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.866078477790048e-06,
+     "min_time": 1220.56
+    },
+    "moving_box_2": {
+     "min_clearance": 1.3779398760107326,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9816772578406326,
+     "min_time": 1230.87
+    }
+   }
+  },
+  {
+   "item": 42,
+   "started_s": 1241.75,
+   "ended_s": 1280.71,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.20920688161297113,
+     "near": 293,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.08286976457638301,
+     "min_time": 1251.9
+    },
+    "moving_box_2": {
+     "min_clearance": 0.19797589448995728,
+     "near": 49,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.094918606759731,
+     "min_time": 1268.33
+    }
+   }
+  },
+  {
+   "item": 43,
+   "started_s": 1281.14,
+   "ended_s": 1322.6,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.11284233927507792,
+     "near": 464,
+     "danger": 54,
+     "contact": 0,
+     "speed_at_min": 1.0159487482510936,
+     "min_time": 1305.87
+    },
+    "moving_box_2": {
+     "min_clearance": 0.3530232468167936,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6269580117418513,
+     "min_time": 1312.38
+    }
+   }
+  },
+  {
+   "item": 44,
+   "started_s": 1323.07,
+   "ended_s": 1355.54,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4840623269860522,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 7.229387513915299e-05,
+     "min_time": 1340.72
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6026962152386592,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.02274768684056828,
+     "min_time": 1337.5
+    }
+   }
+  },
+  {
+   "item": 45,
+   "started_s": 1355.79,
+   "ended_s": 1380.14,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.8799468374866677,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.011172161967107859,
+     "min_time": 1370.66
+    },
+    "moving_box_2": {
+     "min_clearance": 0.26156481317658203,
+     "near": 65,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6891526270955982,
+     "min_time": 1374.96
+    }
+   }
+  },
+  {
+   "item": 46,
+   "started_s": 1382.15,
+   "ended_s": 1388.04,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7586269775720096,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.7302601552716675e-06,
+     "min_time": 1388.02
+    },
+    "moving_box_2": {
+     "min_clearance": 1.6150308190807565,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.3756100460309741e-06,
+     "min_time": 1382.16
+    }
+   }
+  },
+  {
+   "item": 47,
+   "started_s": 1389.04,
+   "ended_s": 1393.99,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758882201927369,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.1770510417153634e-06,
+     "min_time": 1393.98
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342072360453554,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.1770510417153634e-06,
+     "min_time": 1393.98
+    }
+   }
+  },
+  {
+   "item": 48,
+   "started_s": 1397.55,
+   "ended_s": 1426.09,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.2072850065990937,
+     "near": 70,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5173140079186428,
+     "min_time": 1417.11
+    },
+    "moving_box_2": {
+     "min_clearance": 0.8704731103025138,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.565233833411209,
+     "min_time": 1415.45
+    }
+   }
+  },
+  {
+   "item": 49,
+   "started_s": 1426.57,
+   "ended_s": 1480.74,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.027295124449466746,
+     "near": 327,
+     "danger": 174,
+     "contact": 42,
+     "speed_at_min": 0.6524752937420417,
+     "min_time": 1469.31
+    },
+    "moving_box_2": {
+     "min_clearance": -0.08229393327222165,
+     "near": 776,
+     "danger": 141,
+     "contact": 46,
+     "speed_at_min": 0.8418088785027541,
+     "min_time": 1458.42
+    }
+   }
+  },
+  {
+   "item": 50,
+   "started_s": 1481.11,
+   "ended_s": 1514.34,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.4807482562809298,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8813199015386386,
+     "min_time": 1505.36
+    },
+    "moving_box_2": {
+     "min_clearance": 2.972306374290423,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0015306567881843748,
+     "min_time": 1511.28
+    }
+   }
+  },
+  {
+   "item": 51,
+   "started_s": 1514.58,
+   "ended_s": 1549.18,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.002835095494053752,
+     "near": 220,
+     "danger": 174,
+     "contact": 41,
+     "speed_at_min": 0.3607048865860392,
+     "min_time": 1540.32
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6478776329448228,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0021663276979741416,
+     "min_time": 1531.9
+    }
+   }
+  },
+  {
+   "item": 52,
+   "started_s": 1549.7,
+   "ended_s": 1576.42,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.96039671104697,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8186007092222216,
+     "min_time": 1553.23
+    },
+    "moving_box_2": {
+     "min_clearance": 0.29475920746014367,
+     "near": 31,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5103971857520915,
+     "min_time": 1557.53
+    }
+   }
+  },
+  {
+   "item": 53,
+   "started_s": 1578.43,
+   "ended_s": 1584.32,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.2656671975383316,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 9.485420807810117e-07,
+     "min_time": 1582.06
+    },
+    "moving_box_2": {
+     "min_clearance": 0.9028234598487339,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00043304421405768824,
+     "min_time": 1578.44
+    }
+   }
+  },
+  {
+   "item": 54,
+   "started_s": 1585.33,
+   "ended_s": 1590.27,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7564049604385605,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00038586954123518287,
+     "min_time": 1590.26
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3401678906345946,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00038586954123518287,
+     "min_time": 1590.26
+    }
+   }
+  },
+  {
+   "item": 55,
+   "started_s": 1594.03,
+   "ended_s": 1634.65,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.13407465674661861,
+     "near": 1054,
+     "danger": 742,
+     "contact": 404,
+     "speed_at_min": 0.13408814501287922,
+     "min_time": 1618.21
+    },
+    "moving_box_2": {
+     "min_clearance": 0.48128172721728496,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0218230002261695,
+     "min_time": 1613.92
+    }
+   }
+  },
+  {
+   "item": 56,
+   "started_s": 1635.16,
+   "ended_s": 1685.02,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.079253562482404,
+     "near": 275,
+     "danger": 132,
+     "contact": 0,
+     "speed_at_min": 0.26125529417408927,
+     "min_time": 1641.53
+    },
+    "moving_box_2": {
+     "min_clearance": 0.14306577252940278,
+     "near": 476,
+     "danger": 14,
+     "contact": 0,
+     "speed_at_min": 0.7346099853954277,
+     "min_time": 1671.1
+    }
+   }
+  },
+  {
+   "item": 57,
+   "started_s": 1685.42,
+   "ended_s": 1714.88,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.304319173602258,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.3391153853487948,
+     "min_time": 1711.96
+    },
+    "moving_box_2": {
+     "min_clearance": 3.1612130727672225,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.034824389425627725,
+     "min_time": 1711.56
+    }
+   }
+  },
+  {
+   "item": 58,
+   "started_s": 1715.07,
+   "ended_s": 1755.51,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.08664730934135767,
+     "near": 1936,
+     "danger": 1207,
+     "contact": 565,
+     "speed_at_min": 0.506722102638151,
+     "min_time": 1741.62
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3567957494868406,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0219780951386552,
+     "min_time": 1740.9
+    }
+   }
+  },
+  {
+   "item": 59,
+   "started_s": 1755.89,
+   "ended_s": 1786.43,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.015383308704127185,
+     "near": 192,
+     "danger": 128,
+     "contact": 0,
+     "speed_at_min": 0.6639424462853364,
+     "min_time": 1761.84
+    },
+    "moving_box_2": {
+     "min_clearance": 0.24349233439493684,
+     "near": 41,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0894891432567029,
+     "min_time": 1778.21
+    }
+   }
+  },
+  {
+   "item": 60,
+   "started_s": 1788.44,
+   "ended_s": 1794.33,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.4802074619702776,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.001776768959644449,
+     "min_time": 1792.08
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3107860190961116,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.001776768959644449,
+     "min_time": 1792.08
+    }
+   }
+  },
+  {
+   "item": 61,
+   "started_s": 1795.34,
+   "ended_s": 1800.24,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.759040353096891,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.010233156487084e-07,
+     "min_time": 1800.23
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420667508053357,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.010233156487084e-07,
+     "min_time": 1800.23
+    }
+   }
+  },
+  {
+   "item": 62,
+   "started_s": 1803.49,
+   "ended_s": 1838.36,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.0326307533963197,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.07340766150378095,
+     "min_time": 1815.06
+    },
+    "moving_box_2": {
+     "min_clearance": 0.10353886371652732,
+     "near": 133,
+     "danger": 42,
+     "contact": 0,
+     "speed_at_min": 0.8120000687733239,
+     "min_time": 1828.82
+    }
+   }
+  },
+  {
+   "item": 63,
+   "started_s": 1838.71,
+   "ended_s": 1903.35,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.12312005556485672,
+     "near": 5960,
+     "danger": 5231,
+     "contact": 3111,
+     "speed_at_min": 0.019353229129723894,
+     "min_time": 1873.43
+    },
+    "moving_box_2": {
+     "min_clearance": 0.20548830979485405,
+     "near": 68,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0637733454380631,
+     "min_time": 1841.25
+    }
+   }
+  },
+  {
+   "item": 64,
+   "started_s": 1903.8,
+   "ended_s": 1938.56,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.1455512161412335,
+     "near": 212,
+     "danger": 40,
+     "contact": 0,
+     "speed_at_min": 0.14871969796703335,
+     "min_time": 1904.89
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2084218213765146,
+     "near": 71,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9968087251749608,
+     "min_time": 1912.23
+    }
+   }
+  },
+  {
+   "item": 65,
+   "started_s": 1938.66,
+   "ended_s": 1976.01,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.8452442230276009,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.669022399862477,
+     "min_time": 1962.38
+    },
+    "moving_box_2": {
+     "min_clearance": 0.3158927072596765,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8940957879138411,
+     "min_time": 1964.79
+    }
+   }
+  },
+  {
+   "item": 66,
+   "started_s": 1976.39,
+   "ended_s": 2003.56,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.9193191771667106,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.490273547410937e-07,
+     "min_time": 1989.21
+    },
+    "moving_box_2": {
+     "min_clearance": 0.4931464535414272,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.313603782295569e-08,
+     "min_time": 1991.43
+    }
+   }
+  },
+  {
+   "item": 67,
+   "started_s": 2005.57,
+   "ended_s": 2011.42,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.459817124074277,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.290181618451052e-07,
+     "min_time": 2009.16
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3168022272788065,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.290181618451052e-07,
+     "min_time": 2009.16
+    }
+   }
+  },
+  {
+   "item": 68,
+   "started_s": 2012.43,
+   "ended_s": 2017.3,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7588673705545395,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0018303515934709011,
+     "min_time": 2017.29
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341937866751074,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0018303515934709011,
+     "min_time": 2017.29
+    }
+   }
+  },
+  {
+   "item": 69,
+   "started_s": 2021.04,
+   "ended_s": 2050.38,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.04662412877760497,
+     "near": 133,
+     "danger": 81,
+     "contact": 0,
+     "speed_at_min": 0.8549245690904933,
+     "min_time": 2041.06
+    },
+    "moving_box_2": {
+     "min_clearance": 0.8987853101903578,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6079071144383961,
+     "min_time": 2039.76
+    }
+   }
+  },
+  {
+   "item": 70,
+   "started_s": 2050.85,
+   "ended_s": 2093.53,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.6297140150892069,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.3921188263475774,
+     "min_time": 2085.55
+    },
+    "moving_box_2": {
+     "min_clearance": 0.23534930957893346,
+     "near": 48,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0106634663758702,
+     "min_time": 2080.53
+    }
+   }
+  },
+  {
+   "item": 71,
+   "started_s": 2093.91,
+   "ended_s": 2125.21,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.022235715766824815,
+     "near": 156,
+     "danger": 104,
+     "contact": 0,
+     "speed_at_min": 0.9278778836944406,
+     "min_time": 2116.62
+    },
+    "moving_box_2": {
+     "min_clearance": 0.639298207233457,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.995262566098248e-05,
+     "min_time": 2109.97
+    }
+   }
+  },
+  {
+   "item": 72,
+   "started_s": 2125.52,
+   "ended_s": 2159.32,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.7931129386669062,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5785214760608908,
+     "min_time": 2130.11
+    },
+    "moving_box_2": {
+     "min_clearance": 2.979466839765372,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.10907924505241214,
+     "min_time": 2156.47
+    }
+   }
+  },
+  {
+   "item": 73,
+   "started_s": 2159.86,
+   "ended_s": 2184.69,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.0051322174913139285,
+     "near": 328,
+     "danger": 118,
+     "contact": 11,
+     "speed_at_min": 0.9091280794630892,
+     "min_time": 2162.46
+    },
+    "moving_box_2": {
+     "min_clearance": 0.23856475801504545,
+     "near": 106,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.658242796665394,
+     "min_time": 2167.59
+    }
+   }
+  },
+  {
+   "item": 74,
+   "started_s": 2186.7,
+   "ended_s": 2192.54,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.589175448236991,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0003602583007951476,
+     "min_time": 2190.3
+    },
+    "moving_box_2": {
+     "min_clearance": 0.9571646502648796,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.002108964116889688,
+     "min_time": 2186.71
+    }
+   }
+  },
+  {
+   "item": 75,
+   "started_s": 2193.55,
+   "ended_s": 2198.45,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7593059684175723,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 7.341311055963962e-07,
+     "min_time": 2198.44
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342279212196049,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 7.341311055963962e-07,
+     "min_time": 2198.44
+    }
+   }
+  },
+  {
+   "item": 76,
+   "started_s": 2203.35,
+   "ended_s": 2237.35,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.07587015205676445,
+     "near": 242,
+     "danger": 123,
+     "contact": 0,
+     "speed_at_min": 0.8317428326951768,
+     "min_time": 2225.04
+    },
+    "moving_box_2": {
+     "min_clearance": 0.3857513208360425,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6523054332278573,
+     "min_time": 2223.26
+    }
+   }
+  },
+  {
+   "item": 77,
+   "started_s": 2237.84,
+   "ended_s": 2335.27,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.1111742146737012,
+     "near": 5301,
+     "danger": 4946,
+     "contact": 3786,
+     "speed_at_min": 0.14941764802076773,
+     "min_time": 2327.36
+    },
+    "moving_box_2": {
+     "min_clearance": 0.29561326642731395,
+     "near": 13,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9452628843883786,
+     "min_time": 2269.71
+    }
+   }
+  },
+  {
+   "item": 78,
+   "started_s": 2337.28,
+   "ended_s": 2343.2,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.896110161440848,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.721081230101095e-06,
+     "min_time": 2338.81
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6691547253794441,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0098167617162462e-05,
+     "min_time": 2338.8
+    }
+   }
+  },
+  {
+   "item": 79,
+   "started_s": 2344.21,
+   "ended_s": 2349.1,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758920226297934,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.18360644608615e-07,
+     "min_time": 2349.08
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3419731101538517,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.18360644608615e-07,
+     "min_time": 2349.08
+    }
+   }
+  },
+  {
+   "item": 80,
+   "started_s": 2352.88,
+   "ended_s": 2383.32,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9696855256516814,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.44064486880854e-06,
+     "min_time": 2360.42
+    },
+    "moving_box_2": {
+     "min_clearance": 1.3268702226836355,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0591365739500627,
+     "min_time": 2372.76
+    }
+   }
+  },
+  {
+   "item": 81,
+   "started_s": 2383.53,
+   "ended_s": 2420.41,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.1788843020355616,
+     "near": 215,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5227564295645978,
+     "min_time": 2390.76
+    },
+    "moving_box_2": {
+     "min_clearance": 0.14875859762220173,
+     "near": 60,
+     "danger": 5,
+     "contact": 0,
+     "speed_at_min": 1.0574328778157494,
+     "min_time": 2409.03
+    }
+   }
+  },
+  {
+   "item": 82,
+   "started_s": 2420.85,
+   "ended_s": 2461.88,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.016063544990756906,
+     "near": 590,
+     "danger": 229,
+     "contact": 0,
+     "speed_at_min": 0.9605508782826259,
+     "min_time": 2446.62
+    },
+    "moving_box_2": {
+     "min_clearance": 0.13349544058770468,
+     "near": 140,
+     "danger": 39,
+     "contact": 0,
+     "speed_at_min": 0.7466571074220482,
+     "min_time": 2451.85
+    }
+   }
+  },
+  {
+   "item": 83,
+   "started_s": 2462.34,
+   "ended_s": 2495.27,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4585418369661034,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.001702396894986846,
+     "min_time": 2481.51
+    },
+    "moving_box_2": {
+     "min_clearance": 0.5803727745617349,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.02334057512203697,
+     "min_time": 2477.18
+    }
+   }
+  },
+  {
+   "item": 84,
+   "started_s": 2495.52,
+   "ended_s": 2579.78,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.7780806303707262,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.197933956449322,
+     "min_time": 2511.44
+    },
+    "moving_box_2": {
+     "min_clearance": 0.4302449344388481,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.14279216804818382,
+     "min_time": 2515.74
+    }
+   }
+  },
+  {
+   "item": 85,
+   "started_s": 2581.79,
+   "ended_s": 2587.69,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7587510527299157,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 9.542476128837084e-07,
+     "min_time": 2587.68
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6695463458045274,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0003459428081241354,
+     "min_time": 2581.8
+    }
+   }
+  },
+  {
+   "item": 86,
+   "started_s": 2588.7,
+   "ended_s": 2593.58,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7576974030441432,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00034545996970113265,
+     "min_time": 2593.57
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341268198834266,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00034545996970113265,
+     "min_time": 2593.57
+    }
+   }
+  },
+  {
+   "item": 87,
+   "started_s": 2597.29,
+   "ended_s": 2624.97,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.4319702162810301,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.622004407904416,
+     "min_time": 2616.31
+    },
+    "moving_box_2": {
+     "min_clearance": 0.9610796738002487,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.6831318213459593,
+     "min_time": 2614.54
+    }
+   }
+  },
+  {
+   "item": 88,
+   "started_s": 2625.47,
+   "ended_s": 2680.1,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.34476800895997833,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7413555533293681,
+     "min_time": 2666.46
+    },
+    "moving_box_2": {
+     "min_clearance": -0.01543727494552094,
+     "near": 251,
+     "danger": 83,
+     "contact": 19,
+     "speed_at_min": 0.8898209807661088,
+     "min_time": 2657.08
+    }
+   }
+  },
+  {
+   "item": 89,
+   "started_s": 2680.46,
+   "ended_s": 2718.12,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.08186805217808227,
+     "near": 425,
+     "danger": 280,
+     "contact": 89,
+     "speed_at_min": 0.5741832091252901,
+     "min_time": 2684.21
+    },
+    "moving_box_2": {
+     "min_clearance": 0.36874919004165935,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5197446032430382,
+     "min_time": 2706.84
+    }
+   }
+  },
+  {
+   "item": 90,
+   "started_s": 2718.46,
+   "ended_s": 2753.03,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.5323667521431743,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.005566443494549462,
+     "min_time": 2734.63
+    },
+    "moving_box_2": {
+     "min_clearance": 2.8570907676605604,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.40253782855638404,
+     "min_time": 2747.25
+    }
+   }
+  },
+  {
+   "item": 91,
+   "started_s": 2753.56,
+   "ended_s": 2782.93,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.08175492016732583,
+     "near": 248,
+     "danger": 132,
+     "contact": 0,
+     "speed_at_min": 0.7362429484147938,
+     "min_time": 2758.96
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2840825004208613,
+     "near": 64,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.4970522711802815,
+     "min_time": 2763.66
+    }
+   }
+  },
+  {
+   "item": 92,
+   "started_s": 2784.94,
+   "ended_s": 2790.77,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7588257618688576,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 3.1897483456881127e-06,
+     "min_time": 2790.77
+    },
+    "moving_box_2": {
+     "min_clearance": 0.9509541816126286,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.503551581065252e-05,
+     "min_time": 2784.95
+    }
+   }
+  },
+  {
+   "item": 93,
+   "started_s": 2791.78,
+   "ended_s": 2796.68,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758972020424288,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.811771711599544e-06,
+     "min_time": 2796.66
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342014530747308,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.811771711599544e-06,
+     "min_time": 2796.66
+    }
+   }
+  },
+  {
+   "item": 94,
+   "started_s": 2800.64,
+   "ended_s": 2872.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10818874253627353,
+     "near": 3930,
+     "danger": 3616,
+     "contact": 2776,
+     "speed_at_min": 0.010839256720444026,
+     "min_time": 2850.38
+    },
+    "moving_box_2": {
+     "min_clearance": 0.4591378918501035,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.24232583313242514,
+     "min_time": 2858.49
+    }
+   }
+  },
+  {
+   "item": 95,
+   "started_s": 2873.06,
+   "ended_s": 3007.63,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10915496798633317,
+     "near": 8691,
+     "danger": 8354,
+     "contact": 6388,
+     "speed_at_min": 0.0609082960591949,
+     "min_time": 2959.24
+    },
+    "moving_box_2": {
+     "min_clearance": 0.34675477284399364,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8623379797049079,
+     "min_time": 2975.36
+    }
+   }
+  },
+  {
+   "item": 96,
+   "started_s": 3009.65,
+   "ended_s": 3015.5,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.014426218316076378,
+     "near": 153,
+     "danger": 153,
+     "contact": 153,
+     "speed_at_min": 4.7715226456510675e-05,
+     "min_time": 3011.11
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341887620840058,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.3163455087427054e-07,
+     "min_time": 3015.48
+    }
+   }
+  },
+  {
+   "item": 97,
+   "started_s": 3016.51,
+   "ended_s": 3021.39,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7589252267053137,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017576449831801255,
+     "min_time": 3021.39
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3419885737011765,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017576449831801255,
+     "min_time": 3021.39
+    }
+   }
+  },
+  {
+   "item": 98,
+   "started_s": 3025.46,
+   "ended_s": 3058.86,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.7051144872039061,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5796677468081289,
+     "min_time": 3047.71
+    },
+    "moving_box_2": {
+     "min_clearance": 1.2748953337982023,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.967199002032768,
+     "min_time": 3048.46
+    }
+   }
+  },
+  {
+   "item": 99,
+   "started_s": 3059.06,
+   "ended_s": 3096.3,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.3130380338656787,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.9194765073572965e-05,
+     "min_time": 3077.6
+    },
+    "moving_box_2": {
+     "min_clearance": 0.153789687603075,
+     "near": 72,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9124948381616739,
+     "min_time": 3084.8
+    }
+   }
+  },
+  {
+   "item": 100,
+   "started_s": 3096.75,
+   "ended_s": 3135.81,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.07616935656104074,
+     "near": 327,
+     "danger": 128,
+     "contact": 0,
+     "speed_at_min": 0.47405760860129675,
+     "min_time": 3103.97
+    },
+    "moving_box_2": {
+     "min_clearance": 0.27580779697566277,
+     "near": 66,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.671467859462593,
+     "min_time": 3125.76
+    }
+   }
+  },
+  {
+   "item": 101,
+   "started_s": 3136.3,
+   "ended_s": 3170.65,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4942816932842553,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.112312793328045e-06,
+     "min_time": 3153.7
+    },
+    "moving_box_2": {
+     "min_clearance": 0.595623058438266,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.08226515947241797,
+     "min_time": 3158.31
+    }
+   }
+  },
+  {
+   "item": 102,
+   "started_s": 3170.88,
+   "ended_s": 3206.25,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.4735425270730203,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.3572326622642313,
+     "min_time": 3198.96
+    },
+    "moving_box_2": {
+     "min_clearance": 0.05514729902923671,
+     "near": 129,
+     "danger": 77,
+     "contact": 0,
+     "speed_at_min": 0.7141127701595129,
+     "min_time": 3200.34
+    }
+   }
+  },
+  {
+   "item": 103,
+   "started_s": 3208.26,
+   "ended_s": 3214.16,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758735755787237,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.2823223985085865e-06,
+     "min_time": 3214.14
+    },
+    "moving_box_2": {
+     "min_clearance": 1.6218133276507085,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.2944175015110673e-05,
+     "min_time": 3208.27
+    }
+   }
+  },
+  {
+   "item": 104,
+   "started_s": 3215.17,
+   "ended_s": 3220.07,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7590433419704485,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.063412279762179e-07,
+     "min_time": 3220.06
+    },
+    "moving_box_2": {
+     "min_clearance": 2.342182478840329,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.063412279762179e-07,
+     "min_time": 3220.06
+    }
+   }
+  },
+  {
+   "item": 105,
+   "started_s": 3224.02,
+   "ended_s": 3313.13,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.08627443612127211,
+     "near": 6871,
+     "danger": 6289,
+     "contact": 3815,
+     "speed_at_min": 0.4089330341740065,
+     "min_time": 3309.29
+    },
+    "moving_box_2": {
+     "min_clearance": 0.45948080276453857,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7105701674496232,
+     "min_time": 3311.82
+    }
+   }
+  },
+  {
+   "item": 106,
+   "started_s": 3315.15,
+   "ended_s": 3321.02,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.2873550071649234,
+     "near": 153,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00028328435574010363,
+     "min_time": 3316.68
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6025020336073783,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00028253497195154293,
+     "min_time": 3315.16
+    }
+   }
+  },
+  {
+   "item": 107,
+   "started_s": 3322.03,
+   "ended_s": 3326.92,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7589664807204652,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.048942034720868e-05,
+     "min_time": 3326.91
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420105061184078,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.048942034720868e-05,
+     "min_time": 3326.91
+    }
+   }
+  },
+  {
+   "item": 108,
+   "started_s": 3330.21,
+   "ended_s": 3359.34,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.0044141824031123,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.5648168944295795e-05,
+     "min_time": 3338.24
+    },
+    "moving_box_2": {
+     "min_clearance": 1.434505659232805,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.904059029690215,
+     "min_time": 3348.16
+    }
+   }
+  },
+  {
+   "item": 109,
+   "started_s": 3359.54,
+   "ended_s": 3396.1,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.28355402653280265,
+     "near": 147,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 3.504182163918427e-06,
+     "min_time": 3368.27
+    },
+    "moving_box_2": {
+     "min_clearance": 0.18068205235506546,
+     "near": 58,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0308302624888257,
+     "min_time": 3384.66
+    }
+   }
+  },
+  {
+   "item": 110,
+   "started_s": 3396.62,
+   "ended_s": 3485.33,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10200792893611377,
+     "near": 4633,
+     "danger": 4386,
+     "contact": 3215,
+     "speed_at_min": 0.13994923335808324,
+     "min_time": 3469.47
+    },
+    "moving_box_2": {
+     "min_clearance": 0.05458365586466074,
+     "near": 315,
+     "danger": 89,
+     "contact": 0,
+     "speed_at_min": 0.8032664287390638,
+     "min_time": 3402.7
+    }
+   }
+  },
+  {
+   "item": 111,
+   "started_s": 3485.52,
+   "ended_s": 3529.18,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.1330028465274362,
+     "near": 1238,
+     "danger": 1032,
+     "contact": 686,
+     "speed_at_min": 0.17169749988759883,
+     "min_time": 3514.39
+    },
+    "moving_box_2": {
+     "min_clearance": 1.7361098312506116,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.904201699385846,
+     "min_time": 3518.67
+    }
+   }
+  },
+  {
+   "item": 112,
+   "started_s": 3529.58,
+   "ended_s": 3558.43,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.3021995628944885,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.625958730320821e-05,
+     "min_time": 3553.8
+    },
+    "moving_box_2": {
+     "min_clearance": 3.2533381410079447,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.07903600988257498,
+     "min_time": 3553.7
+    }
+   }
+  },
+  {
+   "item": 113,
+   "started_s": 3560.44,
+   "ended_s": 3566.43,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.7520974020767988,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.8986358434424354e-06,
+     "min_time": 3562.09
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341904012434381,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0837685692818764e-06,
+     "min_time": 3566.41
+    }
+   }
+  },
+  {
+   "item": 114,
+   "started_s": 3567.44,
+   "ended_s": 3572.37,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7589663341109496,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.844066773811271e-07,
+     "min_time": 3572.35
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420115402515904,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.844066773811271e-07,
+     "min_time": 3572.35
+    }
+   }
+  },
+  {
+   "item": 115,
+   "started_s": 3575.62,
+   "ended_s": 3605.7,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9893433092275203,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 3.166282453122143e-07,
+     "min_time": 3583.69
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2611419897652913,
+     "near": 54,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7132665755812402,
+     "min_time": 3595.75
+    }
+   }
+  },
+  {
+   "item": 116,
+   "started_s": 3606.04,
+   "ended_s": 3645.89,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.049701823252707056,
+     "near": 289,
+     "danger": 201,
+     "contact": 61,
+     "speed_at_min": 0.6065234618281528,
+     "min_time": 3611.6
+    },
+    "moving_box_2": {
+     "min_clearance": 0.1915420451231573,
+     "near": 70,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0368968896294113,
+     "min_time": 3608.67
+    }
+   }
+  },
+  {
+   "item": 117,
+   "started_s": 3646.03,
+   "ended_s": 3718.61,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.7954455640475802,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.18396389396721077,
+     "min_time": 3673.94
+    },
+    "moving_box_2": {
+     "min_clearance": -0.06278179907571224,
+     "near": 3121,
+     "danger": 2232,
+     "contact": 710,
+     "speed_at_min": 0.037146932090252556,
+     "min_time": 3697.53
+    }
+   }
+  },
+  {
+   "item": 118,
+   "started_s": 3718.95,
+   "ended_s": 3745.95,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.6447712090374034,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.20368399523788916,
+     "min_time": 3721.09
+    },
+    "moving_box_2": {
+     "min_clearance": 1.7141759587456604,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.24923532114991603,
+     "min_time": 3721.2
+    }
+   }
+  },
+  {
+   "item": 119,
+   "started_s": 3746.2,
+   "ended_s": 3778.18,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.7325984379180712,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.039681606273403974,
+     "min_time": 3765.65
+    },
+    "moving_box_2": {
+     "min_clearance": 0.31534856242855186,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0003920837425418668,
+     "min_time": 3762.14
+    }
+   }
+  },
+  {
+   "item": 120,
+   "started_s": 3780.19,
+   "ended_s": 3786.04,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.1633929126409046,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.0452109446124927e-06,
+     "min_time": 3783.75
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420045026497025,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.5023058373843167e-06,
+     "min_time": 3786.02
+    }
+   }
+  },
+  {
+   "item": 121,
+   "started_s": 3787.04,
+   "ended_s": 3791.92,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.759029640765694,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1123706432226124e-06,
+     "min_time": 3791.92
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420548733721764,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1123706432226124e-06,
+     "min_time": 3791.92
+    }
+   }
+  },
+  {
+   "item": 122,
+   "started_s": 3795.65,
+   "ended_s": 3825.46,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.08879523362641323,
+     "near": 136,
+     "danger": 76,
+     "contact": 0,
+     "speed_at_min": 0.8539139515265811,
+     "min_time": 3815.54
+    },
+    "moving_box_2": {
+     "min_clearance": 0.8132177468720878,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.593227529685661,
+     "min_time": 3814.11
+    }
+   }
+  },
+  {
+   "item": 123,
+   "started_s": 3825.91,
+   "ended_s": 3904.88,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10663065187558407,
+     "near": 1896,
+     "danger": 1776,
+     "contact": 1437,
+     "speed_at_min": 0.07343125006551306,
+     "min_time": 3878.77
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2305231228464824,
+     "near": 237,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.023689009959103148,
+     "min_time": 3885.91
+    }
+   }
+  },
+  {
+   "item": 124,
+   "started_s": 3905.25,
+   "ended_s": 3939.65,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.6261058404029112,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8468269240974209,
+     "min_time": 3931.39
+    },
+    "moving_box_2": {
+     "min_clearance": 2.986150293582472,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.15656599776446506,
+     "min_time": 3935.18
+    }
+   }
+  },
+  {
+   "item": 125,
+   "started_s": 3939.88,
+   "ended_s": 3974.71,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.0823430916934782,
+     "near": 275,
+     "danger": 219,
+     "contact": 0,
+     "speed_at_min": 0.3943291851739746,
+     "min_time": 3945.9
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2921804263673438,
+     "near": 19,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5371719168198593,
+     "min_time": 3964.77
+    }
+   }
+  },
+  {
+   "item": 126,
+   "started_s": 3975.22,
+   "ended_s": 4000.31,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.8282985380675785,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.749407897167271,
+     "min_time": 3978.99
+    },
+    "moving_box_2": {
+     "min_clearance": 0.08520158367870256,
+     "near": 159,
+     "danger": 66,
+     "contact": 0,
+     "speed_at_min": 0.7216037486039711,
+     "min_time": 3983.41
+    }
+   }
+  },
+  {
+   "item": 127,
+   "started_s": 4002.32,
+   "ended_s": 4008.21,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.4257583551688593,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.1663862886277744e-06,
+     "min_time": 4005.96
+    },
+    "moving_box_2": {
+     "min_clearance": 0.8879777480314175,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.002686820042369607,
+     "min_time": 4002.33
+    }
+   }
+  },
+  {
+   "item": 128,
+   "started_s": 4009.22,
+   "ended_s": 4014.1,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.759322082172864,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.9441752184457126e-06,
+     "min_time": 4014.09
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3422827589500805,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.9441752184457126e-06,
+     "min_time": 4014.09
+    }
+   }
+  },
+  {
+   "item": 129,
+   "started_s": 4018.42,
+   "ended_s": 4047.84,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.0065221972505012,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.3773073391743209e-05,
+     "min_time": 4025.42
+    },
+    "moving_box_2": {
+     "min_clearance": 1.4183820589854532,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0052432023966855,
+     "min_time": 4037.19
+    }
+   }
+  },
+  {
+   "item": 130,
+   "started_s": 4048.05,
+   "ended_s": 4084.13,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.1687126239031116,
+     "near": 315,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.49682416313550054,
+     "min_time": 4055.19
+    },
+    "moving_box_2": {
+     "min_clearance": 0.21281552235231987,
+     "near": 49,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0546804388867808,
+     "min_time": 4072.93
+    }
+   }
+  },
+  {
+   "item": 131,
+   "started_s": 4084.57,
+   "ended_s": 4120.1,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.5280598432431447,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5324043030048897,
+     "min_time": 4111.65
+    },
+    "moving_box_2": {
+     "min_clearance": 0.4347870725499286,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8657303995424401,
+     "min_time": 4108.45
+    }
+   }
+  },
+  {
+   "item": 132,
+   "started_s": 4120.29,
+   "ended_s": 4153.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.07677499302048685,
+     "near": 210,
+     "danger": 52,
+     "contact": 0,
+     "speed_at_min": 0.6322175233801941,
+     "min_time": 4125.67
+    },
+    "moving_box_2": {
+     "min_clearance": 1.7864736190280868,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.052587742076148324,
+     "min_time": 4126.87
+    }
+   }
+  },
+  {
+   "item": 133,
+   "started_s": 4154.14,
+   "ended_s": 4183.4,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.3508896784384545,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.20434814831784207,
+     "min_time": 4178.53
+    },
+    "moving_box_2": {
+     "min_clearance": 3.2231087869767556,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.10327157123573905,
+     "min_time": 4178.63
+    }
+   }
+  },
+  {
+   "item": 134,
+   "started_s": 4185.41,
+   "ended_s": 4191.37,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.693633895288401,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.503488598040109e-06,
+     "min_time": 4185.42
+    },
+    "moving_box_2": {
+     "min_clearance": 2.287912619375233,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017453548463149807,
+     "min_time": 4189.1
+    }
+   }
+  },
+  {
+   "item": 135,
+   "started_s": 4192.38,
+   "ended_s": 4197.22,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758808161875902,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.0599596341686035e-05,
+     "min_time": 4197.21
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341914644485698,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 5.0599596341686035e-05,
+     "min_time": 4197.21
+    }
+   }
+  },
+  {
+   "item": 136,
+   "started_s": 4201.29,
+   "ended_s": 4231.3,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9940395161823423,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.3064776459742164e-06,
+     "min_time": 4208.56
+    },
+    "moving_box_2": {
+     "min_clearance": 1.6832717661780934,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.13238854144177403,
+     "min_time": 4217.46
+    }
+   }
+  },
+  {
+   "item": 137,
+   "started_s": 4231.53,
+   "ended_s": 4270.02,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.09035838647699468,
+     "near": 667,
+     "danger": 517,
+     "contact": 0,
+     "speed_at_min": 0.5389308593860934,
+     "min_time": 4239.21
+    },
+    "moving_box_2": {
+     "min_clearance": 0.3880225863052313,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.5695351607492461,
+     "min_time": 4258.06
+    }
+   }
+  },
+  {
+   "item": 138,
+   "started_s": 4270.55,
+   "ended_s": 4313.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.08974061789977167,
+     "near": 241,
+     "danger": 93,
+     "contact": 0,
+     "speed_at_min": 0.7726155422645989,
+     "min_time": 4299.21
+    },
+    "moving_box_2": {
+     "min_clearance": 0.12851952057326682,
+     "near": 132,
+     "danger": 28,
+     "contact": 0,
+     "speed_at_min": 0.850099284176864,
+     "min_time": 4304.01
+    }
+   }
+  },
+  {
+   "item": 139,
+   "started_s": 4314.0,
+   "ended_s": 4347.87,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.452334143307869,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.001974027687161932,
+     "min_time": 4332.55
+    },
+    "moving_box_2": {
+     "min_clearance": 0.5109260224323027,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.14250424037747392,
+     "min_time": 4324.48
+    }
+   }
+  },
+  {
+   "item": 140,
+   "started_s": 4348.0,
+   "ended_s": 4375.12,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.8561548310700415,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0017966648856648617,
+     "min_time": 4362.78
+    },
+    "moving_box_2": {
+     "min_clearance": 0.38545252455501305,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.06865021368879065,
+     "min_time": 4365.48
+    }
+   }
+  },
+  {
+   "item": 141,
+   "started_s": 4377.13,
+   "ended_s": 4382.98,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.113815814659206,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.16673769614677e-06,
+     "min_time": 4380.72
+    },
+    "moving_box_2": {
+     "min_clearance": 1.3919703691337986,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.002535516063113175,
+     "min_time": 4377.14
+    }
+   }
+  },
+  {
+   "item": 142,
+   "started_s": 4383.99,
+   "ended_s": 4388.86,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.75891439837271,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.71320497401193e-06,
+     "min_time": 4388.86
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3419901537750962,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.71320497401193e-06,
+     "min_time": 4388.86
+    }
+   }
+  },
+  {
+   "item": 143,
+   "started_s": 4392.91,
+   "ended_s": 4435.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.12527859959635096,
+     "near": 1215,
+     "danger": 1058,
+     "contact": 358,
+     "speed_at_min": 0.1463014337860512,
+     "min_time": 4420.04
+    },
+    "moving_box_2": {
+     "min_clearance": 0.5844159978477732,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.21702232140136543,
+     "min_time": 4423.55
+    }
+   }
+  },
+  {
+   "item": 144,
+   "started_s": 4436.04,
+   "ended_s": 4513.18,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10931329239496251,
+     "near": 2814,
+     "danger": 2362,
+     "contact": 2190,
+     "speed_at_min": 0.11370557455622739,
+     "min_time": 4493.4
+    },
+    "moving_box_2": {
+     "min_clearance": 0.1688323496769833,
+     "near": 141,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0233217414035976,
+     "min_time": 4467.0
+    }
+   }
+  },
+  {
+   "item": 145,
+   "started_s": 4513.54,
+   "ended_s": 4547.13,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.7814068553640803,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0016205755119860883,
+     "min_time": 4531.98
+    },
+    "moving_box_2": {
+     "min_clearance": 2.9483061843834446,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.4152430865037019,
+     "min_time": 4541.41
+    }
+   }
+  },
+  {
+   "item": 146,
+   "started_s": 4547.34,
+   "ended_s": 4598.58,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.048544094453184916,
+     "near": 2403,
+     "danger": 2025,
+     "contact": 354,
+     "speed_at_min": 0.5438478962779417,
+     "min_time": 4586.73
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6080364883050566,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.601177162314117,
+     "min_time": 4567.98
+    }
+   }
+  },
+  {
+   "item": 147,
+   "started_s": 4599.12,
+   "ended_s": 4629.75,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.05760045076511,
+     "near": 274,
+     "danger": 101,
+     "contact": 0,
+     "speed_at_min": 0.8318180269653818,
+     "min_time": 4604.66
+    },
+    "moving_box_2": {
+     "min_clearance": 0.10539811270266325,
+     "near": 191,
+     "danger": 70,
+     "contact": 0,
+     "speed_at_min": 0.7550364360720409,
+     "min_time": 4609.43
+    }
+   }
+  },
+  {
+   "item": 148,
+   "started_s": 4631.77,
+   "ended_s": 4637.68,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7582023915697587,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.329179538655866e-05,
+     "min_time": 4637.67
+    },
+    "moving_box_2": {
+     "min_clearance": 1.0112273151109428,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0021291350236666813,
+     "min_time": 4631.78
+    }
+   }
+  },
+  {
+   "item": 149,
+   "started_s": 4638.69,
+   "ended_s": 4643.51,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758517532822755,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.587742515788675e-05,
+     "min_time": 4643.51
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3416718276495567,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 6.587742515788675e-05,
+     "min_time": 4643.51
+    }
+   }
+  },
+  {
+   "item": 150,
+   "started_s": 4647.36,
+   "ended_s": 4677.72,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.9714803564174888,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.8500936423190357e-06,
+     "min_time": 4654.87
+    },
+    "moving_box_2": {
+     "min_clearance": 1.3099366118821276,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0720623315868072,
+     "min_time": 4667.32
+    }
+   }
+  },
+  {
+   "item": 151,
+   "started_s": 4677.93,
+   "ended_s": 4714.36,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.028512960170913815,
+     "near": 664,
+     "danger": 556,
+     "contact": 0,
+     "speed_at_min": 0.05575364926077693,
+     "min_time": 4689.39
+    },
+    "moving_box_2": {
+     "min_clearance": 0.21162170979823697,
+     "near": 50,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9923647078155621,
+     "min_time": 4702.77
+    }
+   }
+  },
+  {
+   "item": 152,
+   "started_s": 4714.79,
+   "ended_s": 4752.23,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.024471426303706634,
+     "near": 353,
+     "danger": 213,
+     "contact": 53,
+     "speed_at_min": 0.5232498585885318,
+     "min_time": 4739.78
+    },
+    "moving_box_2": {
+     "min_clearance": 0.34882146978939904,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7883985504645608,
+     "min_time": 4736.19
+    }
+   }
+  },
+  {
+   "item": 153,
+   "started_s": 4752.43,
+   "ended_s": 4789.63,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.050347452924758174,
+     "near": 2086,
+     "danger": 1251,
+     "contact": 220,
+     "speed_at_min": 0.18211208713334717,
+     "min_time": 4756.89
+    },
+    "moving_box_2": {
+     "min_clearance": 2.4706177879367366,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0120606229542868,
+     "min_time": 4779.62
+    }
+   }
+  },
+  {
+   "item": 154,
+   "started_s": 4790.08,
+   "ended_s": 4817.43,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.2595291965295168,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.2370151541306859e-05,
+     "min_time": 4813.86
+    },
+    "moving_box_2": {
+     "min_clearance": 3.160951681915859,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.07313132954152722,
+     "min_time": 4814.17
+    }
+   }
+  },
+  {
+   "item": 155,
+   "started_s": 4819.44,
+   "ended_s": 4825.34,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.524634967696748,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.831390116410231e-06,
+     "min_time": 4819.45
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3418864339732575,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0018083365318588283,
+     "min_time": 4825.32
+    }
+   }
+  },
+  {
+   "item": 156,
+   "started_s": 4826.35,
+   "ended_s": 4831.29,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7589393786016645,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.1859749571730433e-06,
+     "min_time": 4831.28
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3419903499117747,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.1859749571730433e-06,
+     "min_time": 4831.28
+    }
+   }
+  },
+  {
+   "item": 157,
+   "started_s": 4835.11,
+   "ended_s": 4866.05,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.0041238539301298,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.6561439110558763e-06,
+     "min_time": 4842.69
+    },
+    "moving_box_2": {
+     "min_clearance": 1.3532157290038545,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.101456709728425,
+     "min_time": 4854.92
+    }
+   }
+  },
+  {
+   "item": 158,
+   "started_s": 4866.23,
+   "ended_s": 4903.15,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.030204244465513563,
+     "near": 715,
+     "danger": 611,
+     "contact": 0,
+     "speed_at_min": 0.781396559740254,
+     "min_time": 4872.99
+    },
+    "moving_box_2": {
+     "min_clearance": 0.18925732222646863,
+     "near": 53,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0106222038976218,
+     "min_time": 4891.44
+    }
+   }
+  },
+  {
+   "item": 159,
+   "started_s": 4903.67,
+   "ended_s": 4954.39,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.024019080375595303,
+     "near": 426,
+     "danger": 204,
+     "contact": 31,
+     "speed_at_min": 0.7596753102264663,
+     "min_time": 4912.11
+    },
+    "moving_box_2": {
+     "min_clearance": 0.05439462593236566,
+     "near": 152,
+     "danger": 83,
+     "contact": 0,
+     "speed_at_min": 0.8768050039541467,
+     "min_time": 4943.51
+    }
+   }
+  },
+  {
+   "item": 160,
+   "started_s": 4954.86,
+   "ended_s": 4986.75,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4952425151283566,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.00875569708973376,
+     "min_time": 4969.4
+    },
+    "moving_box_2": {
+     "min_clearance": 0.606395153376527,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.143664266622298e-06,
+     "min_time": 4969.61
+    }
+   }
+  },
+  {
+   "item": 161,
+   "started_s": 4986.98,
+   "ended_s": 5015.56,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.8557174802117047,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.011853408329250303,
+     "min_time": 4999.43
+    },
+    "moving_box_2": {
+     "min_clearance": 0.41829348588944565,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.014823887910593274,
+     "min_time": 4999.83
+    }
+   }
+  },
+  {
+   "item": 162,
+   "started_s": 5017.56,
+   "ended_s": 5023.44,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.6022331483377794,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.550437713925927e-06,
+     "min_time": 5021.2
+    },
+    "moving_box_2": {
+     "min_clearance": 1.7413259066073767,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0004113753247322839,
+     "min_time": 5017.57
+    }
+   }
+  },
+  {
+   "item": 163,
+   "started_s": 5024.45,
+   "ended_s": 5029.33,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7590419946211,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.2902537212209815e-06,
+     "min_time": 5029.31
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3421186221784374,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.2902537212209815e-06,
+     "min_time": 5029.31
+    }
+   }
+  },
+  {
+   "item": 164,
+   "started_s": 5032.9,
+   "ended_s": 5120.16,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.06609050096927577,
+     "near": 6668,
+     "danger": 6653,
+     "contact": 6069,
+     "speed_at_min": 0.1630037571152896,
+     "min_time": 5085.64
+    },
+    "moving_box_2": {
+     "min_clearance": 0.514831953599522,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0180315955365606,
+     "min_time": 5051.79
+    }
+   }
+  },
+  {
+   "item": 165,
+   "started_s": 5122.17,
+   "ended_s": 5128.03,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.02139360919965505,
+     "near": 153,
+     "danger": 153,
+     "contact": 153,
+     "speed_at_min": 5.0416269952635054e-05,
+     "min_time": 5123.64
+    },
+    "moving_box_2": {
+     "min_clearance": 1.4371522887285326,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 2.4318891303808634e-06,
+     "min_time": 5122.18
+    }
+   }
+  },
+  {
+   "item": 166,
+   "started_s": 5129.04,
+   "ended_s": 5133.89,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758986765172863,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.4003391109611645e-06,
+     "min_time": 5133.89
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3420280974606427,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 4.4003391109611645e-06,
+     "min_time": 5133.89
+    }
+   }
+  },
+  {
+   "item": 167,
+   "started_s": 5137.77,
+   "ended_s": 5170.02,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10815130027073683,
+     "near": 361,
+     "danger": 322,
+     "contact": 219,
+     "speed_at_min": 0.28027442370358846,
+     "min_time": 5159.81
+    },
+    "moving_box_2": {
+     "min_clearance": 0.5349854191104506,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.8347700751956308,
+     "min_time": 5156.0
+    }
+   }
+  },
+  {
+   "item": 168,
+   "started_s": 5170.47,
+   "ended_s": 5212.91,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.20032261536387147,
+     "near": 67,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.7787732636411565,
+     "min_time": 5175.34
+    },
+    "moving_box_2": {
+     "min_clearance": -0.005883719938162391,
+     "near": 114,
+     "danger": 70,
+     "contact": 10,
+     "speed_at_min": 1.0081197783244549,
+     "min_time": 5200.48
+    }
+   }
+  },
+  {
+   "item": 169,
+   "started_s": 5213.35,
+   "ended_s": 5242.89,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.4432508108660111,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0356204432188445,
+     "min_time": 5237.62
+    },
+    "moving_box_2": {
+     "min_clearance": 3.166704934599176,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0356204432188445,
+     "min_time": 5237.62
+    }
+   }
+  },
+  {
+   "item": 170,
+   "started_s": 5243.08,
+   "ended_s": 5327.34,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.10922531135734487,
+     "near": 6662,
+     "danger": 6105,
+     "contact": 4133,
+     "speed_at_min": 0.09597619610910381,
+     "min_time": 5312.34
+    },
+    "moving_box_2": {
+     "min_clearance": 1.452946001013187,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.04613384754917093,
+     "min_time": 5277.77
+    }
+   }
+  },
+  {
+   "item": 171,
+   "started_s": 5327.73,
+   "ended_s": 5359.14,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.07794370122881322,
+     "near": 350,
+     "danger": 208,
+     "contact": 0,
+     "speed_at_min": 0.630297780235549,
+     "min_time": 5335.65
+    },
+    "moving_box_2": {
+     "min_clearance": 0.2642821391494368,
+     "near": 34,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.04412544788927,
+     "min_time": 5351.16
+    }
+   }
+  },
+  {
+   "item": 172,
+   "started_s": 5361.15,
+   "ended_s": 5367.04,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.758776929949266,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.528049648210755e-07,
+     "min_time": 5367.03
+    },
+    "moving_box_2": {
+     "min_clearance": 2.3418413725247835,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.528049648210755e-07,
+     "min_time": 5367.03
+    }
+   }
+  },
+  {
+   "item": 173,
+   "started_s": 5368.05,
+   "ended_s": 5372.98,
+   "end_reason": "state->READY",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 3.7588088453865245,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.084980470742264e-08,
+     "min_time": 5372.97
+    },
+    "moving_box_2": {
+     "min_clearance": 2.341894217435382,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 8.084980470742264e-08,
+     "min_time": 5372.97
+    }
+   }
+  },
+  {
+   "item": 174,
+   "started_s": 5377.73,
+   "ended_s": 5406.85,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 1.015545885246883,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.08428098749692944,
+     "min_time": 5384.5
+    },
+    "moving_box_2": {
+     "min_clearance": 1.4252559842255317,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9720983485585636,
+     "min_time": 5395.83
+    }
+   }
+  },
+  {
+   "item": 175,
+   "started_s": 5407.06,
+   "ended_s": 5442.57,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.17553526813199316,
+     "near": 305,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.4583209331873446,
+     "min_time": 5414.16
+    },
+    "moving_box_2": {
+     "min_clearance": 0.26320353541403435,
+     "near": 33,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 1.0881476031776522,
+     "min_time": 5431.11
+    }
+   }
+  },
+  {
+   "item": 176,
+   "started_s": 5443.09,
+   "ended_s": 5483.82,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.24676738703998707,
+     "near": 47,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9126113261868999,
+     "min_time": 5471.51
+    },
+    "moving_box_2": {
+     "min_clearance": 0.19006970669763118,
+     "near": 94,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.9833888843238452,
+     "min_time": 5473.51
+    }
+   }
+  },
+  {
+   "item": 177,
+   "started_s": 5484.26,
+   "ended_s": 5515.82,
+   "end_reason": "state->ITEM_SUCCEEDED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 2.4941910744972335,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.18142236224536384,
+     "min_time": 5504.75
+    },
+    "moving_box_2": {
+     "min_clearance": 0.6424790748136806,
+     "near": 0,
+     "danger": 0,
+     "contact": 0,
+     "speed_at_min": 0.0010165243186644323,
+     "min_time": 5500.55
+    }
+   }
+  },
+  {
+   "item": 178,
+   "started_s": 5516.05,
+   "ended_s": 5596.87,
+   "end_reason": "state->ITEM_FAILED",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": 0.11335172179373204,
+     "near": 3749,
+     "danger": 2036,
+     "contact": 0,
+     "speed_at_min": 0.005467941808730658,
+     "min_time": 5559.84
+    },
+    "moving_box_2": {
+     "min_clearance": 0.14571980801042617,
+     "near": 42,
+     "danger": 6,
+     "contact": 0,
+     "speed_at_min": 1.038525488002519,
+     "min_time": 5543.36
+    }
+   }
+  },
+  {
+   "item": 179,
+   "started_s": 5598.89,
+   "ended_s": 6923.94,
+   "end_reason": "probe shutdown",
+   "monitor_activations": 0,
+   "boxes": {
+    "moving_box_1": {
+     "min_clearance": -0.007179240936905695,
+     "near": 218,
+     "danger": 5,
+     "contact": 1,
+     "speed_at_min": 13.973462784107578,
+     "min_time": 5727.11
+    },
+    "moving_box_2": {
+     "min_clearance": -0.022475890521637232,
+     "near": 72,
+     "danger": 30,
+     "contact": 5,
+     "speed_at_min": 0.4379037152395153,
+     "min_time": 6217.9
+    }
+   }
+  }
+ ],
+ "monitor": {
+  "activations_total": 0,
+  "durations_sec": {},
+  "events": []
+ },
+ "samples": [
+  [
+   6903.18,
+   {
+    "moving_box_1": 39.854,
+    "moving_box_2": 37.401
+   },
+   21.315,
+   "RESET_FAILED"
+  ],
+  [
+   6903.28,
+   {
+    "moving_box_1": 41.792,
+    "moving_box_2": 39.341
+   },
+   16.995,
+   "RESET_FAILED"
+  ],
+  [
+   6903.38,
+   {
+    "moving_box_1": 43.532,
+    "moving_box_2": 41.076
+   },
+   19.339,
+   "RESET_FAILED"
+  ],
+  [
+   6903.48,
+   {
+    "moving_box_1": 45.549,
+    "moving_box_2": 43.089
+   },
+   19.7,
+   "RESET_FAILED"
+  ],
+  [
+   6903.59,
+   {
+    "moving_box_1": 47.543,
+    "moving_box_2": 45.084
+   },
+   17.685,
+   "RESET_FAILED"
+  ],
+  [
+   6903.7,
+   {
+    "moving_box_1": 49.638,
+    "moving_box_2": 47.175
+   },
+   20.025,
+   "RESET_FAILED"
+  ],
+  [
+   6903.81,
+   {
+    "moving_box_1": 51.734,
+    "moving_box_2": 49.271
+   },
+   17.903,
+   "RESET_FAILED"
+  ],
+  [
+   6903.91,
+   {
+    "moving_box_1": 53.568,
+    "moving_box_2": 51.103
+   },
+   19.52,
+   "RESET_FAILED"
+  ],
+  [
+   6904.01,
+   {
+    "moving_box_1": 55.568,
+    "moving_box_2": 53.101
+   },
+   19.475,
+   "RESET_FAILED"
+  ],
+  [
+   6904.11,
+   {
+    "moving_box_1": 57.368,
+    "moving_box_2": 54.903
+   },
+   17.372,
+   "RESET_FAILED"
+  ],
+  [
+   6904.21,
+   {
+    "moving_box_1": 59.267,
+    "moving_box_2": 56.798
+   },
+   20.903,
+   "RESET_FAILED"
+  ],
+  [
+   6904.31,
+   {
+    "moving_box_1": 61.311,
+    "moving_box_2": 58.843
+   },
+   18.693,
+   "RESET_FAILED"
+  ],
+  [
+   6904.41,
+   {
+    "moving_box_1": 63.026,
+    "moving_box_2": 60.56
+   },
+   17.709,
+   "RESET_FAILED"
+  ],
+  [
+   6904.51,
+   {
+    "moving_box_1": 65.049,
+    "moving_box_2": 62.578
+   },
+   21.722,
+   "RESET_FAILED"
+  ],
+  [
+   6904.62,
+   {
+    "moving_box_1": 66.838,
+    "moving_box_2": 64.362
+   },
+   14.018,
+   "RESET_FAILED"
+  ],
+  [
+   6904.72,
+   {
+    "moving_box_1": 68.344,
+    "moving_box_2": 65.855
+   },
+   17.656,
+   "RESET_FAILED"
+  ],
+  [
+   6904.83,
+   {
+    "moving_box_1": 70.053,
+    "moving_box_2": 67.556
+   },
+   14.063,
+   "RESET_FAILED"
+  ],
+  [
+   6904.93,
+   {
+    "moving_box_1": 71.256,
+    "moving_box_2": 68.745
+   },
+   12.502,
+   "RESET_FAILED"
+  ],
+  [
+   6905.04,
+   {
+    "moving_box_1": 72.462,
+    "moving_box_2": 69.936
+   },
+   13.597,
+   "RESET_FAILED"
+  ],
+  [
+   6905.14,
+   {
+    "moving_box_1": 73.591,
+    "moving_box_2": 71.05
+   },
+   12.478,
+   "RESET_FAILED"
+  ],
+  [
+   6905.24,
+   {
+    "moving_box_1": 74.627,
+    "moving_box_2": 72.072
+   },
+   13.595,
+   "RESET_FAILED"
+  ],
+  [
+   6905.34,
+   {
+    "moving_box_1": 75.872,
+    "moving_box_2": 73.302
+   },
+   14.969,
+   "RESET_FAILED"
+  ],
+  [
+   6905.45,
+   {
+    "moving_box_1": 77.206,
+    "moving_box_2": 74.623
+   },
+   13.156,
+   "RESET_FAILED"
+  ],
+  [
+   6905.55,
+   {
+    "moving_box_1": 78.295,
+    "moving_box_2": 75.7
+   },
+   13.192,
+   "RESET_FAILED"
+  ],
+  [
+   6905.65,
+   {
+    "moving_box_1": 79.503,
+    "moving_box_2": 76.896
+   },
+   14.498,
+   "RESET_FAILED"
+  ],
+  [
+   6905.76,
+   {
+    "moving_box_1": 80.365,
+    "moving_box_2": 77.753
+   },
+   9.308,
+   "RESET_FAILED"
+  ],
+  [
+   6905.87,
+   {
+    "moving_box_1": 81.291,
+    "moving_box_2": 78.674
+   },
+   5.464,
+   "RESET_FAILED"
+  ],
+  [
+   6905.97,
+   {
+    "moving_box_1": 82.229,
+    "moving_box_2": 79.608
+   },
+   10.629,
+   "RESET_FAILED"
+  ],
+  [
+   6906.07,
+   {
+    "moving_box_1": 82.9,
+    "moving_box_2": 80.277
+   },
+   11.158,
+   "RESET_FAILED"
+  ],
+  [
+   6906.17,
+   {
+    "moving_box_1": 83.815,
+    "moving_box_2": 81.189
+   },
+   3.881,
+   "RESET_FAILED"
+  ],
+  [
+   6906.27,
+   {
+    "moving_box_1": 84.8,
+    "moving_box_2": 82.171
+   },
+   8.423,
+   "RESET_FAILED"
+  ],
+  [
+   6906.38,
+   {
+    "moving_box_1": 85.416,
+    "moving_box_2": 82.788
+   },
+   5.623,
+   "RESET_FAILED"
+  ],
+  [
+   6906.49,
+   {
+    "moving_box_1": 84.8,
+    "moving_box_2": 82.179
+   },
+   10.002,
+   "RESET_FAILED"
+  ],
+  [
+   6906.6,
+   {
+    "moving_box_1": 84.222,
+    "moving_box_2": 81.608
+   },
+   15.791,
+   "RESET_FAILED"
+  ],
+  [
+   6906.71,
+   {
+    "moving_box_1": 83.377,
+    "moving_box_2": 80.771
+   },
+   9.118,
+   "RESET_FAILED"
+  ],
+  [
+   6906.81,
+   {
+    "moving_box_1": 82.743,
+    "moving_box_2": 80.143
+   },
+   7.406,
+   "RESET_FAILED"
+  ],
+  [
+   6906.91,
+   {
+    "moving_box_1": 82.089,
+    "moving_box_2": 79.496
+   },
+   9.024,
+   "RESET_FAILED"
+  ],
+  [
+   6907.01,
+   {
+    "moving_box_1": 81.402,
+    "moving_box_2": 78.815
+   },
+   11.97,
+   "RESET_FAILED"
+  ],
+  [
+   6907.12,
+   {
+    "moving_box_1": 80.71,
+    "moving_box_2": 78.129
+   },
+   13.574,
+   "RESET_FAILED"
+  ],
+  [
+   6907.23,
+   {
+    "moving_box_1": 79.833,
+    "moving_box_2": 77.257
+   },
+   10.818,
+   "RESET_FAILED"
+  ],
+  [
+   6907.33,
+   {
+    "moving_box_1": 78.908,
+    "moving_box_2": 76.338
+   },
+   4.753,
+   "RESET_FAILED"
+  ],
+  [
+   6907.44,
+   {
+    "moving_box_1": 77.985,
+    "moving_box_2": 75.424
+   },
+   7.429,
+   "RESET_FAILED"
+  ],
+  [
+   6907.54,
+   {
+    "moving_box_1": 77.302,
+    "moving_box_2": 74.749
+   },
+   11.995,
+   "RESET_FAILED"
+  ],
+  [
+   6907.64,
+   {
+    "moving_box_1": 76.623,
+    "moving_box_2": 74.074
+   },
+   8.769,
+   "RESET_FAILED"
+  ],
+  [
+   6907.75,
+   {
+    "moving_box_1": 75.684,
+    "moving_box_2": 73.145
+   },
+   5.314,
+   "RESET_FAILED"
+  ],
+  [
+   6907.85,
+   {
+    "moving_box_1": 75.065,
+    "moving_box_2": 72.536
+   },
+   12.013,
+   "RESET_FAILED"
+  ],
+  [
+   6907.95,
+   {
+    "moving_box_1": 74.291,
+    "moving_box_2": 71.766
+   },
+   5.628,
+   "RESET_FAILED"
+  ],
+  [
+   6908.05,
+   {
+    "moving_box_1": 73.543,
+    "moving_box_2": 71.03
+   },
+   10.819,
+   "RESET_FAILED"
+  ],
+  [
+   6908.15,
+   {
+    "moving_box_1": 72.799,
+    "moving_box_2": 70.291
+   },
+   7.065,
+   "RESET_FAILED"
+  ],
+  [
+   6908.26,
+   {
+    "moving_box_1": 71.889,
+    "moving_box_2": 69.394
+   },
+   10.025,
+   "RESET_FAILED"
+  ],
+  [
+   6908.37,
+   {
+    "moving_box_1": 71.1,
+    "moving_box_2": 68.611
+   },
+   8.851,
+   "RESET_FAILED"
+  ],
+  [
+   6908.48,
+   {
+    "moving_box_1": 70.071,
+    "moving_box_2": 67.595
+   },
+   9.655,
+   "RESET_FAILED"
+  ],
+  [
+   6908.58,
+   {
+    "moving_box_1": 69.375,
+    "moving_box_2": 66.904
+   },
+   8.997,
+   "RESET_FAILED"
+  ],
+  [
+   6908.68,
+   {
+    "moving_box_1": 68.413,
+    "moving_box_2": 65.955
+   },
+   11.82,
+   "RESET_FAILED"
+  ],
+  [
+   6908.79,
+   {
+    "moving_box_1": 67.34,
+    "moving_box_2": 64.903
+   },
+   13.803,
+   "RESET_FAILED"
+  ],
+  [
+   6908.9,
+   {
+    "moving_box_1": 66.042,
+    "moving_box_2": 63.629
+   },
+   12.75,
+   "RESET_FAILED"
+  ],
+  [
+   6909.0,
+   {
+    "moving_box_1": 65.091,
+    "moving_box_2": 62.696
+   },
+   14.476,
+   "RESET_FAILED"
+  ],
+  [
+   6909.11,
+   {
+    "moving_box_1": 63.854,
+    "moving_box_2": 61.481
+   },
+   11.937,
+   "RESET_FAILED"
+  ],
+  [
+   6909.21,
+   {
+    "moving_box_1": 63.107,
+    "moving_box_2": 60.749
+   },
+   10.814,
+   "RESET_FAILED"
+  ],
+  [
+   6909.31,
+   {
+    "moving_box_1": 62.36,
+    "moving_box_2": 60.013
+   },
+   4.417,
+   "RESET_FAILED"
+  ],
+  [
+   6909.41,
+   {
+    "moving_box_1": 62.184,
+    "moving_box_2": 59.852
+   },
+   10.126,
+   "RESET_FAILED"
+  ],
+  [
+   6909.52,
+   {
+    "moving_box_1": 61.67,
+    "moving_box_2": 59.353
+   },
+   5.476,
+   "RESET_FAILED"
+  ],
+  [
+   6909.62,
+   {
+    "moving_box_1": 61.532,
+    "moving_box_2": 59.229
+   },
+   8.016,
+   "RESET_FAILED"
+  ],
+  [
+   6909.73,
+   {
+    "moving_box_1": 61.164,
+    "moving_box_2": 58.883
+   },
+   9.712,
+   "RESET_FAILED"
+  ],
+  [
+   6909.83,
+   {
+    "moving_box_1": 60.653,
+    "moving_box_2": 58.392
+   },
+   8.482,
+   "RESET_FAILED"
+  ],
+  [
+   6909.93,
+   {
+    "moving_box_1": 59.771,
+    "moving_box_2": 57.53
+   },
+   8.413,
+   "RESET_FAILED"
+  ],
+  [
+   6910.03,
+   {
+    "moving_box_1": 59.063,
+    "moving_box_2": 56.84
+   },
+   14.574,
+   "RESET_FAILED"
+  ],
+  [
+   6910.14,
+   {
+    "moving_box_1": 58.253,
+    "moving_box_2": 56.046
+   },
+   13.284,
+   "RESET_FAILED"
+  ],
+  [
+   6910.24,
+   {
+    "moving_box_1": 57.362,
+    "moving_box_2": 55.173
+   },
+   6.086,
+   "RESET_FAILED"
+  ],
+  [
+   6910.35,
+   {
+    "moving_box_1": 56.524,
+    "moving_box_2": 54.362
+   },
+   11.355,
+   "RESET_FAILED"
+  ],
+  [
+   6910.46,
+   {
+    "moving_box_1": 55.838,
+    "moving_box_2": 53.695
+   },
+   13.431,
+   "RESET_FAILED"
+  ],
+  [
+   6910.57,
+   {
+    "moving_box_1": 54.879,
+    "moving_box_2": 52.759
+   },
+   6.792,
+   "RESET_FAILED"
+  ],
+  [
+   6910.67,
+   {
+    "moving_box_1": 54.221,
+    "moving_box_2": 52.125
+   },
+   10.738,
+   "RESET_FAILED"
+  ],
+  [
+   6910.78,
+   {
+    "moving_box_1": 53.854,
+    "moving_box_2": 51.769
+   },
+   4.533,
+   "RESET_FAILED"
+  ],
+  [
+   6910.88,
+   {
+    "moving_box_1": 53.593,
+    "moving_box_2": 51.522
+   },
+   4.582,
+   "RESET_FAILED"
+  ],
+  [
+   6910.98,
+   {
+    "moving_box_1": 53.373,
+    "moving_box_2": 51.31
+   },
+   2.962,
+   "RESET_FAILED"
+  ],
+  [
+   6911.08,
+   {
+    "moving_box_1": 53.204,
+    "moving_box_2": 51.153
+   },
+   4.911,
+   "RESET_FAILED"
+  ],
+  [
+   6911.19,
+   {
+    "moving_box_1": 52.997,
+    "moving_box_2": 50.959
+   },
+   2.804,
+   "RESET_FAILED"
+  ],
+  [
+   6911.3,
+   {
+    "moving_box_1": 52.932,
+    "moving_box_2": 50.905
+   },
+   3.155,
+   "RESET_FAILED"
+  ],
+  [
+   6911.41,
+   {
+    "moving_box_1": 52.876,
+    "moving_box_2": 50.86
+   },
+   2.734,
+   "RESET_FAILED"
+  ],
+  [
+   6911.52,
+   {
+    "moving_box_1": 52.809,
+    "moving_box_2": 50.799
+   },
+   1.122,
+   "RESET_FAILED"
+  ],
+  [
+   6911.62,
+   {
+    "moving_box_1": 52.883,
+    "moving_box_2": 50.878
+   },
+   1.373,
+   "RESET_FAILED"
+  ],
+  [
+   6911.73,
+   {
+    "moving_box_1": 52.845,
+    "moving_box_2": 50.846
+   },
+   1.551,
+   "RESET_FAILED"
+  ],
+  [
+   6911.83,
+   {
+    "moving_box_1": 52.817,
+    "moving_box_2": 50.822
+   },
+   0.819,
+   "RESET_FAILED"
+  ],
+  [
+   6911.94,
+   {
+    "moving_box_1": 52.75,
+    "moving_box_2": 50.758
+   },
+   0.902,
+   "RESET_FAILED"
+  ],
+  [
+   6912.04,
+   {
+    "moving_box_1": 52.658,
+    "moving_box_2": 50.667
+   },
+   1.075,
+   "RESET_FAILED"
+  ],
+  [
+   6912.14,
+   {
+    "moving_box_1": 52.569,
+    "moving_box_2": 50.579
+   },
+   0.605,
+   "RESET_FAILED"
+  ],
+  [
+   6912.25,
+   {
+    "moving_box_1": 52.557,
+    "moving_box_2": 50.569
+   },
+   0.405,
+   "RESET_FAILED"
+  ],
+  [
+   6912.35,
+   {
+    "moving_box_1": 52.506,
+    "moving_box_2": 50.516
+   },
+   0.866,
+   "RESET_FAILED"
+  ],
+  [
+   6912.46,
+   {
+    "moving_box_1": 52.389,
+    "moving_box_2": 50.399
+   },
+   1.296,
+   "RESET_FAILED"
+  ],
+  [
+   6912.56,
+   {
+    "moving_box_1": 52.263,
+    "moving_box_2": 50.275
+   },
+   0.861,
+   "RESET_FAILED"
+  ],
+  [
+   6912.66,
+   {
+    "moving_box_1": 52.206,
+    "moving_box_2": 50.218
+   },
+   0.448,
+   "RESET_FAILED"
+  ],
+  [
+   6912.76,
+   {
+    "moving_box_1": 52.194,
+    "moving_box_2": 50.207
+   },
+   0.41,
+   "RESET_FAILED"
+  ],
+  [
+   6912.86,
+   {
+    "moving_box_1": 52.13,
+    "moving_box_2": 50.141
+   },
+   2.8,
+   "RESET_FAILED"
+  ],
+  [
+   6912.97,
+   {
+    "moving_box_1": 51.848,
+    "moving_box_2": 49.861
+   },
+   7.963,
+   "RESET_FAILED"
+  ],
+  [
+   6913.07,
+   {
+    "moving_box_1": 51.685,
+    "moving_box_2": 49.702
+   },
+   5.51,
+   "RESET_FAILED"
+  ],
+  [
+   6913.17,
+   {
+    "moving_box_1": 51.279,
+    "moving_box_2": 49.297
+   },
+   2.252,
+   "RESET_FAILED"
+  ],
+  [
+   6913.28,
+   {
+    "moving_box_1": 50.805,
+    "moving_box_2": 48.828
+   },
+   2.571,
+   "RESET_FAILED"
+  ],
+  [
+   6913.39,
+   {
+    "moving_box_1": 50.573,
+    "moving_box_2": 48.601
+   },
+   7.518,
+   "RESET_FAILED"
+  ],
+  [
+   6913.49,
+   {
+    "moving_box_1": 50.318,
+    "moving_box_2": 48.346
+   },
+   1.702,
+   "RESET_FAILED"
+  ],
+  [
+   6913.6,
+   {
+    "moving_box_1": 50.071,
+    "moving_box_2": 48.118
+   },
+   20.613,
+   "RESET_FAILED"
+  ],
+  [
+   6913.7,
+   {
+    "moving_box_1": 50.511,
+    "moving_box_2": 48.614
+   },
+   11.165,
+   "RESET_FAILED"
+  ],
+  [
+   6913.8,
+   {
+    "moving_box_1": 50.842,
+    "moving_box_2": 48.996
+   },
+   10.21,
+   "RESET_FAILED"
+  ],
+  [
+   6913.91,
+   {
+    "moving_box_1": 51.308,
+    "moving_box_2": 49.517
+   },
+   11.46,
+   "RESET_FAILED"
+  ],
+  [
+   6914.01,
+   {
+    "moving_box_1": 51.837,
+    "moving_box_2": 50.1
+   },
+   11.283,
+   "RESET_FAILED"
+  ],
+  [
+   6914.11,
+   {
+    "moving_box_1": 52.416,
+    "moving_box_2": 50.735
+   },
+   12.273,
+   "RESET_FAILED"
+  ],
+  [
+   6914.22,
+   {
+    "moving_box_1": 53.023,
+    "moving_box_2": 51.407
+   },
+   13.541,
+   "RESET_FAILED"
+  ],
+  [
+   6914.33,
+   {
+    "moving_box_1": 53.644,
+    "moving_box_2": 52.096
+   },
+   16.159,
+   "RESET_FAILED"
+  ],
+  [
+   6914.43,
+   {
+    "moving_box_1": 54.063,
+    "moving_box_2": 52.579
+   },
+   16.886,
+   "RESET_FAILED"
+  ],
+  [
+   6914.54,
+   {
+    "moving_box_1": 55.138,
+    "moving_box_2": 53.73
+   },
+   29.047,
+   "RESET_FAILED"
+  ],
+  [
+   6914.65,
+   {
+    "moving_box_1": 57.184,
+    "moving_box_2": 55.879
+   },
+   30.445,
+   "RESET_FAILED"
+  ],
+  [
+   6914.75,
+   {
+    "moving_box_1": 59.07,
+    "moving_box_2": 57.845
+   },
+   23.887,
+   "RESET_FAILED"
+  ],
+  [
+   6914.85,
+   {
+    "moving_box_1": 60.941,
+    "moving_box_2": 59.792
+   },
+   21.68,
+   "RESET_FAILED"
+  ],
+  [
+   6914.96,
+   {
+    "moving_box_1": 63.031,
+    "moving_box_2": 61.962
+   },
+   20.415,
+   "RESET_FAILED"
+  ],
+  [
+   6915.06,
+   {
+    "moving_box_1": 64.959,
+    "moving_box_2": 63.964
+   },
+   25.508,
+   "RESET_FAILED"
+  ],
+  [
+   6915.16,
+   {
+    "moving_box_1": 66.839,
+    "moving_box_2": 65.911
+   },
+   29.882,
+   "RESET_FAILED"
+  ],
+  [
+   6915.27,
+   {
+    "moving_box_1": 69.052,
+    "moving_box_2": 68.191
+   },
+   28.831,
+   "RESET_FAILED"
+  ],
+  [
+   6915.38,
+   {
+    "moving_box_1": 71.415,
+    "moving_box_2": 70.615
+   },
+   24.245,
+   "RESET_FAILED"
+  ],
+  [
+   6915.48,
+   {
+    "moving_box_1": 73.774,
+    "moving_box_2": 73.037
+   },
+   28.602,
+   "RESET_FAILED"
+  ],
+  [
+   6915.59,
+   {
+    "moving_box_1": 75.872,
+    "moving_box_2": 75.175
+   },
+   19.115,
+   "RESET_FAILED"
+  ],
+  [
+   6915.69,
+   {
+    "moving_box_1": 77.408,
+    "moving_box_2": 76.741
+   },
+   18.499,
+   "RESET_FAILED"
+  ],
+  [
+   6915.79,
+   {
+    "moving_box_1": 78.928,
+    "moving_box_2": 78.293
+   },
+   19.671,
+   "RESET_FAILED"
+  ],
+  [
+   6915.9,
+   {
+    "moving_box_1": 80.583,
+    "moving_box_2": 79.984
+   },
+   15.985,
+   "RESET_FAILED"
+  ],
+  [
+   6916.01,
+   {
+    "moving_box_1": 82.067,
+    "moving_box_2": 81.5
+   },
+   15.054,
+   "RESET_FAILED"
+  ],
+  [
+   6916.12,
+   {
+    "moving_box_1": 83.664,
+    "moving_box_2": 83.129
+   },
+   12.415,
+   "RESET_FAILED"
+  ],
+  [
+   6916.23,
+   {
+    "moving_box_1": 85.296,
+    "moving_box_2": 84.79
+   },
+   14.05,
+   "RESET_FAILED"
+  ],
+  [
+   6916.34,
+   {
+    "moving_box_1": 87.001,
+    "moving_box_2": 86.519
+   },
+   16.707,
+   "RESET_FAILED"
+  ],
+  [
+   6916.44,
+   {
+    "moving_box_1": 88.585,
+    "moving_box_2": 88.122
+   },
+   16.885,
+   "RESET_FAILED"
+  ],
+  [
+   6916.54,
+   {
+    "moving_box_1": 90.177,
+    "moving_box_2": 89.729
+   },
+   16.864,
+   "RESET_FAILED"
+  ],
+  [
+   6916.65,
+   {
+    "moving_box_1": 91.95,
+    "moving_box_2": 91.517
+   },
+   18.857,
+   "RESET_FAILED"
+  ],
+  [
+   6916.75,
+   {
+    "moving_box_1": 93.569,
+    "moving_box_2": 93.147
+   },
+   20.058,
+   "RESET_FAILED"
+  ],
+  [
+   6916.86,
+   {
+    "moving_box_1": 95.431,
+    "moving_box_2": 95.018
+   },
+   20.861,
+   "RESET_FAILED"
+  ],
+  [
+   6916.96,
+   {
+    "moving_box_1": 97.112,
+    "moving_box_2": 96.704
+   },
+   18.398,
+   "RESET_FAILED"
+  ],
+  [
+   6917.06,
+   {
+    "moving_box_1": 98.751,
+    "moving_box_2": 98.346
+   },
+   11.544,
+   "RESET_FAILED"
+  ],
+  [
+   6917.16,
+   {
+    "moving_box_1": 100.274,
+    "moving_box_2": 99.868
+   },
+   9.228,
+   "RESET_FAILED"
+  ],
+  [
+   6917.27,
+   {
+    "moving_box_1": 102.187,
+    "moving_box_2": 101.781
+   },
+   26.214,
+   "RESET_FAILED"
+  ],
+  [
+   6917.37,
+   {
+    "moving_box_1": 103.889,
+    "moving_box_2": 103.481
+   },
+   7.922,
+   "RESET_FAILED"
+  ],
+  [
+   6917.48,
+   {
+    "moving_box_1": 105.324,
+    "moving_box_2": 104.918
+   },
+   21.533,
+   "RESET_FAILED"
+  ],
+  [
+   6917.58,
+   {
+    "moving_box_1": 106.586,
+    "moving_box_2": 106.182
+   },
+   9.162,
+   "RESET_FAILED"
+  ],
+  [
+   6917.69,
+   {
+    "moving_box_1": 108.105,
+    "moving_box_2": 107.703
+   },
+   19.166,
+   "RESET_FAILED"
+  ],
+  [
+   6917.79,
+   {
+    "moving_box_1": 109.648,
+    "moving_box_2": 109.244
+   },
+   15.362,
+   "RESET_FAILED"
+  ],
+  [
+   6917.9,
+   {
+    "moving_box_1": 111.292,
+    "moving_box_2": 110.882
+   },
+   12.529,
+   "RESET_FAILED"
+  ],
+  [
+   6918.0,
+   {
+    "moving_box_1": 112.874,
+    "moving_box_2": 112.461
+   },
+   13.267,
+   "RESET_FAILED"
+  ],
+  [
+   6918.1,
+   {
+    "moving_box_1": 114.454,
+    "moving_box_2": 114.039
+   },
+   15.708,
+   "RESET_FAILED"
+  ],
+  [
+   6918.21,
+   {
+    "moving_box_1": 116.07,
+    "moving_box_2": 115.653
+   },
+   17.567,
+   "RESET_FAILED"
+  ],
+  [
+   6918.32,
+   {
+    "moving_box_1": 117.645,
+    "moving_box_2": 117.223
+   },
+   15.834,
+   "RESET_FAILED"
+  ],
+  [
+   6918.42,
+   {
+    "moving_box_1": 119.135,
+    "moving_box_2": 118.712
+   },
+   13.169,
+   "RESET_FAILED"
+  ],
+  [
+   6918.53,
+   {
+    "moving_box_1": 120.761,
+    "moving_box_2": 120.339
+   },
+   13.536,
+   "RESET_FAILED"
+  ],
+  [
+   6918.63,
+   {
+    "moving_box_1": 122.152,
+    "moving_box_2": 121.73
+   },
+   16.535,
+   "RESET_FAILED"
+  ],
+  [
+   6918.73,
+   {
+    "moving_box_1": 123.339,
+    "moving_box_2": 122.916
+   },
+   5.397,
+   "RESET_FAILED"
+  ],
+  [
+   6918.83,
+   {
+    "moving_box_1": 124.104,
+    "moving_box_2": 123.68
+   },
+   8.007,
+   "RESET_FAILED"
+  ],
+  [
+   6918.94,
+   {
+    "moving_box_1": 124.849,
+    "moving_box_2": 124.428
+   },
+   9.231,
+   "RESET_FAILED"
+  ],
+  [
+   6919.04,
+   {
+    "moving_box_1": 125.606,
+    "moving_box_2": 125.189
+   },
+   5.214,
+   "RESET_FAILED"
+  ],
+  [
+   6919.15,
+   {
+    "moving_box_1": 126.548,
+    "moving_box_2": 126.131
+   },
+   9.373,
+   "RESET_FAILED"
+  ],
+  [
+   6919.26,
+   {
+    "moving_box_1": 127.236,
+    "moving_box_2": 126.824
+   },
+   10.591,
+   "RESET_FAILED"
+  ],
+  [
+   6919.36,
+   {
+    "moving_box_1": 128.091,
+    "moving_box_2": 127.684
+   },
+   5.105,
+   "RESET_FAILED"
+  ],
+  [
+   6919.46,
+   {
+    "moving_box_1": 128.951,
+    "moving_box_2": 128.545
+   },
+   9.998,
+   "RESET_FAILED"
+  ],
+  [
+   6919.57,
+   {
+    "moving_box_1": 129.672,
+    "moving_box_2": 129.271
+   },
+   10.221,
+   "RESET_FAILED"
+  ],
+  [
+   6919.67,
+   {
+    "moving_box_1": 130.427,
+    "moving_box_2": 130.028
+   },
+   3.274,
+   "RESET_FAILED"
+  ],
+  [
+   6919.78,
+   {
+    "moving_box_1": 130.833,
+    "moving_box_2": 130.432
+   },
+   3.678,
+   "RESET_FAILED"
+  ],
+  [
+   6919.89,
+   {
+    "moving_box_1": 131.259,
+    "moving_box_2": 130.86
+   },
+   3.762,
+   "RESET_FAILED"
+  ],
+  [
+   6920.0,
+   {
+    "moving_box_1": 131.485,
+    "moving_box_2": 131.089
+   },
+   1.047,
+   "RESET_FAILED"
+  ],
+  [
+   6920.1,
+   {
+    "moving_box_1": 131.651,
+    "moving_box_2": 131.252
+   },
+   3.129,
+   "RESET_FAILED"
+  ],
+  [
+   6920.21,
+   {
+    "moving_box_1": 132.116,
+    "moving_box_2": 131.719
+   },
+   4.586,
+   "RESET_FAILED"
+  ],
+  [
+   6920.31,
+   {
+    "moving_box_1": 132.374,
+    "moving_box_2": 131.979
+   },
+   0.942,
+   "RESET_FAILED"
+  ],
+  [
+   6920.41,
+   {
+    "moving_box_1": 132.502,
+    "moving_box_2": 132.105
+   },
+   3.037,
+   "RESET_FAILED"
+  ],
+  [
+   6920.51,
+   {
+    "moving_box_1": 132.551,
+    "moving_box_2": 132.151
+   },
+   0.468,
+   "RESET_FAILED"
+  ],
+  [
+   6920.61,
+   {
+    "moving_box_1": 132.501,
+    "moving_box_2": 132.097
+   },
+   1.177,
+   "RESET_FAILED"
+  ],
+  [
+   6920.72,
+   {
+    "moving_box_1": 132.435,
+    "moving_box_2": 132.03
+   },
+   1.763,
+   "RESET_FAILED"
+  ],
+  [
+   6920.82,
+   {
+    "moving_box_1": 132.435,
+    "moving_box_2": 132.033
+   },
+   3.59,
+   "RESET_FAILED"
+  ],
+  [
+   6920.93,
+   {
+    "moving_box_1": 132.758,
+    "moving_box_2": 132.361
+   },
+   3.432,
+   "RESET_FAILED"
+  ],
+  [
+   6921.03,
+   {
+    "moving_box_1": 133.041,
+    "moving_box_2": 132.645
+   },
+   2.16,
+   "RESET_FAILED"
+  ],
+  [
+   6921.14,
+   {
+    "moving_box_1": 133.145,
+    "moving_box_2": 132.748
+   },
+   0.313,
+   "RESET_FAILED"
+  ],
+  [
+   6921.24,
+   {
+    "moving_box_1": 133.176,
+    "moving_box_2": 132.779
+   },
+   0.325,
+   "RESET_FAILED"
+  ],
+  [
+   6921.34,
+   {
+    "moving_box_1": 133.198,
+    "moving_box_2": 132.802
+   },
+   0.324,
+   "RESET_FAILED"
+  ],
+  [
+   6921.44,
+   {
+    "moving_box_1": 133.209,
+    "moving_box_2": 132.814
+   },
+   0.415,
+   "RESET_FAILED"
+  ],
+  [
+   6921.54,
+   {
+    "moving_box_1": 133.2,
+    "moving_box_2": 132.805
+   },
+   0.256,
+   "RESET_FAILED"
+  ],
+  [
+   6921.65,
+   {
+    "moving_box_1": 133.177,
+    "moving_box_2": 132.782
+   },
+   0.172,
+   "RESET_FAILED"
+  ],
+  [
+   6921.75,
+   {
+    "moving_box_1": 133.167,
+    "moving_box_2": 132.772
+   },
+   0.003,
+   "RESET_FAILED"
+  ],
+  [
+   6921.86,
+   {
+    "moving_box_1": 133.137,
+    "moving_box_2": 132.745
+   },
+   1.462,
+   "RESET_FAILED"
+  ],
+  [
+   6921.96,
+   {
+    "moving_box_1": 133.172,
+    "moving_box_2": 132.783
+   },
+   1.541,
+   "RESET_FAILED"
+  ],
+  [
+   6922.06,
+   {
+    "moving_box_1": 133.263,
+    "moving_box_2": 132.875
+   },
+   0.426,
+   "RESET_FAILED"
+  ],
+  [
+   6922.16,
+   {
+    "moving_box_1": 133.333,
+    "moving_box_2": 132.947
+   },
+   0.977,
+   "RESET_FAILED"
+  ],
+  [
+   6922.26,
+   {
+    "moving_box_1": 133.397,
+    "moving_box_2": 133.012
+   },
+   0.71,
+   "RESET_FAILED"
+  ],
+  [
+   6922.36,
+   {
+    "moving_box_1": 133.423,
+    "moving_box_2": 133.039
+   },
+   0.675,
+   "RESET_FAILED"
+  ],
+  [
+   6922.47,
+   {
+    "moving_box_1": 133.411,
+    "moving_box_2": 133.029
+   },
+   1.392,
+   "RESET_FAILED"
+  ],
+  [
+   6922.57,
+   {
+    "moving_box_1": 133.393,
+    "moving_box_2": 133.016
+   },
+   3.012,
+   "RESET_FAILED"
+  ],
+  [
+   6922.67,
+   {
+    "moving_box_1": 133.542,
+    "moving_box_2": 133.169
+   },
+   1.646,
+   "RESET_FAILED"
+  ],
+  [
+   6922.78,
+   {
+    "moving_box_1": 133.628,
+    "moving_box_2": 133.26
+   },
+   2.139,
+   "RESET_FAILED"
+  ],
+  [
+   6922.88,
+   {
+    "moving_box_1": 133.78,
+    "moving_box_2": 133.413
+   },
+   0.92,
+   "RESET_FAILED"
+  ],
+  [
+   6922.99,
+   {
+    "moving_box_1": 133.814,
+    "moving_box_2": 133.448
+   },
+   0.942,
+   "RESET_FAILED"
+  ],
+  [
+   6923.09,
+   {
+    "moving_box_1": 133.812,
+    "moving_box_2": 133.45
+   },
+   2.336,
+   "RESET_FAILED"
+  ],
+  [
+   6923.2,
+   {
+    "moving_box_1": 134.049,
+    "moving_box_2": 133.69
+   },
+   2.264,
+   "RESET_FAILED"
+  ],
+  [
+   6923.3,
+   {
+    "moving_box_1": 134.208,
+    "moving_box_2": 133.851
+   },
+   2.222,
+   "RESET_FAILED"
+  ],
+  [
+   6923.4,
+   {
+    "moving_box_1": 134.399,
+    "moving_box_2": 134.043
+   },
+   1.667,
+   "RESET_FAILED"
+  ],
+  [
+   6923.5,
+   {
+    "moving_box_1": 134.452,
+    "moving_box_2": 134.096
+   },
+   0.913,
+   "RESET_FAILED"
+  ],
+  [
+   6923.61,
+   {
+    "moving_box_1": 134.606,
+    "moving_box_2": 134.252
+   },
+   2.142,
+   "RESET_FAILED"
+  ],
+  [
+   6923.71,
+   {
+    "moving_box_1": 134.817,
+    "moving_box_2": 134.463
+   },
+   1.889,
+   "RESET_FAILED"
+  ],
+  [
+   6923.81,
+   {
+    "moving_box_1": 135.023,
+    "moving_box_2": 134.669
+   },
+   1.949,
+   "RESET_FAILED"
+  ],
+  [
+   6923.91,
+   {
+    "moving_box_1": 135.204,
+    "moving_box_2": 134.849
+   },
+   1.879,
+   "RESET_FAILED"
+  ]
+ ]
+}

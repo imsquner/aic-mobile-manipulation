@@ -1,0 +1,11 @@
+{
+  "checked_at": "2026-10-17T15:01:41+0800",
+  "record": "/home/ros/桌面/AIC_Competition_Work/run_records/20261017_141336_312e163_plan_o_avoidance_after20v40b",
+  "processes": [],
+  "busy_ports": [],
+  "launcher": {
+    "launcher_pid": "90648",
+    "alive": false
+  },
+  "clean": true
+}
