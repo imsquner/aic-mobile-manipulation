@@ -17,14 +17,40 @@
   <a href="#参赛复盘">参赛复盘</a>
 </p>
 
+---
+
+## 🎬 演示 Demo
+
 [![Gazebo 仓储场景与移动机器人，点击查看五件搬运案例](docs/assets/readme/world2-scene.png)](#完整案例)
 
 **5/5 件**通过严格区域内核验（同一轮）　·　**158.790 秒**单轮执行阶段耗时　·　**28/32 轮**有效任务完成（四批测试）
 
 > 我们公开省赛项目的源码、系统设计和测试记录，供技术交流和复现参考，严禁直接抄袭。 [公开范围与交付记录](#参赛复盘)
 
-## 完整案例
+---
 
+## ✨ 特性
+
+| 能力 | 实现 |
+| --- | --- |
+| 🧠 赛题解析 | DeepSeek 将随机题目、抓取顺序和颜色区域映射转换为结构化计划，本地校验后接纳本轮任务。[任务解析](src/yzbot/aic_task/aic_task/task_input/) |
+| 🧭 逐件调度 | 用路径矩阵和分阶段估时比较同色货物、路线与槽位，结合当前区域占用和剩余任务逐件作出决策。[调度源码](src/yzbot/aic_task/aic_task/planning/) |
+| 🚙 导航与对接 | Nav2 负责长距离导航，近场控制负责对正与限速，`world2` 设置两处往复移动障碍。[导航配置](src/yzbot/bot_navigation/) |
+| 📷 视觉抓取 | OpenCV 提取颜色轮廓，结合 RGB-D 深度和 TF 定位目标，MoveIt 2 执行预抓取、夹持与抬升。[感知与抓取](src/yzbot/aic_perception/) |
+| 📦 放置核验 | 释放后核验实际落点与区域占用，将结果回传调度并推进下一件。[执行编排](src/yzbot/aic_task/aic_task/orchestration/) |
+| 🖥️ 状态展示 | Foxglove 展示本轮任务、路径、抓取状态与任务进度。[运行截图](#从题目到有序计划) |
+
+---
+
+## 🏗 系统架构
+
+![模块之间的任务传递与执行反馈](docs/assets/readme/system-architecture.png)
+
+大模型与本地检查生成可执行计划。逐件调度用路径矩阵和分阶段估时选择货物、路线与槽位，并考虑当前选择对剩余任务的影响。Nav2、RGB-D 感知与机械臂按执行阶段交接。释放与落点核验结果回流给调度，并同步到 Foxglove。
+
+---
+
+## 完整案例
 ### 从题目到有序计划
 
 归档中的宠物店题经过容量取整、条件颜色映射和变量区域映射，形成两段指令。先把两件蓝色货物搬到 B 区，再把三件红色货物搬到 A 区。系统校验并接纳计划，Foxglove 显示本轮任务和执行进度。
@@ -52,6 +78,8 @@ Nav2 把机器人送到取货附近。近场对接调整朝向与速度，RGB-D 
 
 ![五件货物的执行顺序、目标槽位与单件时长](docs/assets/readme/five-item-run.png)
 
+---
+
 ## 比赛要求对照
 
 括号内为官方评分项分值。下列证据来自团队的技术文档和测试归档，逐项官方得分暂无可核记录。 [赛题官方页面](https://www.aicomp.cn/tracks/4559.html)
@@ -69,6 +97,8 @@ Nav2 把机器人送到取货附近。近场对接调整朝向与速度，RGB-D 
 
 *RViz 展示局部路径。整轮完成结果来自相应测试记录。*
 
+---
+
 ## 批量测试结果
 
 省赛准备阶段的四批 Gazebo 测试保留了失败轮次。
@@ -77,14 +107,9 @@ Nav2 把机器人送到取货附近。近场对接调整朝向与速度，RGB-D 
 - **有效任务轮**　排除两次运行环境异常后，32 轮中完成 28 轮，完成率 **87.5%**。
 - **执行耗时**　32 个有效轮的执行阶段中位数为 **171.09 秒**，包含 4 个未完成轮。计时范围不含题目获取和计划生成。
 
-## 系统架构
-
-![模块之间的任务传递与执行反馈](docs/assets/readme/system-architecture.png)
-
-大模型与本地检查生成可执行计划。逐件调度用路径矩阵和分阶段估时选择货物、路线与槽位，并考虑当前选择对剩余任务的影响。Nav2、RGB-D 感知与机械臂按执行阶段交接。释放与落点核验结果回流给调度，并同步到 Foxglove。
+---
 
 ## 快速开始
-
 ### 环境与资源
 
 - **系统** Ubuntu 22.04、ROS 2 Humble。
@@ -109,6 +134,8 @@ python3 start_competition.py --world world2 --dry-run
 
 `--dry-run` 检查环境和资源。前置检查通过后，使用 `python3 start_competition.py --world world2` 正式启动。看到 `SYSTEM READY` 后核对题目、映射与结构化计划，再开始执行。本次文档更新只核对了入口与参数，完整运行仍以目标 Linux 环境下的实测为准。
 
+---
+
 ## 源码索引
 
 - **启动与场景**　[统一启动入口](src/yzbot/start_competition.py) · [场景和节点接线](src/yzbot/aic_bringup/)
@@ -116,6 +143,8 @@ python3 start_competition.py --world world2 --dry-run
 - **调度与执行**　[货物、路线和槽位决策](src/yzbot/aic_task/aic_task/planning/) · [任务编排与单件结果](src/yzbot/aic_task/aic_task/orchestration/) · [路径矩阵](verification/)
 - **导航与抓取**　[Nav2 配置](src/yzbot/bot_navigation/) · [视觉检测和抓取](src/yzbot/aic_perception/)
 - **许可证**　[核心源码 Apache-2.0](src/yzbot/LICENSE) · [IFRA LinkAttacher 许可证](src/yzbot/IFRA_LinkAttacher/LICENSE.md)
+
+---
 
 ## 参赛复盘
 
