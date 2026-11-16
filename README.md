@@ -1,8 +1,21 @@
-# 基于大模型任务解析的移动机器人自主搬运系统
+<h1 align="center">基于大模型任务解析的移动机器人自主搬运系统</h1>
 
-给定随机题目、抓取顺序和颜色区域映射，机器人在 Gazebo 中逐件完成识别、抓取、运输和放置，并根据实际落点更新后续任务。
+<p align="center"><strong>从随机赛题解析到自主抓取、搬运与落点核验</strong></p>
 
-[完整案例](#完整案例) · [比赛要求对照](#比赛要求对照) · [快速开始](#快速开始) · [参赛复盘](#参赛复盘)
+<p align="center">
+  <a href="https://docs.ros.org/en/humble/"><img src="https://img.shields.io/badge/ROS_2-Humble-22314E?style=flat" alt="ROS 2 Humble"></a>
+  <a href="#完整案例"><img src="https://img.shields.io/badge/Simulation-Gazebo-C45B26?style=flat" alt="仿真环境 Gazebo"></a>
+  <a href="src/yzbot/bot_navigation/"><img src="https://img.shields.io/badge/Navigation-Nav2-2563A6?style=flat" alt="导航 Nav2"></a>
+  <a href="src/yzbot/aic_perception/"><img src="https://img.shields.io/badge/Manipulation-MoveIt_2-347953?style=flat" alt="机械臂 MoveIt 2"></a>
+  <a href="#比赛要求对照"><img src="https://img.shields.io/badge/Contest-AIC_2026-79519A?style=flat" alt="赛题 AIC 2026"></a>
+</p>
+
+<p align="center">
+  <a href="#完整案例">完整案例</a> ·
+  <a href="#比赛要求对照">比赛要求对照</a> ·
+  <a href="#快速开始">快速开始</a> ·
+  <a href="#参赛复盘">参赛复盘</a>
+</p>
 
 [![Gazebo 仓储场景与移动机器人，点击查看五件搬运案例](docs/assets/readme/world2-scene.png)](#完整案例)
 
